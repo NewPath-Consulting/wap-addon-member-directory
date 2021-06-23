@@ -1,0 +1,9 @@
+{
+  "autoload": {
+    "psr-4": {
+      "PO\\classes\\": "classes",
+      "PO\\services\\": "services",
+      "PO\\admin\\": "admin"
+    }
+  }
+}

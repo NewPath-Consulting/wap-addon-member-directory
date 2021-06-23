@@ -21,9 +21,19 @@
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/writing-your-first-block-type/
  */
 
+require_once("vendor/autoload.php");
+require_once("ContactsAPI.php");
+require_once("admin/AdminSettings.php");
 
-
+use PO\Admin\AdminSettings;
+use PO\classes\ContactsUtils;
+use PO\classes\ContactsListingPersistor;
+use PO\classes\UserProfileShortcode;
 use WAWP\Activator;
+
+new ContactsAPI();
+new AdminSettings();
+new UserProfileShortcode();
 
 $activator_dir = ABSPATH . 'wp-content/plugins/wawp/src/Activator.php';
 
@@ -35,6 +45,20 @@ function create_block_wawp_addon_member_directory_block_init() {
 		deactivate_plugins(plugin_basename(__FILE__));
 		add_action('admin_notices', 'memdir_wawp_not_loaded');
 	}
+}
+
+add_filter('no_texturize_shortcodes', 'shortcodes_to_exempt_from_wptexturize');
+function shortcodes_to_exempt_from_wptexturize($shortcodes) {
+	$shortcodes[] = 'wa-contacts';
+	return $shortcodes;
+}
+
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_action_links');
+function add_action_links($links) {
+	$mylinks = array(
+		'<a href="' . admin_url('options-general.php?page=waconnector_options') . '">Settings</a>',
+	);
+	return array_merge($links, $mylinks);
 }
 
 function memdir_wawp_not_loaded() {
