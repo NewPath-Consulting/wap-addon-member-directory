@@ -51,3 +51,19 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 	 */
 	save,
 } );
+
+export const getContactFields = () => {
+	const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
+
+	fetch(CF_API_URL)
+		.then((resp) => {
+			return resp.text();
+		})
+		.then((data) => {
+			console.log(data);
+			// var result = JSON.parse(data);
+			// console.log(result);
+			// return result;
+		});
+
+} 

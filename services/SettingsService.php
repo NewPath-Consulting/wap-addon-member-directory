@@ -21,6 +21,7 @@ class SettingsService
 
     public static function getWAapiKeys()
     {
+        // TODO; change to spencer's api keys
         $options = get_option(self::WA_CONNECTOR_SETTINGS_NAME);
 
         if (empty($options) || empty($options[self::WA_CONNECTOR_SETTINGS_API_KEYS])) {

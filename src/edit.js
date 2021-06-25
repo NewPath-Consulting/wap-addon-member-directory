@@ -14,6 +14,7 @@ import { __ } from '@wordpress/i18n';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, PanelRow, CheckboxControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { getContactFields } from './index';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -57,12 +58,13 @@ const MyCheckboxControl = (property) => {
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes}) {
+	getContactFields();
 	return (
 		<div { ...useBlockProps() }>
 			<InspectorControls key="setting">
 				<PanelBody title="Filter Members" initialOpen={ true }>
 					<PanelRow>
-						{ attributes.fields.array.forEach(element => {
+						{ attributes.fields.forEach(element => {
 							MyCheckboxControl(element);
 						}) }
 						{/* { MyCheckboxControl() } */}

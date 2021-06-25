@@ -6159,9 +6159,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! bluebird */ "./node_modules/bluebird/js/browser/bluebird.js");
-/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(bluebird__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./index */ "./src/index.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
+/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bluebird */ "./node_modules/bluebird/js/browser/bluebird.js");
+/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(bluebird__WEBPACK_IMPORTED_MODULE_6__);
 
 
 /**
@@ -6180,6 +6181,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -6191,7 +6193,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const toggleCheckbox = item => {
-  var array = bluebird__WEBPACK_IMPORTED_MODULE_5__["props"].attributes.fields_applied;
+  var array = bluebird__WEBPACK_IMPORTED_MODULE_6__["props"].attributes.fields_applied;
   var isChecked = array.includes(item);
 
   if (isChecked) {
@@ -6201,13 +6203,13 @@ const toggleCheckbox = item => {
     array.push(item);
   }
 
-  bluebird__WEBPACK_IMPORTED_MODULE_5__["props"].setAttributes({
+  bluebird__WEBPACK_IMPORTED_MODULE_6__["props"].setAttributes({
     fields_applied: array
   });
 };
 
 const MyCheckboxControl = property => {
-  const isChecked = bluebird__WEBPACK_IMPORTED_MODULE_5__["props"].attributes.fields_applied.includes(property);
+  const isChecked = bluebird__WEBPACK_IMPORTED_MODULE_6__["props"].attributes.fields_applied.includes(property);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["CheckboxControl"], {
     label: property,
     checked: isChecked,
@@ -6228,12 +6230,13 @@ function Edit({
   attributes,
   setAttributes
 }) {
+  Object(_index__WEBPACK_IMPORTED_MODULE_4__["getContactFields"])();
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], {
     key: "setting"
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
     title: "Filter Members",
     initialOpen: true
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, attributes.fields.array.forEach(element => {
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, attributes.fields.forEach(element => {
     MyCheckboxControl(element);
   })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Wild Apricot Member Directory")));
 }
@@ -6258,11 +6261,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
-/*! no exports provided */
+/*! exports provided: getContactFields */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getContactFields", function() { return getContactFields; });
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/blocks */ "@wordpress/blocks");
 /* harmony import */ var _wordpress_blocks__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
@@ -6319,6 +6323,16 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('cre
    */
   save: _save__WEBPACK_IMPORTED_MODULE_3__["default"]
 });
+const getContactFields = () => {
+  const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
+  fetch(CF_API_URL).then(resp => {
+    return resp.text();
+  }).then(data => {
+    console.log(data); // var result = JSON.parse(data);
+    // console.log(result);
+    // return result;
+  });
+};
 
 /***/ }),
 

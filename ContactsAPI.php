@@ -31,6 +31,14 @@ class ContactsAPI
               'methods' => 'GET',
               'callback' => array($this, 'contactsRestRoutes')
             ));
+
+            register_rest_route('wawp/v1', '/contacts/fields/', array(
+                'methods' => 'GET',
+                'callback' => array($this, 'contactFieldsRestRoute'),
+                'permissions_callback' => function() {
+                    return current_user_can('edit_others_posts');
+                }
+            ));
         });
     }
 
@@ -77,6 +85,41 @@ class ContactsAPI
         ob_end_clean();
 
         return array('results' => [$contactsHTML], 'errors' => []);;
+    }
+
+    public function contactFieldsRestRoute() {
+        $waAPIKeys = SettingsService::getWAapiKeys();
+
+        $outer_idx = array_key_first($waAPIKeys);
+
+        // $inner_idx = array_key_first($waAPIKeys[$outer_idx]);
+
+        $key = $waAPIKeys[$outer_idx]['key'];
+
+        // $key = $waAPIKeys[$outer_idx][$inner_idx]['key'];
+
+        // do_action('qm/debug', $option[$outer_idx][$inner_idx]['key']);
+
+        // $outer = array_key_first($waAPIKeys);
+        // $key = $outer['key'];
+
+
+        // // $key = $arr['key'];
+
+        $waService = new WAService($key);
+
+        $waService->init();
+
+        $data = $waService->getContactFields();
+
+        $response = new WP_REST_Response($data, 200);
+
+        // Set headers.
+        $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
+
+        return $response;
+
+        // return rest_ensure_response($contactFields);
     }
 
     private function register_shortcodes()

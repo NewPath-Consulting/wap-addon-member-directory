@@ -7,7 +7,7 @@ require_once('CacheService.php');
 use PO\classes\WaApiClient;
 use PO\services\CacheService;
 
-const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.1/Accounts/';
+const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
 class WAService
 {
@@ -31,6 +31,20 @@ class WAService
     $this->init();
   }
 
+  public function getContactFields() {
+    $queryParams = array(
+      'showSectionDividers' => 'false'
+    );
+
+    $query = http_build_query($queryParams);
+
+    $url = $this->getAccountURL() . '/contactfields?' . $query;
+
+    $contactFields = $this->apiClient->makeRequest($url);
+
+    return $contactFields;
+  }
+
   public function getContactsList($filter = null, $select = null)
   {
     $queryParams = array(
@@ -49,7 +63,7 @@ class WAService
 
     $url =
       $this->getAccountURL() .
-      '/Contacts/?' .
+      '/Contacts?' .
       $query;
 
     if (isset($this->useCache)) {
