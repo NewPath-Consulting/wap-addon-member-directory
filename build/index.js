@@ -6141,6 +6141,190 @@ module.exports = g;
 
 /***/ }),
 
+/***/ "./src/components/Filter.js":
+/*!**********************************!*\
+  !*** ./src/components/Filter.js ***!
+  \**********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Filter; });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+class Filter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      attributes: props.attributes,
+      setAttributes: props.setAttributes,
+      field: props.field
+    };
+  }
+
+  render() {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(FilterCheckbox, {
+      field: this.state.field,
+      attributes: this.state.attributes,
+      setAttributes: this.state.setAttributes
+    }));
+  }
+
+}
+
+function FilterCheckbox(props) {
+  let setAttr = props.setAttributes;
+  let arr = props.attributes.fields_applied;
+  let exists = contains(arr, props.field) == -1 ? false : true;
+  const [isChecked, setChecked] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(exists);
+  let field_obj = {
+    name: props.field
+  };
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    let in_array = contains(arr, props.field); // if the item is checked but not in the field array, add it
+
+    if (isChecked && in_array == -1) {
+      arr.push(field_obj); // add it to fields applied
+    } else if (!isChecked && in_array != -1) {
+      // let idx = arr.indexOf(field_obj);
+      arr.splice(in_array, 1); // remove it
+    }
+
+    setAttr({
+      fields_applied: arr
+    });
+    console.log(props.attributes.fields_applied);
+  });
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["CheckboxControl"], {
+    label: props.field,
+    checked: isChecked,
+    onChange: setChecked
+  });
+}
+
+function contains(array, item) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i].name == item) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+/***/ }),
+
+/***/ "./src/components/FilterControls.js":
+/*!******************************************!*\
+  !*** ./src/components/FilterControls.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FilterControls; });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Filter */ "./src/components/Filter.js");
+
+
+
+
+ // TODO: get filter data here
+
+const getContactFields = () => {
+  const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
+  return fetch(CF_API_URL).then(resp => {
+    return resp.text();
+  }).then(data => {
+    // console.log(data);
+    var result = JSON.parse(data); // console.log(result);
+
+    return result;
+  });
+};
+
+let system_fields = [];
+let common_fields = [];
+let member_fields = [];
+getContactFields().then(e => {
+  e.forEach(field => {
+    if (field.IsSystem) {
+      system_fields.push({
+        name: field.FieldName
+      });
+    } else if (field.MemberOnly) {
+      member_fields.push({
+        name: field.FieldName
+      });
+    } else {
+      common_fields.push({
+        name: field.FieldName
+      });
+    }
+  });
+});
+class FilterControls extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      system: system_fields,
+      common: common_fields,
+      member: member_fields,
+      attributes: props.attributes,
+      setAttributes: props.setAttributes
+    };
+  }
+
+  render() {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["Panel"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
+      title: "System Fields",
+      initialOpen: false
+    }, this.state.system.map(field => {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        attributes: this.state.attributes,
+        setAttributes: this.state.setAttributes,
+        field: field.name,
+        key: field.name
+      });
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
+      title: "Common Fields",
+      initialOpen: false
+    }, this.state.common.map(field => {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        attributes: this.state.attributes,
+        setAttributes: this.state.setAttributes,
+        field: field.name,
+        key: field.name
+      });
+    })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
+      title: "Member Fields",
+      initialOpen: false
+    }, this.state.member.map(field => {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        attributes: this.state.attributes,
+        setAttributes: this.state.setAttributes,
+        field: field.name,
+        key: field.name
+      });
+    })));
+  }
+
+}
+
+/***/ }),
+
 /***/ "./src/edit.js":
 /*!*********************!*\
   !*** ./src/edit.js ***!
@@ -6160,9 +6344,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./index */ "./src/index.js");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
-/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! bluebird */ "./node_modules/bluebird/js/browser/bluebird.js");
-/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(bluebird__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _components_FilterControls__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/FilterControls */ "./src/components/FilterControls.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./src/editor.scss");
+/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! bluebird */ "./node_modules/bluebird/js/browser/bluebird.js");
+/* harmony import */ var bluebird__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(bluebird__WEBPACK_IMPORTED_MODULE_7__);
 
 
 /**
@@ -6182,6 +6367,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
  * Those files can contain any CSS code that gets applied to the editor.
@@ -6191,31 +6378,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-const toggleCheckbox = item => {
-  var array = bluebird__WEBPACK_IMPORTED_MODULE_6__["props"].attributes.fields_applied;
-  var isChecked = array.includes(item);
-
-  if (isChecked) {
-    let index = array.indexOf(property);
-    array.splice(index, 1);
-  } else {
-    array.push(item);
-  }
-
-  bluebird__WEBPACK_IMPORTED_MODULE_6__["props"].setAttributes({
-    fields_applied: array
-  });
-};
-
-const MyCheckboxControl = property => {
-  const isChecked = bluebird__WEBPACK_IMPORTED_MODULE_6__["props"].attributes.fields_applied.includes(property);
-  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["CheckboxControl"], {
-    label: property,
-    checked: isChecked,
-    onChange: toggleCheckbox(property)
-  });
-};
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -6225,20 +6387,22 @@ const MyCheckboxControl = property => {
  * @return {WPElement} Element to render.
  */
 
-
 function Edit({
   attributes,
   setAttributes
 }) {
-  Object(_index__WEBPACK_IMPORTED_MODULE_4__["getContactFields"])();
+  // updateFields(attributes, setAttributes);
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", Object(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"])(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["InspectorControls"], {
     key: "setting"
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
-    title: "Filter Members",
-    initialOpen: true
-  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelRow"], null, attributes.fields.forEach(element => {
-    MyCheckboxControl(element);
-  })))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Wild Apricot Member Directory")));
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_components_FilterControls__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    attributes: attributes,
+    setAttributes: setAttributes
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Wild Apricot Member Directory"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, attributes.fields_applied.map(field => {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("li", {
+      className: "filter",
+      key: field.name
+    }, field.name);
+  }))));
 }
 
 /***/ }),
@@ -6304,12 +6468,15 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('cre
     fields_applied: {
       // holds the fields applied by the user to pass into the shortcode
       type: 'array',
-      default: []
-    },
-    fields: {
-      // TODO: get these from WA API
-      type: 'array',
-      default: ['First name', 'Last name', 'Middle name', 'Organization']
+      default: [],
+      source: 'query',
+      selector: 'li.filter',
+      query: {
+        name: {
+          type: 'string',
+          source: 'text'
+        }
+      }
     }
   },
 
@@ -6325,12 +6492,13 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_0__["registerBlockType"])('cre
 });
 const getContactFields = () => {
   const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
-  fetch(CF_API_URL).then(resp => {
+  return fetch(CF_API_URL).then(resp => {
     return resp.text();
   }).then(data => {
-    console.log(data); // var result = JSON.parse(data);
-    // console.log(result);
-    // return result;
+    // console.log(data);
+    var result = JSON.parse(data); // console.log(result);
+
+    return result;
   });
 };
 
@@ -6378,10 +6546,15 @@ __webpack_require__.r(__webpack_exports__);
  * @return {WPElement} Element to render.
  */
 
-function save() {
-  return (// shortcode will go here
-    Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__["__"])('Wawp Addon Member Directory – hello from the saved content!', 'wawp-addon-member-directory'))
-  );
+function save({
+  attributes
+}) {
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Wild Apricot Member Directory"), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, attributes.fields_applied.map(field => {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("li", {
+      className: "filter",
+      key: field.name
+    }, field.name);
+  })));
 }
 
 /***/ }),
@@ -6438,6 +6611,17 @@ function save() {
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["i18n"]; }());
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["React"]; }());
 
 /***/ })
 

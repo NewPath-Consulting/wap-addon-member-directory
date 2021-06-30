@@ -13,8 +13,10 @@ import { __ } from '@wordpress/i18n';
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, PanelRow, CheckboxControl } from '@wordpress/components';
+import { __experimentalText as Text } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { getContactFields } from './index';
+import FilterControls from './components/FilterControls';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -24,31 +26,6 @@ import { getContactFields } from './index';
  */
 import './editor.scss';
 import { props } from 'bluebird';
-
-const toggleCheckbox = (item) => {
-	var array = props.attributes.fields_applied;
-	var isChecked = array.includes(item);
-	if (isChecked) {
-		let index = array.indexOf(property);
-		array.splice(index, 1);
-	} else {
-		array.push(item);
-	}
-
-	props.setAttributes({fields_applied: array});
-}
-
-const MyCheckboxControl = (property) => {
-	const isChecked = props.attributes.fields_applied.includes(property);
-	return (
-		<CheckboxControl
-		label={ property }
-		checked={ isChecked }
-		onChange={ toggleCheckbox(property) }
-		/>
-	);
-};
-
 /**
  * The edit function describes the structure of your block in the context of the
  * editor. This represents what the editor will render when the block is used.
@@ -58,22 +35,19 @@ const MyCheckboxControl = (property) => {
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes}) {
-	getContactFields();
+	// updateFields(attributes, setAttributes);
 	return (
 		<div { ...useBlockProps() }>
 			<InspectorControls key="setting">
-				<PanelBody title="Filter Members" initialOpen={ true }>
-					<PanelRow>
-						{ attributes.fields.forEach(element => {
-							MyCheckboxControl(element);
-						}) }
-						{/* { MyCheckboxControl() } */}
-					</PanelRow>
-				</PanelBody>
+				<FilterControls attributes={attributes} setAttributes={setAttributes}></FilterControls>
 			</InspectorControls>
 			<div {...useBlockProps.save()} >
-				{/* placeholder for editing */}
 				<p>Wild Apricot Member Directory</p>
+					<ul>
+						{attributes.fields_applied.map((field) => {
+							return <li className="filter" key={field.name}>{field.name}</li>
+						})}
+					</ul>
 			</div>
 		</div>
 	);

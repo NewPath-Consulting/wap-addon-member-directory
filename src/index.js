@@ -29,16 +29,15 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 	attributes: {
 		fields_applied: { // holds the fields applied by the user to pass into the shortcode
 			type: 'array',
-			default: []
-		},
-		fields: { // TODO: get these from WA API
-			type: 'array',
-			default: [
-				'First name',
-				'Last name',
-				'Middle name',
-				'Organization'
-			]
+			default: [],
+			source: 'query',
+			selector: 'li.filter',
+			query: {
+				name: {
+					type: 'string',
+					source: 'text'
+				}
+			}
 		}
 	},
 	/**
@@ -55,15 +54,14 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 export const getContactFields = () => {
 	const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
 
-	fetch(CF_API_URL)
+	return fetch(CF_API_URL)
 		.then((resp) => {
 			return resp.text();
 		})
 		.then((data) => {
-			console.log(data);
-			// var result = JSON.parse(data);
+			// console.log(data);
+			var result = JSON.parse(data);
 			// console.log(result);
-			// return result;
+			return result;
 		});
-
 } 

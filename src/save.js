@@ -22,14 +22,15 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
-export default function save() {
+export default function save({attributes}) {
 	return (
-		// shortcode will go here
-		<p { ...useBlockProps.save() }>
-			{ __(
-				'Wawp Addon Member Directory – hello from the saved content!',
-				'wawp-addon-member-directory'
-			) }
-		</p>
+		<div {...useBlockProps.save()} >
+			<p>Wild Apricot Member Directory</p>
+				<ul>
+					{attributes.fields_applied.map((field) => {
+						return <li className="filter" key={field.name}>{field.name}</li>
+					})}
+				</ul>
+		</div>
 	);
 }
