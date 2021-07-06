@@ -1,7 +1,8 @@
 import { PanelRow, CheckboxControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
+import contactFields from '../ContactFields';
 
-export default class Filter extends React.Component {
+export default class Field extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
@@ -14,34 +15,52 @@ export default class Filter extends React.Component {
     render() {
         return(
             <PanelRow>
-                <FilterCheckbox 
+                <FieldCheckbox 
                     field={this.state.field}
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
                 >
-                </FilterCheckbox>
+                </FieldCheckbox>
             </PanelRow>
         );
     }
 }
 
-function FilterCheckbox(props) {
+// export default class Filter extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = ({
+//             attributes: props.attributes,
+//             setAttributes: props.setAttributes,
+//             field: props.field,
+//             type: props.field.type,
+//             allowed_values: props.field.allowed_values
+//         });
+//     }
+
+//     render() {
+//         if (this.state.type == 'Boolean') {
+//             return(
+
+//             )
+//         }
+//     }
+// }
+
+function FieldCheckbox(props) {
     let setAttr = props.setAttributes;
     let arr = props.attributes.fields_applied
     let exists = contains(arr, props.field) == -1 ? false : true;
 
     const [ isChecked, setChecked ] = useState(exists);
 
-    let field_obj = {name: props.field};
-
     useEffect(() => {
         let in_array = contains(arr, props.field);
         // if the item is checked but not in the field array, add it
         if (isChecked && in_array == -1) {
-            arr.push(field_obj);
+            arr.push(props.field);
             // add it to fields applied
         } else if (!isChecked && in_array != -1) {
-            // let idx = arr.indexOf(field_obj);
             arr.splice(in_array, 1);
             // remove it
         }
@@ -52,7 +71,7 @@ function FilterCheckbox(props) {
     
     return (
         <CheckboxControl
-            label={ props.field }
+            label={ contactFields.getFieldName(props.field.id) }
             checked={ isChecked }
             onChange={ setChecked }
         >
@@ -62,7 +81,7 @@ function FilterCheckbox(props) {
 
 function contains(array, item) {
     for (var i = 0; i < array.length; i++) {
-        if (array[i].name == item) {
+        if (array[i].id == item.id) {
             return i;
         }
     }
