@@ -12,6 +12,9 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
 import { useBlockProps } from '@wordpress/block-editor';
+import contactFields from './ContactFields';
+import generateShortcode from './index';
+
 
 /**
  * The save function defines the way in which the different attributes should
@@ -23,14 +26,25 @@ import { useBlockProps } from '@wordpress/block-editor';
  * @return {WPElement} Element to render.
  */
 export default function save({attributes}) {
+	// console.log('fields: ', attributes.fields_applied);
 	return (
 		<div {...useBlockProps.save()} >
 			<p>Wild Apricot Member Directory</p>
 				<ul>
-					{attributes.fields_applied.map((field) => {
-						return <li className="filter" key={field.name}>{field.name}</li>
-					})}
+					{
+						attributes.fields_applied.map((field) => {
+							// console.log('field: ', field);
+							return (
+								<li className="filter" key={ field.id } data-system-code={ field.id }>
+									{ contactFields.getFieldName(field.id) }
+								</li>
+							);
+						})
+					}
 				</ul>
+				<p>
+					{generateShortcode(attributes.fields_applied)}
+				</p>
 		</div>
 	);
 }
