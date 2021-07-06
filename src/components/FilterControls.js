@@ -1,48 +1,15 @@
-import { Panel, PanelBody } from '@wordpress/components';
+import { Panel, PanelBody, ToggleControl } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
-import { Fragment } from 'react';
-import Filter from './Filter';
-
-// TODO: get filter data here
-const getContactFields = () => {
-	const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
-
-	return fetch(CF_API_URL)
-		.then((resp) => {
-			return resp.text();
-		})
-		.then((data) => {
-			// console.log(data);
-			var result = JSON.parse(data);
-			// console.log(result);
-			return result;
-		});
-} 
-
-let system_fields = [];
-let common_fields = [];
-let member_fields = [];
-
-getContactFields().then((e) => {
-    e.forEach((field) => {
-        if (field.IsSystem) {
-            system_fields.push({name: field.FieldName});
-        } else if (field.MemberOnly) {
-            member_fields.push({name: field.FieldName});
-        } else {
-            common_fields.push({name:field.FieldName});
-        }
-    });
-});
-
+import Field from './Filter';
+import contactFields from '../ContactFields';
 
 export default class FilterControls extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            system: system_fields,
-            common: common_fields,
-            member: member_fields, 
+            system: contactFields.getSystemFields(),
+            common: contactFields.getCommonFields(),
+            member: contactFields.getMemberFields(), 
             attributes: props.attributes,
             setAttributes: props.setAttributes
         };
@@ -54,48 +21,66 @@ export default class FilterControls extends React.Component {
                     {
                         this.state.system.map((field) => {
                             return (
-                                <Filter 
+                                <Field 
                                     attributes={this.state.attributes} 
                                     setAttributes={this.state.setAttributes} 
-                                    field={field.name}
-                                    key={field.name}
+                                    field={field}
                                 >
-                                </Filter>
+                                </Field>
                             )
                         })
                     }
                 </PanelBody>
-                <PanelBody title="Common Fields" initialOpen={false}>
+                <PanelBody title="Common Fields" initialOpen={ false }>
                 {
                         this.state.common.map((field) => {
                             return (
-                                <Filter 
+                                <Field 
                                     attributes={this.state.attributes} 
                                     setAttributes={this.state.setAttributes} 
-                                    field={field.name}
-                                    key={field.name}
+                                    field={field}
                                 >
-                                </Filter>
+                                </Field>
                             )
                         })
                     }
                 </PanelBody>
-                <PanelBody title="Member Fields" initialOpen={false}>
-                {
+                <PanelBody title="Member Fields" initialOpen={ false }>
+                    {
                         this.state.member.map((field) => {
                             return (
-                                <Filter 
+                                <Field 
                                     attributes={this.state.attributes} 
                                     setAttributes={this.state.setAttributes} 
-                                    field={field.name}
-                                    key={field.name}
+                                    field={field}
                                 >
-                                </Filter>
+                                </Field>
                             )
                         })
                     }
+                </PanelBody>
+                <PanelBody title="Filters" initialOpen={ false }>
+                {
+                    this.state.attributes.fields_applied.map((field) => {
+                        return <Text isBlock>{ contactFields.getFieldName(field.id) }</Text>;
+                    })
+                }
                 </PanelBody>
             </Panel>
         );
+    }
+}
+
+class SearchControls extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        <PanelBody title="Enable Search" initialOpen={ true }>
+            <PanelRow>
+                <Toggole
+            </PanelRow>
+        </PanelBody>
     }
 }
