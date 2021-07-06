@@ -19,6 +19,7 @@ import './style.scss';
  */
 import Edit from './edit';
 import save from './save';
+import contactFields from './ContactFields';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -33,11 +34,16 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 			source: 'query',
 			selector: 'li.filter',
 			query: {
-				name: {
+				id: {
 					type: 'string',
-					source: 'text'
+					source: 'attribute',
+					attribute: 'data-system-code'
 				}
 			}
+		},
+		enable_search: {
+			type: 'boolean',
+			default: false
 		}
 	},
 	/**
@@ -51,17 +57,18 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 	save,
 } );
 
-export const getContactFields = () => {
-	const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
+export default function generateShortcode(fields_applied) {
+	var shortcode_str = '[wa-contacts ';
 
-	return fetch(CF_API_URL)
-		.then((resp) => {
-			return resp.text();
-		})
-		.then((data) => {
-			// console.log(data);
-			var result = JSON.parse(data);
-			// console.log(result);
-			return result;
-		});
-} 
+	var len = fields_applied.length;
+
+	for (let i = 0; i < len; i++) {
+		let id = fields_applied[i].id;
+		shortcode_str += '\'' + contactFields.getFieldName(id) + '\'';
+		shortcode_str += ' ';
+	}
+
+	shortcode_str += "search dropdown] [/wa-contacts]";
+
+	return shortcode_str;
+}

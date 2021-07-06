@@ -17,6 +17,8 @@ import { __experimentalText as Text } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { getContactFields } from './index';
 import FilterControls from './components/FilterControls';
+import contactFields from './ContactFields';
+import generateShortcode  from './index';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -35,7 +37,6 @@ import { props } from 'bluebird';
  * @return {WPElement} Element to render.
  */
 export default function Edit({attributes, setAttributes}) {
-	// updateFields(attributes, setAttributes);
 	return (
 		<div { ...useBlockProps() }>
 			<InspectorControls key="setting">
@@ -45,9 +46,17 @@ export default function Edit({attributes, setAttributes}) {
 				<p>Wild Apricot Member Directory</p>
 					<ul>
 						{attributes.fields_applied.map((field) => {
-							return <li className="filter" key={field.name}>{field.name}</li>
+							// console.debug(field);
+							return (
+								<li className="filter" key={ field.id } data-system-code={ field.id }>
+									{ contactFields.getFieldName(field.id) }
+								</li>
+							)
 						})}
 					</ul>
+					<p>
+						{ generateShortcode(attributes.fields_applied) }
+					</p>
 			</div>
 		</div>
 	);
