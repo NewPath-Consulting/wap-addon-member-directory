@@ -44,6 +44,10 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 		enable_search: {
 			type: 'boolean',
 			default: false
+		},
+		page_size: {
+			type: 'number',
+			default: 10
 		}
 	},
 	/**
@@ -57,18 +61,24 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 	save,
 } );
 
-export default function generateShortcode(fields_applied) {
+export default function generateShortcode(attributes) {
 	var shortcode_str = '[wa-contacts ';
 
-	var len = fields_applied.length;
+	var len = attributes.fields_applied.length;
 
 	for (let i = 0; i < len; i++) {
-		let id = fields_applied[i].id;
+		let id = attributes.fields_applied[i].id;
 		shortcode_str += '\'' + contactFields.getFieldName(id) + '\'';
 		shortcode_str += ' ';
 	}
 
-	shortcode_str += "search dropdown] [/wa-contacts]";
+	shortcode_str += 'page-size=' + attributes.page_size;
+
+	if (attributes.enable_search) {
+		shortcode_str += ' search';
+	}
+
+	shortcode_str += "] [/wa-contacts]";
 
 	return shortcode_str;
 }
