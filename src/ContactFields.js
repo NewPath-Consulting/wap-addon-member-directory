@@ -49,10 +49,14 @@ class ContactFields {
     }
 
     getFieldName(system_code) {
-        if (this.data[system_code] == undefined) {
-            console.log("system code: ", system_code);
-            console.log("typeof systemcode: ", typeof system_code);
-            console.log("data: ", this.data);
+        // if (this.data[system_code] == undefined) {
+        //     console.log("system code: ", system_code);
+        //     console.log("typeof systemcode: ", typeof system_code);
+        //     console.log("data: ", this.data);
+        //     console.log("data size: ", this.data.length);
+        // }
+        if (this.data.length == 0 || this.data == null) {
+            this.populateFieldData();
         }
         return this.data[system_code].name;
     }
