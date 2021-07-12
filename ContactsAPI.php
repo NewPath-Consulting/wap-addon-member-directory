@@ -21,6 +21,8 @@ class ContactsAPI
     private function registerJSFile() {
         add_action('init', function() {
             wp_register_script('wafw', plugins_url('/js/wafw.js', __FILE__ ), true);
+            wp_register_script('wawp_pagination', plugins_url('/js/pagination.js', __FILE__), array('jquery'),true);
+            wp_register_script('pagination_plugin', plugins_url('js/pagination.min.js', __FILE__), array('jquery'), true);
         });
 
     }
@@ -143,6 +145,9 @@ class ContactsAPI
 
         $profileURL = $this->extractAndRemoveProfileURL($args);
 
+        $pageSize = $this->extractAndRemovePageSize($args);
+        do_action('qm/debug', 'page size: {a}', ['a' => $pageSize]);
+
         $dropdownList = "";
         if ($this->extractAndRemoveDropdown($args)) {
             $dropdownList = $sites;
@@ -166,12 +171,16 @@ class ContactsAPI
             return $customOutput;
         }
 
-        return $this->render($contacts, $cssClass, $searchBox, $profileURL, $queryHash, $dropdownList);
+        return $this->render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $queryHash, $dropdownList);
     }
 
-    public function render($contacts, $cssClass, $searchBox, $profileURL,
+    public function render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, 
         $queryHash, $dropdownList)
     {
+        
+        $pageSizeNum = (int)$pageSize;
+        do_action('qm/debug', 'type of pg size: {a}', ['a' => gettype($pageSizeNum)]);
+        $pagination = count($contacts) > $pageSizeNum;
 
         ob_start();
         echo "<div class=\"$cssClass\">";
@@ -187,11 +196,21 @@ class ContactsAPI
 
         echo '<div class="wa-contacts-items">';
 
+        // check to see if pagination needs to happen (> 50 contacts)
+        if ($pagination) {
+            wp_enqueue_script('pagination_plugin');
+            wp_enqueue_script('wawp_pagination');
+            wp_localize_script('wawp_pagination', 'wawp_memdir_page_size', array('page_size' => $pageSizeNum));
+        }
+
         foreach ($contacts as $contact) {
             $this->renderFieldValuesList($contact, $profileURL);
         }
 
         echo '</div>';
+        if ($pagination) {
+            echo '<div class="wa-pagination"></div>';
+        }
         echo "</div>";
 
         return ob_get_clean();
@@ -319,6 +338,12 @@ class ContactsAPI
         $profileURL = isset($shortCodeArgs['profile-url']) ? $shortCodeArgs['profile-url'] : "";
         unset($shortCodeArgs['profile-url']);
         return $profileURL;
+    }
+
+    private function extractAndRemovePageSize(&$shortCodeArgs) {
+        $pageSize = isset($shortCodeArgs['page-size']) ? $shortCodeArgs['page-size'] : "";
+        unset($shortCodeArgs['page-size']);
+        return $pageSize;
     }
 
     private function extractAndRemoveSearchToggle(&$shortCodeArgs)
