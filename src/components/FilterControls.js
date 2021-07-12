@@ -1,5 +1,7 @@
-import { Panel, PanelBody, ToggleControl } from '@wordpress/components';
+import { Panel, PanelBody, PanelRow, ToggleControl } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
+import { __experimentalNumberControl as NumberControl } from '@wordpress/components';
+import { useState, useEffect } from '@wordpress/element';
 import Field from './Filter';
 import contactFields from '../ContactFields';
 
@@ -66,21 +68,73 @@ export default class FilterControls extends React.Component {
                     })
                 }
                 </PanelBody>
+                <SearchControl 
+                    attributes={this.state.attributes}
+                    setAttributes={this.state.setAttributes}
+                >
+                </SearchControl>
+                <PageSizeControl
+                    attributes={this.state.attributes}
+                    setAttributes={this.state.setAttributes}
+                >
+                </PageSizeControl>
             </Panel>
         );
     }
 }
 
-class SearchControls extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+function SearchControl(props) {
+    let attributes = props.attributes;
+    let setAttributes = props.setAttributes;
 
-    render() {
+    const [ isChecked, setChecked ] = useState(attributes.enable_search);
+
+    useEffect(() => {
+        var new_val;
+        if (isChecked && !attributes.enable_search) {
+            new_val = true;
+        } else if (!isChecked && attributes.enable_search) {
+            new_val = false;
+        }
+
+        setAttributes({enable_search: new_val});
+    });
+
+    return (
         <PanelBody title="Enable Search" initialOpen={ true }>
             <PanelRow>
-                <Toggole
+                <ToggleControl
+                    label="Enable search"
+                    checked={ isChecked }
+                    onChange={ setChecked }
+                >
+                </ToggleControl>
             </PanelRow>
         </PanelBody>
-    }
+    );
+}
+
+function PageSizeControl(props) {
+    let attributes = props.attributes;
+    let setAttributes = props.setAttributes;
+
+    const [ value, setValue ] = useState(attributes.page_size);
+
+    useEffect(() => {
+        setAttributes({page_size: value});
+    });
+
+    return (
+        <PanelBody title="Page Size" initialOpen={ false }>
+            <PanelRow>
+                <NumberControl
+                    label="Number of members per page"
+                    isShiftStepEnabled={ true }
+                    onChange={ setValue }
+                    shiftStep={ 5 }
+                    value={ value }
+                ></NumberControl>
+            </PanelRow>
+        </PanelBody>
+    );
 }
