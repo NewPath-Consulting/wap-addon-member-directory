@@ -43,7 +43,7 @@ export default function save({attributes}) {
 					}
 				</ul>
 				<p>
-					{generateShortcode(attributes.fields_applied)}
+					{generateShortcode(attributes)}
 				</p>
 		</div>
 	);
