@@ -15,7 +15,8 @@
 	},
 	"dependencies": {
 		"@wordpress/blocks": "^9.1.4",
-		"@wordpress/i18n": "^4.1.1"
+		"@wordpress/i18n": "^4.1.1",
+		"paginationjs": "^2.1.5"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^16.1.2"
