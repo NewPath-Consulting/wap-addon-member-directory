@@ -66,7 +66,6 @@ function FieldCheckbox(props) {
         }
 
         setAttr({fields_applied: arr});
-        console.log(props.attributes.fields_applied)
     });
     
     return (
