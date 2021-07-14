@@ -35,7 +35,7 @@ new ContactsAPI();
 new AdminSettings();
 new UserProfileShortcode();
 
-$activator_dir = ABSPATH . 'wp-content/plugins/wawp/src/Activator.php';
+$activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
 
 require_once ($activator_dir);
 
