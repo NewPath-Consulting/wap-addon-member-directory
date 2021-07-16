@@ -45,6 +45,45 @@ class WAService
     return $contactFields;
   }
 
+  //can this be broader than for getting list, ie featured member?
+  public function controlAccess($contacts = array(), ) {
+    //if status != 200, return
+    //take in filter/select?
+
+    //access to this controlled by wa data
+    //is user member or public
+    $member = false;
+    $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
+    if($currentUserStatus == "Active" || $currentUserStatus == "PendingRenewal") { //contains or [0] bc array?
+      $member = true;
+    }
+    
+    //get /contactfields to see/store what things are allowed to who
+    $contactFields = $this->getContactFields();
+    //for each field store the access level
+      //array of key value pairs to enum maybe; all, member, no
+    //store all the terms in query
+
+    
+    // for each contact
+      // for each query term, 
+        //check default, check custom, 
+            //if any of them are private, exclude entire contact
+
+      //for each selected
+        //what is the default privacy, set that as privacy does custom exist? if so, that overrides
+            //if good, aight
+            //else set attribute to null or dummy. is this going to cause type issues or smth? 
+
+
+    //No matching records (only opted-in members are included)
+    return $contacts;
+
+    // status code 200 ie normal
+    //id, field name, access [Nobody, Members, Public]
+
+  }
+
   public function getContactsList($filter = null, $select = null)
   {
     $queryParams = array(
@@ -82,7 +121,7 @@ class WAService
       return array();
     }
 
-    return array_values($contacts['Contacts']);
+    return $this->controlAccess(array_values($contacts['Contacts'])); 
   }
 
   private function getAccountDetails()
@@ -101,6 +140,7 @@ class WAService
     }
     return $this->accountURL;
   }
+
 
 }
 ?>

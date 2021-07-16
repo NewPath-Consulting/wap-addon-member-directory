@@ -112,7 +112,7 @@ class ContactsAPI
 
         $waService->init();
 
-        $data = $waService->getContactFields();
+        $data = $waService->getContactFields(); //ye
 
         $response = new WP_REST_Response($data, 200);
 
