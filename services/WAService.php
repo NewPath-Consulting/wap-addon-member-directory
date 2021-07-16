@@ -46,11 +46,7 @@ class WAService
   }
 
   //can this be broader than for getting list, ie featured member?
-  public function controlAccess($contacts = array(), ) {
-    //if status != 200, return
-    //take in filter/select?
-
-    //access to this controlled by wa data
+  public function controlAccess($contacts = array(), $filter = null, $select = null) {
     //is user member or public
     $member = false;
     $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
@@ -60,28 +56,58 @@ class WAService
     
     //get /contactfields to see/store what things are allowed to who
     $contactFields = $this->getContactFields();
-    //for each field store the access level
-      //array of key value pairs to enum maybe; all, member, no
-    //store all the terms in query
-
+    if($contactFields['statusCode'] != 200) {
+      return $contactFields; //Error: if the restriction of everything can't be determined, can't give information  
+    }
     
-    // for each contact
-      // for each query term, 
-        //check default, check custom, 
-            //if any of them are private, exclude entire contact
+    $contactFields = array_values($contactFields[0]['body']); //is the [0] needed?
+    //for each field store the access level
+    $defaultAccess = array();
+    foreach($contactFields as $contactField) {
+      $defaultAccess[$contactField['SystemCode']] = $contactField['Access']; 
+    }
 
+    if(empty($select)) {
+      return $contacts; //can return because there is no content
+    } else {
+      $select = str_replace("'", '', $select);
+      $select = explode(',', $select); //make into array
+    }
+
+    $filterExists = false;
+    $filters = array();
+    if(!empty($filter)) {
+      // extract each term, put in array
+    }
+
+    foreach($contacts as $contact => $contactInfo) {
+      if($filterExists) {
+        // for each filter term,
+        foreach($filters as $filter)
+          $access = $defaultAccess[$filter]; //get default privacy setting
+          //if [custom] exist
+          //access = that 
+          if($access == "Nobody" || ($access == "Members" && !$member)) {
+            //exclude entire contact (how??) continue to next contact
+          }
+      }
       //for each selected
-        //what is the default privacy, set that as privacy does custom exist? if so, that overrides
-            //if good, aight
-            //else set attribute to null or dummy. is this going to cause type issues or smth? 
-
-
-    //No matching records (only opted-in members are included)
+      foreach($select as $term) {
+        //eee not an easy access? maybe some better way than looping, rip. 
+        //if must loop, best way is go through all, check if thing is a filtered term, that way only 1 pass
+        $access = $defaultAccess[$term]; //get default privacy setting
+        //if [custom] exist
+          //access = that
+            
+        if($access == "Nobody" || ($access == "Members" && !$member)) {
+          //actually, this contact[attr] = "" ; secret time! // is this going to cause type issues or smth?
+        }  // otherwise it's all good
+      }
+    }
     return $contacts;
-
-    // status code 200 ie normal
     //id, field name, access [Nobody, Members, Public]
-
+    //No matching records (only opted-in members are included)
+    //be aware of fieldname vs system code. find good way to test. ask about swag
   }
 
   public function getContactsList($filter = null, $select = null)
@@ -121,7 +147,7 @@ class WAService
       return array();
     }
 
-    return $this->controlAccess(array_values($contacts['Contacts'])); 
+    return $this->controlAccess(array_values($contacts['Contacts']), $filter, $select); 
   }
 
   private function getAccountDetails()
