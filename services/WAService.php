@@ -47,82 +47,88 @@ class WAService
 
   //can this be broader than for getting list, ie featured member?
   public function controlAccess($contacts = array(), $filter = null, $select = null) {
-    //is user member or public
+    //is current wp user member or public
     $member = false;
     $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
     if($currentUserStatus == "Active" || $currentUserStatus == "PendingRenewal") { //contains or [0] bc array?
       $member = true;
     }
     
-    //get /contactfields to see/store what things are allowed to who
-    $contactFields = $this->getContactFields();
+    if(empty($select)) {
+      return $contacts; //can return because there is no content
+    } 
+
+    //get /contactfields to see/store what things are allowed for what levels
+    $contactFields = $this->getContactFields(); //this does every field
     if($contactFields['statusCode'] != 200) {
-      return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the  
+      return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the error 
     }
-    
+
     $contactFields = array_values($contactFields[0]['body']); //is the [0] needed?
     //for each field store the access level
+    //could possibly store less? is it better to store everything or filter what is stored
+    //caching this would be good, how? //TODO nice to have
     $defaultAccess = array();
     foreach($contactFields as $contactField) {
-      $defaultAccess[$contactField['SystemCode']] = $contactField['Access']; 
-      //fieldname or system code? both are passed, let's use the code though
+      $defaultAccess[$contactField['SystemCode']] = $contactField['Access'];
     }
 
-    if(empty($select)) {
-      return $contacts; //can return because there is no content selected to return
-    } else {
-      $select = str_replace("'", '', $select);
-      $select = explode(',', $select); //make into array
-    }
-
-    $filterExists = false;
+    $exclude = false;
     $filters = array();
-    if(!empty($filter)) {
-      // extract each term, put in array
-    }
+    $excludedContacts = array();
 
-    foreach($contacts as $contact => $contactInfo) {
-      foreach($contactInfo["FieldValues"] as $field => $value) { //test this. becasue each field values is blank, can't just lookup, have to iterate through all.. average o(n) bc hashtable o(1)
-        $SystemCode = $value["SystemCode"];
-        $access = null;
+    if(!empty($filter)) { //if filter exists
+      // extract each term, put in array $filters
+      //TODO
 
-        //would it be faster or slower to keep track of how many filters and selects there are and then if 0 continue to next contact early?
-
-        if($filterExists && isset($filters[$SystemCode])) { //if a filter exists on this attribute
-          //find privacy
+      //select filters with api call, privacy turned off
+      $filterData = $this -> getContactsList(null, $filters, false);
+      if(empty($filterData)) {
+        return array(); //can't return if can't guarentee privacy
+      }
+      //loop each contact and check privacy for each filter (slow, limit filters)
+      foreach($filterData as $contact => $contactInfo) {
+        foreach($contactInfo["FieldValues"] as $field => $value) { //for each filtered attribute for each contact
+          $SystemCode = $value["SystemCode"];
           $access = $defaultAccess[$SystemCode]; //get default privacy setting
           if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
             $access = $value["CustomAccessLevel"]; //custom takes priority always
           }
-          if($access == "Nobody" || ($access == "Members" && !$member)) {
-            //exclude entire contact (how??) continue to next contact
+          if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way an error defaults private)
+            $excludedContacts[] = $contactInfo["Id"]; //add this
+            continue; //ie continue to next contact
           }
-        } 
-        if(isset($select[$SystemCode])) {
-          if(!isset($access)) { //access not set
-            $access = $defaultAccess[$SystemCode]; //get default privacy setting
-            if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
-              $access = $value["CustomAccessLevel"]; //custom takes priority always
-            }
-          } //access is set
-          if($access == "Nobody" || ($access == "Members" && !$member)) {
-            //actually, this contact[attr[value]] = "" ; secret time! 
-          }  
-        } else {
-          //exclude this attribute
-          //wait, this already happenes, select has already selected I think
-          //it sends some extras 
-          //aaaaaa this was actually pointless, this will only be handling filtered values, will have to reformat and select again for queries
+      } 
+    }
+    if(!empty($excludedContacts)) {
+      $exclude = true;
+    }
+
+    foreach($contacts as $contact => $contactInfo) {
+      if($exclude && isset($excludedContacts[$contactInfo["Id"]])) { //an attribute this contact has private is being filtered on, so can't show contact
+        continue; 
+      }
+      foreach($contactInfo["FieldValues"] as $field => $value) { //for each selected value, which have already been selected by the api
+        $SystemCode = $value["SystemCode"]; //combine below once tested
+        $access = $defaultAccess[$SystemCode]; //get default privacy setting
+        if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
+          $access = $value["CustomAccessLevel"]; //custom takes priority always
         }
+        if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way an error defaults private)
+          //secret time! hide this specific value
+          $value["Value"] = null; //type issues?
+        }  
       }
     }
     return $contacts;
     //id, field name, access [Nobody, Members, Public]
-    //No matching records (only opted-in members are included)
-    //be aware of fieldname vs system code. find good way to test. ask about swag
+    //system code, not field name
+    //"No matching records (only opted-in members are included)"
+    //cache
+    //find good way to test
   }
 
-  public function getContactsList($filter = null, $select = null)
+  public function getContactsList($filter = null, $select = null, $private = true)
   {
     $queryParams = array(
       '$async' => 'false'
@@ -158,8 +164,9 @@ class WAService
     if (!isset($contacts['Contacts'])) {
       return array();
     }
-
-    return $this->controlAccess(array_values($contacts['Contacts']), $filter, $select); 
+    if($private) {
+      return $this->controlAccess(array_values($contacts['Contacts']), $filter, $select); 
+    } return array_values($contacts['Contacts']);
   }
 
   private function getAccountDetails()
