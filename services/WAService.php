@@ -70,8 +70,10 @@ class WAService
     //caching this would be good, how? //TODO nice to have
     $defaultAccess = array();
     foreach($contactFields as $contactField) {
-      $defaultAccess[$contactField['SystemCode']] = $contactField['Access'];
+      $defaultAccess[$contactField['FieldName']] = $contactField['Access'];
     }
+
+    //extra information gets passed, should that be removed here? go back to some of previous version
 
     $exclude = false;
     $filters = array();
@@ -89,8 +91,8 @@ class WAService
       //loop each contact and check privacy for each filter (slow, limit filters)
       foreach($filterData as $contact => $contactInfo) {
         foreach($contactInfo["FieldValues"] as $field => $value) { //for each filtered attribute for each contact
-          $SystemCode = $value["SystemCode"];
-          $access = $defaultAccess[$SystemCode]; //get default privacy setting
+          $FieldName = $value["FieldName"];
+          $access = $defaultAccess[$FieldName]; //get default privacy setting
           if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
             $access = $value["CustomAccessLevel"]; //custom takes priority always
           }
@@ -98,7 +100,8 @@ class WAService
             $excludedContacts[] = $contactInfo["Id"]; //add this
             continue; //ie continue to next contact
           }
-      } 
+        } 
+      }
     }
     if(!empty($excludedContacts)) {
       $exclude = true;
@@ -109,8 +112,8 @@ class WAService
         continue; 
       }
       foreach($contactInfo["FieldValues"] as $field => $value) { //for each selected value, which have already been selected by the api
-        $SystemCode = $value["SystemCode"]; //combine below once tested
-        $access = $defaultAccess[$SystemCode]; //get default privacy setting
+        $FieldName = $value["FieldName"]; //combine below once tested
+        $access = $defaultAccess[$FieldName]; //get default privacy setting
         if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
           $access = $value["CustomAccessLevel"]; //custom takes priority always
         }
@@ -122,10 +125,11 @@ class WAService
     }
     return $contacts;
     //id, field name, access [Nobody, Members, Public]
-    //system code, not field name
+    //field name, not system code because that is what filter uses ???? choices
     //"No matching records (only opted-in members are included)"
     //cache
     //find good way to test
+    //double check isset vs empty and things being null
   }
 
   public function getContactsList($filter = null, $select = null, $private = true)
@@ -137,9 +141,19 @@ class WAService
     if (!empty($filter)) {
       $queryParams = array_merge($queryParams, array('$filter' => $filter));
     }
-
-    if (!empty($select)) {
-      $queryParams = array_merge($queryParams, array('$select' => $select));
+    
+    //only Active or PendingRenewal members show up in member directory (or featured member). If this is used elsewhere, should be run with pr=ivate = false
+    //TODO check for other uses
+    if($private) {
+      if (!empty($select)) {
+        $queryParams = array_merge($queryParams, array('$select' => ($select . "AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
+      } else {
+        $queryParams = array_merge($queryParams, array('$select' => "(Status eq 'Active' OR Status eq 'PendingRenewal')"));
+      }
+    } else {
+      if (!empty($select)) {
+        $queryParams = array_merge($queryParams, array('$select' => ($select)));
+      }
     }
 
     $query = http_build_query($queryParams, null, '&', PHP_QUERY_RFC3986);
