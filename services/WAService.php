@@ -57,7 +57,7 @@ class WAService
     //get /contactfields to see/store what things are allowed to who
     $contactFields = $this->getContactFields();
     if($contactFields['statusCode'] != 200) {
-      return $contactFields; //Error: if the restriction of everything can't be determined, can't give information  
+      return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the  
     }
     
     $contactFields = array_values($contactFields[0]['body']); //is the [0] needed?
@@ -65,10 +65,11 @@ class WAService
     $defaultAccess = array();
     foreach($contactFields as $contactField) {
       $defaultAccess[$contactField['SystemCode']] = $contactField['Access']; 
+      //fieldname or system code? both are passed, let's use the code though
     }
 
     if(empty($select)) {
-      return $contacts; //can return because there is no content
+      return $contacts; //can return because there is no content selected to return
     } else {
       $select = str_replace("'", '', $select);
       $select = explode(',', $select); //make into array
@@ -81,27 +82,38 @@ class WAService
     }
 
     foreach($contacts as $contact => $contactInfo) {
-      if($filterExists) {
-        // for each filter term,
-        foreach($filters as $filter)
-          $access = $defaultAccess[$filter]; //get default privacy setting
-          //if [custom] exist
-          //access = that 
+      foreach($contactInfo["FieldValues"] as $field => $value) { //test this. becasue each field values is blank, can't just lookup, have to iterate through all.. average o(n) bc hashtable o(1)
+        $SystemCode = $value["SystemCode"];
+        $access = null;
+
+        //would it be faster or slower to keep track of how many filters and selects there are and then if 0 continue to next contact early?
+
+        if($filterExists && isset($filters[$SystemCode])) { //if a filter exists on this attribute
+          //find privacy
+          $access = $defaultAccess[$SystemCode]; //get default privacy setting
+          if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
+            $access = $value["CustomAccessLevel"]; //custom takes priority always
+          }
           if($access == "Nobody" || ($access == "Members" && !$member)) {
             //exclude entire contact (how??) continue to next contact
           }
-      }
-      //for each selected
-      foreach($select as $term) {
-        //eee not an easy access? maybe some better way than looping, rip. 
-        //if must loop, best way is go through all, check if thing is a filtered term, that way only 1 pass
-        $access = $defaultAccess[$term]; //get default privacy setting
-        //if [custom] exist
-          //access = that
-            
-        if($access == "Nobody" || ($access == "Members" && !$member)) {
-          //actually, this contact[attr] = "" ; secret time! // is this going to cause type issues or smth?
-        }  // otherwise it's all good
+        } 
+        if(isset($select[$SystemCode])) {
+          if(!isset($access)) { //access not set
+            $access = $defaultAccess[$SystemCode]; //get default privacy setting
+            if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
+              $access = $value["CustomAccessLevel"]; //custom takes priority always
+            }
+          } //access is set
+          if($access == "Nobody" || ($access == "Members" && !$member)) {
+            //actually, this contact[attr[value]] = "" ; secret time! 
+          }  
+        } else {
+          //exclude this attribute
+          //wait, this already happenes, select has already selected I think
+          //it sends some extras 
+          //aaaaaa this was actually pointless, this will only be handling filtered values, will have to reformat and select again for queries
+        }
       }
     }
     return $contacts;

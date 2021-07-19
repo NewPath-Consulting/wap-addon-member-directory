@@ -1,0 +1,1127 @@
+[
+    {
+        "body": [
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3007",
+                "Id": 3007,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Archived",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the contact record is archived.",
+                "Order": 0,
+                "SystemCode": "IsArchived"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3019",
+                "Id": 3019,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Donor",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the contact has made donations at least once.",
+                "Order": 0,
+                "SystemCode": "IsDonor"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3020",
+                "Id": 3020,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Event registrant",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the contact attended at least one event.",
+                "Order": 0,
+                "SystemCode": "IsEventAttendee"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3021",
+                "Id": 3021,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Member",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the contact is a member.",
+                "Order": 0,
+                "SystemCode": "IsMember"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3022",
+                "Id": 3022,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Suspended member",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the contact is a suspended member.",
+                "Order": 0,
+                "SystemCode": "IsSuspendedMember"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3013",
+                "Id": 3013,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Event announcements",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether event announcements are enabled within the contact's email preferences.",
+                "Order": 0,
+                "SystemCode": "ReceiveEventReminders"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3014",
+                "Id": 3014,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Member emails and newsletters",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether manually sent emails are enabled within the contact's email preferences.",
+                "Order": 0,
+                "SystemCode": "ReceiveNewsletters"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3017",
+                "Id": 3017,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Email delivery disabled",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether email delivery is disabled for this contact, either because no email address was specified or the delivery of emails was disabled.",
+                "Order": 0,
+                "SystemCode": "EmailDisabled"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3018",
+                "Id": 3018,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Receiving emails disabled",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the delivery of all emails was disabled from the contact's email preferences.",
+                "Order": 0,
+                "SystemCode": "RecievingEMailsDisabled"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3029",
+                "Id": 3029,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Balance",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Balance",
+                "Order": 0,
+                "SystemCode": "Balance"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3030",
+                "Id": 3030,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Total donated",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The total value of all donations made by this contact.",
+                "Order": 0,
+                "SystemCode": "TotalDonated"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3023",
+                "Id": 3023,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Registered for specific event",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Registered for specific event",
+                "Order": 0,
+                "SystemCode": "RegistredForEvent"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3024",
+                "Id": 3024,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Profile last updated",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time the contact record was last updated.",
+                "Order": 0,
+                "SystemCode": "LastUpdated"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3025",
+                "Id": 3025,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": false,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Profile last updated by",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Identifier of member, who last updated the contact.",
+                "Order": 0,
+                "SystemCode": "LastUpdatedBy"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3026",
+                "Id": 3026,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Creation date",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time the contact record was created.",
+                "Order": 0,
+                "SystemCode": "CreationDate"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3028",
+                "Id": 3028,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Last login date",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time the contact last logged in to their account.",
+                "Order": 0,
+                "SystemCode": "LastLoginDate"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3032",
+                "Id": 3032,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": false,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "MultipleChoice",
+                "FieldName": "Administrator role",
+                "Type": "MultipleChoice",
+                "AllowedValues": [
+                    {
+                        "Id": 0,
+                        "Label": null,
+                        "Value": "Undefined",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 1,
+                        "Label": "Website editor",
+                        "Value": "WebSiteEditor",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 2,
+                        "Label": "Membership manager",
+                        "Value": "MembershipManager",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 4,
+                        "Label": "Event manager",
+                        "Value": "EventManager",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 8,
+                        "Label": "Donations manager",
+                        "Value": "DonationManager",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 16,
+                        "Label": "Restricted website editor",
+                        "Value": "RestrictedWebSiteEditor",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 32,
+                        "Label": "Newsletter manager",
+                        "Value": "NewsletterManager",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 64,
+                        "Label": "Online store manager",
+                        "Value": "StoreManager",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 128,
+                        "Label": "Account administrator (Read-only access)",
+                        "Value": "AccountReadOnlyAdministrator",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 256,
+                        "Label": "Account administrator (Full access)",
+                        "Value": "AccountAdministrator",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    }
+                ],
+                "IsSystem": true,
+                "Description": "Administrator role",
+                "Order": 0,
+                "DisplayType": "CheckboxGroup",
+                "SystemCode": "AdminRole"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3009",
+                "Id": 3009,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "MultilineText",
+                "FieldName": "Notes",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Any notes added to the contact's record.",
+                "Order": 0,
+                "DisplayType": "MultilineText",
+                "SystemCode": "Notes"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3031",
+                "Id": 3031,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": false,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldType": "RulesAndTerms",
+                "FieldName": "Terms of use accepted",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Terms of use accepted",
+                "Order": 0,
+                "SystemCode": "SystemRulesAndTermsAccepted",
+                "RulesAndTermsInfo": {
+                    "Text": null,
+                    "Link": "http://www.wildapricot.com/termsofuse.aspx"
+                }
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3027",
+                "Id": 3027,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldType": "MultipleChoice",
+                "FieldName": "Subscription source",
+                "Type": "MultipleChoice",
+                "AllowedValues": [
+                    {
+                        "Id": 361875,
+                        "Label": "Subscribe to our Newsletter",
+                        "Value": "361875",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    }
+                ],
+                "IsSystem": true,
+                "Description": "Subscription source",
+                "Order": 0,
+                "DisplayType": "CheckboxGroup",
+                "SystemCode": "SubscriptionSource"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7003",
+                "Id": 7003,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Member role",
+                "Type": "Choice",
+                "AllowedValues": [
+                    {
+                        "Id": 1,
+                        "Label": "Bundle administrator",
+                        "Value": "1",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 2,
+                        "Label": "Bundle member",
+                        "Value": "2",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 0,
+                        "Label": "Individual",
+                        "Value": "0",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    }
+                ],
+                "IsSystem": true,
+                "Description": "Indicates whether the contact is an individual member, a bundle member, or a bundle administrator.",
+                "Order": 0,
+                "SystemCode": "MemberRole"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7005",
+                "Id": 7005,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Member since",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time that the contact became a member.",
+                "Order": 0,
+                "SystemCode": "MemberSince"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7006",
+                "Id": 7006,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Renewal due",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time of the member's next renewal date.",
+                "Order": 0,
+                "SystemCode": "RenewalDue"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7010",
+                "Id": 7010,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Membership level ID",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The identifier of the membership level assigned to the contact (if any).",
+                "Order": 0,
+                "SystemCode": "MembershipLevelId"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7013",
+                "Id": 7013,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Access to profile by others",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Indicates whether the Show profile option is enabled in this member's privacy settings.",
+                "Order": 0,
+                "SystemCode": "AccessToProfileByOthers"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7020",
+                "Id": 7020,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Renewal date last changed",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time the member's renewal date was last changed.",
+                "Order": 0,
+                "SystemCode": "RenewalDateLastChanged"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7021",
+                "Id": 7021,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Level last changed",
+                "Type": "DateTime",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "The date and time the contact's membership level was last changed",
+                "Order": 0,
+                "SystemCode": "LevelLastChanged"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7023",
+                "Id": 7023,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": false,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Bundle ID",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Bundle ID which member belongs to",
+                "Order": 0,
+                "SystemCode": "BundleId"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7007",
+                "Id": 7007,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldName": "Membership status",
+                "Type": "Choice",
+                "AllowedValues": [
+                    {
+                        "Id": 1,
+                        "Label": "Active",
+                        "Value": "Active",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 2,
+                        "Label": "Lapsed",
+                        "Value": "Lapsed",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 20,
+                        "Label": "Pending - New",
+                        "Value": "PendingNew",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 3,
+                        "Label": "Pending - Renewal",
+                        "Value": "PendingRenewal",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 30,
+                        "Label": "Pending - Level change",
+                        "Value": "PendingUpgrade",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    }
+                ],
+                "IsSystem": true,
+                "Description": "The status of the contact's membership.",
+                "Order": 0,
+                "SystemCode": "Status"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7001",
+                "Id": 7001,
+                "Access": "Nobody",
+                "ExistsInLevels": [
+                    {
+                        "Id": 1292474,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292474"
+                    },
+                    {
+                        "Id": 1292475,
+                        "Url": "https://api.wildapricot.org/v2.2/accounts/372414/MembershipLevels/1292475"
+                    }
+                ],
+                "MemberOnly": true,
+                "IsBuiltIn": true,
+                "SupportSearch": false,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "Membership enabled",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "Description": "Membership enabled",
+                "Order": 0,
+                "SystemCode": "MembershipEnabled"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3001",
+                "Id": 3001,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": false,
+                "AdminOnly": false,
+                "FieldName": "User ID",
+                "Type": "Number",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a read-only system field used to uniquely identify the member or contact.",
+                "MaxLength": 50,
+                "Order": 0,
+                "SystemCode": "MemberId"
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3003",
+                "Id": 3003,
+                "Access": "Public",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Text",
+                "FieldName": "First name",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a system field (first name).   It cannot be deleted.",
+                "MaxLength": 50,
+                "Order": 1,
+                "DisplayType": "SingleLineText",
+                "SystemCode": "FirstName",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3004",
+                "Id": 3004,
+                "Access": "Public",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Text",
+                "FieldName": "Last name",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a system field (last name).  It cannot be deleted.",
+                "MaxLength": 50,
+                "Order": 2,
+                "DisplayType": "SingleLineText",
+                "SystemCode": "LastName",
+                "IsRequired": true
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3005",
+                "Id": 3005,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": true,
+                "FieldType": "Text",
+                "FieldName": "Organization",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a system field (organization).  It cannot be deleted.",
+                "MaxLength": 250,
+                "Order": 3,
+                "DisplayType": "SingleLineText",
+                "SystemCode": "Organization",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3002",
+                "Id": 3002,
+                "Access": "Public",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Text",
+                "FieldName": "Email",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a system field (email).   It is mandatory for online self-service transactions and cannot be deleted.",
+                "MaxLength": 100,
+                "Order": 4,
+                "DisplayType": "SingleLineText",
+                "SystemCode": "Email",
+                "IsRequired": true
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/13244128",
+                "Id": 13244128,
+                "Access": "Members",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Text",
+                "FieldName": "Company email",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": false,
+                "FieldInstructions": "can't have repeats",
+                "MaxLength": 250,
+                "Order": 5,
+                "DisplayType": "SingleLineText",
+                "SystemCode": "custom-13244128",
+                "IsRequired": true
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/3006",
+                "Id": 3006,
+                "Access": "Public",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Text",
+                "FieldName": "Phone",
+                "Type": "String",
+                "AllowedValues": [],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a system field (phone).  It cannot be deleted.",
+                "MaxLength": 50,
+                "Order": 6,
+                "DisplayType": "SingleLineText",
+                "SystemCode": "Phone",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/13227627",
+                "Id": 13227627,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Picture",
+                "FieldName": "Avatar",
+                "Type": "Picture",
+                "AllowedValues": [],
+                "IsSystem": false,
+                "FieldInstructions": "",
+                "MaxLength": 250,
+                "Order": 7,
+                "SystemCode": "custom-13227627",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/13227630",
+                "Id": 13227630,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": true,
+                "FieldType": "RulesAndTerms",
+                "FieldName": "Privacy Policy",
+                "Type": "Boolean",
+                "AllowedValues": [],
+                "IsSystem": false,
+                "FieldInstructions": "",
+                "Order": 8,
+                "SystemCode": "custom-13227630",
+                "IsRequired": true,
+                "RulesAndTermsInfo": {
+                    "Text": "I confirm I have read and accept the terms of the Privacy Policy",
+                    "Link": "http://"
+                }
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/13227713",
+                "Id": 13227713,
+                "Access": "Public",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "MultipleChoice",
+                "FieldName": "What foods do you like",
+                "Type": "MultipleChoice",
+                "AllowedValues": [
+                    {
+                        "Id": 15175075,
+                        "Label": "Waffles",
+                        "Value": "15175075",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 15175076,
+                        "Label": "Pancakes",
+                        "Value": "15175076",
+                        "SelectedByDefault": false,
+                        "Position": 1
+                    },
+                    {
+                        "Id": 15175077,
+                        "Label": "Eggs",
+                        "Value": "15175077",
+                        "SelectedByDefault": false,
+                        "Position": 2
+                    },
+                    {
+                        "Id": 15175078,
+                        "Label": "Melon",
+                        "Value": "15175078",
+                        "SelectedByDefault": false,
+                        "Position": 3
+                    }
+                ],
+                "IsSystem": false,
+                "FieldInstructions": "",
+                "Order": 9,
+                "DisplayType": "CheckboxGroup",
+                "SystemCode": "custom-13227713",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/13227714",
+                "Id": 13227714,
+                "Access": "Members",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "RadioButtons",
+                "FieldName": "Choose",
+                "Type": "Choice",
+                "AllowedValues": [
+                    {
+                        "Id": -2147483648,
+                        "Label": null
+                    },
+                    {
+                        "Id": 15175079,
+                        "Label": "Waffles",
+                        "Value": "15175079",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 15175080,
+                        "Label": "Pancakes",
+                        "Value": "15175080",
+                        "SelectedByDefault": false,
+                        "Position": 1
+                    },
+                    {
+                        "Id": 15175081,
+                        "Label": "None",
+                        "Value": "15175081",
+                        "SelectedByDefault": false,
+                        "Position": 2
+                    }
+                ],
+                "IsSystem": false,
+                "FieldInstructions": "",
+                "Order": 10,
+                "DisplayType": "RadioButtonList",
+                "SystemCode": "custom-13227714",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/13227715",
+                "Id": 13227715,
+                "Access": "Nobody",
+                "MemberOnly": false,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": false,
+                "FieldType": "Dropdown",
+                "FieldName": "Pick",
+                "Type": "Choice",
+                "AllowedValues": [
+                    {
+                        "Id": -2147483648,
+                        "Label": null
+                    },
+                    {
+                        "Id": 15175082,
+                        "Label": "Dogs",
+                        "Value": "15175082",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    },
+                    {
+                        "Id": 15175083,
+                        "Label": "Cats",
+                        "Value": "15175083",
+                        "SelectedByDefault": false,
+                        "Position": 1
+                    },
+                    {
+                        "Id": 15175084,
+                        "Label": "No",
+                        "Value": "15175084",
+                        "SelectedByDefault": false,
+                        "Position": 2
+                    }
+                ],
+                "IsSystem": false,
+                "FieldInstructions": "",
+                "Order": 11,
+                "DisplayType": "DropdownList",
+                "SystemCode": "custom-13227715",
+                "IsRequired": false
+            },
+            {
+                "Url": "https://api.wildapricot.org/v2.2/accounts/372414/ContactFields/7002",
+                "Id": 7002,
+                "Access": "Nobody",
+                "MemberAccess": "Nobody",
+                "MemberOnly": true,
+                "IsBuiltIn": false,
+                "SupportSearch": true,
+                "IsEditable": true,
+                "AdminOnly": true,
+                "FieldName": "Group participation",
+                "Type": "MultipleChoice",
+                "AllowedValues": [
+                    {
+                        "Id": 633475,
+                        "Label": "Board Members",
+                        "Value": "633475",
+                        "SelectedByDefault": false,
+                        "Position": 0
+                    }
+                ],
+                "IsSystem": true,
+                "FieldInstructions": "",
+                "Description": "This is a system field (groups).   It cannot be deleted.",
+                "Order": 0,
+                "SystemCode": "Groups",
+                "IsRequired": false
+            }
+        ],
+        "statusCode": 200
+    }
+]
