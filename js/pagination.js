@@ -20,6 +20,7 @@
 
     function template(data) {
         var html = $("<div></div>");
+        html.addClass('wa-pagination page');
         $.each(data, function(index, item) {
             // console.log(item[1]);
             // html += item[1];
