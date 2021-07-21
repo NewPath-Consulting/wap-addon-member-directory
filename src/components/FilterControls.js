@@ -1,11 +1,12 @@
-import { Panel, PanelBody, PanelRow, ToggleControl } from '@wordpress/components';
+import { Panel, PanelBody, PanelRow, ToggleControl, SelectControl } from '@wordpress/components';
 import { __experimentalText as Text } from '@wordpress/components';
 import { __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
-import Field from './Filter';
+import { Field, Filter } from './Filter';
 import contactFields from '../ContactFields';
+import {SavedSearches, savedSearches} from '../SavedSearches';
 
-export default class FilterControls extends React.Component {
+export default class FieldControls extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -61,13 +62,13 @@ export default class FilterControls extends React.Component {
                         })
                     }
                 </PanelBody>
-                <PanelBody title="Filters" initialOpen={ false }>
-                {
-                    this.state.attributes.fields_applied.map((field) => {
-                        return <Text isBlock>{ contactFields.getFieldName(field.id) }</Text>;
-                    })
-                }
-                </PanelBody>
+                {/* <FilterControls
+                    attributes={ this.state.attributes }
+                    setAttributes={ this.state.setAttributes }
+                >
+                </FilterControls> */}
+                <SavedSearchControl attributes={this.state.attributes} setAttributes={this.state.setAttributes}>
+                </SavedSearchControl>
                 <SearchControl 
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
@@ -81,6 +82,27 @@ export default class FilterControls extends React.Component {
             </Panel>
         );
     }
+}
+
+const SavedSearchControl = (props) => {
+    const [ search, setSearch ] = useState(props.attributes.saved_search);
+
+    return (
+        <PanelBody title="Filters" initialOpen={ false }>
+            <PanelRow>        
+                <SelectControl 
+                    label="Saved search"
+                    value={ search }
+                    options={ savedSearches.getSearchOptions() }
+                    onChange={ (newSearch) => {
+                        setSearch(newSearch);
+                        console.log(typeof newSearch);
+                        props.setAttributes({saved_search: Number(newSearch)});
+                    }}
+                />
+            </PanelRow>
+        </PanelBody>
+    )
 }
 
 function SearchControl(props) {
