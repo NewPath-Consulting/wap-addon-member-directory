@@ -45,6 +45,25 @@ class WAService
     return $contactFields;
   }
 
+  public function getSavedSearches() {
+    $url = $this->getAccountURL() . '/savedsearches';
+
+    $savedSearches = $this->apiClient->makeRequest($url);
+    
+    return $savedSearches;
+  }
+
+  public function getSavedSearch($savedSearchId) {
+    $queryParams = array(
+      'excludeArchived' => 'false'
+    );
+    $query = http_build_query($queryParams);
+    $url = $this->getAccountURL() . '/savedsearches/' . $savedSearchId . '?' . $query;
+    do_action('qm/debug', $url);
+    $savedSearch = $this->apiClient->makeRequest($url);
+    return $savedSearch;
+  }
+
   public function getContactsList($filter = null, $select = null)
   {
     $queryParams = array(
