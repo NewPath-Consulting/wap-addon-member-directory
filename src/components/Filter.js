@@ -1,8 +1,8 @@
-import { PanelRow, CheckboxControl } from '@wordpress/components';
+import { PanelRow, CheckboxControl, SelectControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import contactFields from '../ContactFields';
 
-export default class Field extends React.Component {
+export class Field extends React.Component {
     constructor(props) {
         super(props);
         this.state = ({
@@ -26,29 +26,7 @@ export default class Field extends React.Component {
     }
 }
 
-// export default class Filter extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = ({
-//             attributes: props.attributes,
-//             setAttributes: props.setAttributes,
-//             field: props.field,
-//             type: props.field.type,
-//             allowed_values: props.field.allowed_values
-//         });
-//     }
-
-//     render() {
-//         if (this.state.type == 'Boolean') {
-//             return(
-
-//             )
-//         }
-//     }
-// }
-
 function FieldCheckbox(props) {
-    let setAttr = props.setAttributes;
     let arr = props.attributes.fields_applied
     let exists = contains(arr, props.field) == -1 ? false : true;
 
@@ -65,12 +43,12 @@ function FieldCheckbox(props) {
             // remove it
         }
 
-        setAttr({fields_applied: arr});
+        props.setAttributes({fields_applied: arr});
     });
     
     return (
         <CheckboxControl
-            label={ contactFields.getFieldName(props.field.id) }
+            label={ props.field.name }
             checked={ isChecked }
             onChange={ setChecked }
         >
