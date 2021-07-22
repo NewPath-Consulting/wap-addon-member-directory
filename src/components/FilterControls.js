@@ -96,7 +96,6 @@ const SavedSearchControl = (props) => {
                     options={ savedSearches.getSearchOptions() }
                     onChange={ (newSearch) => {
                         setSearch(newSearch);
-                        console.log(typeof newSearch);
                         props.setAttributes({saved_search: Number(newSearch)});
                     }}
                 />
