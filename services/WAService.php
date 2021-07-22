@@ -50,7 +50,7 @@ class WAService
     //is current wp user member or public
     $member = false;
     $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
-    if($currentUserStatus == "Active" || $currentUserStatus == "PendingRenewal") { //contains or [0] bc array?
+    if($currentUserStatus == "Active" || $currentUserStatus == "PendingRenewal") { //TEST
       $member = true;
     }
     
@@ -60,21 +60,20 @@ class WAService
 
     //get /contactfields to see/store what things are allowed for what levels
     $contactFields = $this->getContactFields(); //this does every field
-    if($contactFields['statusCode'] != 200) {
+    /*if($contactFields['statusCode'] != 200) { //TEST: how to check for error?
       return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the error 
-    }
+    }*/
 
     $contactFields = array_values($contactFields[0]['body']); //is the [0] needed?
     //for each field store the access level
     //could possibly store less? is it better to store everything or filter what is stored
-    //caching this would be good, how? //TODO nice to have
+    //caching this would be good, how? //FUTURE nice to have
     $defaultAccess = array();
     foreach($contactFields as $contactField) {
       $defaultAccess[$contactField['FieldName']] = $contactField['Access'];
     }
 
-    //extra information gets passed, should that be removed here? go back to some of previous version
-
+    //filter isn't going to be used in the September 2021 version, leaving this for future developer
     $exclude = false;
     $filters = array();
     $excludedContacts = array();
@@ -83,7 +82,7 @@ class WAService
       // extract each term, put in array $filters
       //TODO
 
-      //select filters with api call, privacy turned off
+      //select filters with api call, privacy turned off to check privacy
       $filterData = $this -> getContactsList(null, $filters, false);
       if(empty($filterData)) {
         return array(); //can't return if can't guarentee privacy
@@ -108,19 +107,24 @@ class WAService
     }
 
     foreach($contacts as $contact => $contactInfo) {
-      if($exclude && isset($excludedContacts[$contactInfo["Id"]])) { //an attribute this contact has private is being filtered on, so can't show contact
+      if($exclude && isset($excludedContacts[$contactInfo["Id"]])) { //an attribute this contact has private is being filtered on, so can't display contact
         continue; 
       }
       foreach($contactInfo["FieldValues"] as $field => $value) { //for each selected value, which have already been selected by the api
         $FieldName = $value["FieldName"]; //combine below once tested
-        $access = $defaultAccess[$FieldName]; //get default privacy setting
-        if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
-          $access = $value["CustomAccessLevel"]; //custom takes priority always
+        if(!($FieldName == "AccessToProfileByOthers" && $value["Value"] == false)) { //if can be shown to others (can't access this any more easily)
+          $access = $defaultAccess[$FieldName]; //get default privacy setting
+          if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
+            $access = $value["CustomAccessLevel"]; //custom takes priority always
+          }
+          if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way an error defaults private)
+            //secret time! hide this specific value
+            $value["Value"] = null; //type issues?
+          } 
+        } else {
+          unset($contacts[$contact]); //exclude this contact
+          //https://stackoverflow.com/questions/2304570/how-to-delete-object-from-array-inside-foreach-loop
         }
-        if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way an error defaults private)
-          //secret time! hide this specific value
-          $value["Value"] = null; //type issues?
-        }  
       }
     }
     return $contacts;
@@ -130,21 +134,31 @@ class WAService
     //cache
     //find good way to test
     //double check isset vs empty and things being null
+    //shortcode selects
   }
 
   public function getContactsList($filter = null, $select = null, $private = true)
   {
+    //fyi select only works with single quotes
     $queryParams = array(
       '$async' => 'false'
     );
 
+    if($private) { //The global restriction is a FieldValue (terrible design), so need to get 
+      if (!empty($filter)) {
+        $queryParams = array_merge($queryParams, array('$filter' => ($filter . ",'AccessToProfileByOthers'")));
+      }else {
+        $queryParams = array_merge($queryParams, array('$select' => "'AccessToProfileByOthers'"));
+      }
+    }
     if (!empty($filter)) {
       $queryParams = array_merge($queryParams, array('$filter' => $filter));
     }
     
-    //only Active or PendingRenewal members show up in member directory (or featured member). If this is used elsewhere, should be run with pr=ivate = false
-    //TODO check for other uses
-    if($private) {
+    //only Active or PendingRenewal members show up in member directory (or featured member). If this is used elsewhere, should be run with private = false
+    //TODO check for other places this api call is used. private should likely be false by default, as that is the generic behavior
+
+    if($private) { //FUTURE: let this be customizable while private is on
       if (!empty($select)) {
         $queryParams = array_merge($queryParams, array('$select' => ($select . "AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
       } else {
