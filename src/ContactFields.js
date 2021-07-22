@@ -9,8 +9,9 @@ const getContactFields = async () => {
            }
     });
     const data = await resp.text();
-    var result_1 = JSON.parse(data);
-    return result_1;
+    console.log(data);
+    // var result_1 = JSON.parse(data);
+    // return result_1;
 } 
 
 class ContactFields {

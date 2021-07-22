@@ -31,23 +31,20 @@ class ContactsAPI
         add_action('rest_api_init', function () {
             register_rest_route('wafw/v1', '/contacts/search/', array(
               'methods' => 'GET',
-              'callback' => array($this, 'contactsRestRoutes')
+              'callback' => array($this, 'contactsRestRoutes'),
+              'permissions_callback' => '__return_true'
             ));
 
             register_rest_route('wawp/v1', '/contacts/fields/', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'contactFieldsRestRoute'),
-                'permissions_callback' => function() {
-                    return current_user_can('edit_others_posts');
-                }
+                'permissions_callback' => '__return_true'
             ));
 
             register_rest_route('wawp/v1', '/savedsearches/', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'savedSearchesRestRoute'),
-                'permissions_callback' => function() {
-                    return current_user_can('edit_others_posts');
-                }
+                'permissions_callback' => '__return_true'
             ));
         });
     }
