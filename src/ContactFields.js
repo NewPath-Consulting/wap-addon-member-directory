@@ -2,7 +2,12 @@
 const getContactFields = async () => {
 	const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
 
-	const resp = await fetch(CF_API_URL);
+	const resp = await fetch(CF_API_URL, {
+        headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+           }
+    });
     const data = await resp.text();
     var result_1 = JSON.parse(data);
     return result_1;
