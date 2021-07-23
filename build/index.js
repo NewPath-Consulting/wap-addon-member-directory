@@ -6160,8 +6160,9 @@ const getContactFields = async () => {
     }
   });
   const data = await resp.text();
-  console.log(data); // var result_1 = JSON.parse(data);
-  // return result_1;
+  console.log(data);
+  var result_1 = JSON.parse(data);
+  return result_1;
 };
 
 class ContactFields {
@@ -6276,8 +6277,9 @@ const getSavedSearches = async () => {
     }
   });
   const data = await resp.text();
-  console.log(data); // var result_1 = JSON.parse(data);
-  // return result_1;
+  console.log(data);
+  var result_1 = JSON.parse(data);
+  return result_1;
 };
 
 class SavedSearches {
