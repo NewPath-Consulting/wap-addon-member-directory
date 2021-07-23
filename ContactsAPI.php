@@ -86,7 +86,7 @@ class ContactsAPI
 
         ob_start();
         foreach ($contacts as $contact) {
-            $this->renderFieldValuesList($contact, $profileURL);
+            $this->renderContactDiv($contact, $profileURL);
         }
         $contactsHTML = ob_get_contents();
         ob_end_clean();

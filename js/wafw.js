@@ -31,6 +31,7 @@ searchForms.forEach(searchForm => {
         );
         resultsContainer.innerHTML = result.results[0];
         document.body.style.cursor = "default";
+        toggleSearchDisplay();
       });
   });
 });
@@ -65,3 +66,14 @@ sitesSelectors.forEach(sitesSelector => {
       });
   });
 });
+
+function toggleSearchDisplay() {
+  console.log('toggleSearchDisplay called');
+  // need to hide page, show regular contacts display
+  var contacts_page = document.getElementsByClassName('wa-pagination')[0];
+  var page_controls = document.getElementsByClassName('paginationjs')[0];
+  contacts_page.style.display = "none";
+  page_controls.style.display = "none";
+  var search_result = document.getElementsByClassName('wa-contacts-items')[0];
+  search_result.style.display = "grid";
+}
