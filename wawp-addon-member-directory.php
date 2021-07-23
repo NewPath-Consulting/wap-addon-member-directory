@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       WAWP Member Directory Addon
- * Description:       Example block written with ESNext standard and JSX support – build step required.
+ * Description:       Add a Wild Apricot Member Directory to your website!
  * Requires at least: 5.7
  * Requires PHP:      7.0
  * Version:           0.1.0

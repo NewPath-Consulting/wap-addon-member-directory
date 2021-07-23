@@ -6153,10 +6153,15 @@ __webpack_require__.r(__webpack_exports__);
 // TODO: get filter data here
 const getContactFields = async () => {
   const CF_API_URL = "/wp-json/wawp/v1/contacts/fields/";
-  const resp = await fetch(CF_API_URL);
+  const resp = await fetch(CF_API_URL, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  });
   const data = await resp.text();
-  var result_1 = JSON.parse(data);
-  return result_1;
+  console.log(data); // var result_1 = JSON.parse(data);
+  // return result_1;
 };
 
 class ContactFields {
@@ -6264,10 +6269,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "savedSearches", function() { return savedSearches; });
 const getSavedSearches = async () => {
   const CF_API_URL = "/wp-json/wawp/v1/savedsearches/";
-  const resp = await fetch(CF_API_URL);
+  const resp = await fetch(CF_API_URL, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  });
   const data = await resp.text();
-  var result_1 = JSON.parse(data);
-  return result_1;
+  console.log(data); // var result_1 = JSON.parse(data);
+  // return result_1;
 };
 
 class SavedSearches {
@@ -6480,7 +6490,6 @@ const SavedSearchControl = props => {
     options: _SavedSearches__WEBPACK_IMPORTED_MODULE_4__["savedSearches"].getSearchOptions(),
     onChange: newSearch => {
       setSearch(newSearch);
-      console.log(typeof newSearch);
       props.setAttributes({
         saved_search: Number(newSearch)
       });
