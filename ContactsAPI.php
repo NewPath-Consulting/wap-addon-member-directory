@@ -245,7 +245,12 @@ class ContactsAPI
                 continue;
             }
 
-            if (is_array($field['Value'])) {
+            if (ContactsUtils::isPicture($field['Value'])) {
+                //data:image/gif;base64,
+                $picture = $this->getPictureFromAPI($field['Value']['Url']);
+                $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
+                echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+            } else if (is_array($field['Value'])) {
                 $this->renderNestedFieldValuesList($field['FieldName'], $field['Value']);
             } else if ($field['Value'] === "") {
                 continue;
@@ -281,7 +286,9 @@ class ContactsAPI
                 continue;
             }
 
-            if (is_array($field['Value'])) {
+            if (ContactsUtils::isPicture($field['Value'])) {
+
+            } else if (is_array($field['Value'])) {
                 $this->renderNestedFieldValuesList($field['FieldName'], $field['Value']);
             } elseif ($field['Value'] === "") {
                 $this->renderLITag(
@@ -486,7 +493,6 @@ class ContactsAPI
 
         // first need to make a request to the saved search
         $savedSearch = $waService->getSavedSearch($savedSearchId);
-        do_action('qm/debug', $savedSearch);
 
         $filtered_contacts = [];
 
@@ -497,7 +503,6 @@ class ContactsAPI
             }
         }
 
-        do_action('qm/debug', $filtered_contacts);
         return $filtered_contacts;
         // returns list of contact IDs.
 
@@ -521,6 +526,24 @@ class ContactsAPI
         $contacts = new Contacts($contacts);
         $contacts = $contacts->searchByKeywords($keywords);
         return $contacts;
+    }
+
+    private function getPictureFromAPI($url) {
+        $waAPIKeys = SettingsService::getWAapiKeys();
+        if (empty($waAPIKeys)) {
+            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
+        }
+        $outer_idx = array_key_first($waAPIKeys);
+
+        $key = $waAPIKeys[$outer_idx]['key'];
+
+        $waService = new WAService($key);
+
+        $waService->init();
+
+        $picture = $waService->getPicture($url);
+
+        return $picture;
     }
 }
 ?>

@@ -104,6 +104,19 @@ class WAService
     return array_values($contacts['Contacts']);
   }
 
+  public function getPicture($pictureUrl) {
+    $queryParams = array(
+      'fullSize' => 'false',
+      'asBase64' => 'true'
+    );
+
+    $query = http_build_query($queryParams);
+    $url = $pictureUrl . '?' . $query;
+    $picture = $this->apiClient->makeRequest($url, true);
+    do_action('qm/debug', $picture);
+    return $picture;
+  }
+
   private function getAccountDetails()
   {
     $accounts = $this->apiClient->makeRequest(ACCOUNTS_API_URL);

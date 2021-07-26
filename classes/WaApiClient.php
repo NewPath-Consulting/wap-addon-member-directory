@@ -50,7 +50,7 @@ class WaApiClient
         }
     }
 
-    public function makeRequest($url, $verb = 'GET', $data = null)
+    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = null)
     {
         if (!$this->token) {
             throw new \Exception(
@@ -78,6 +78,10 @@ class WaApiClient
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $jsonResult = curl_exec($ch);
+        if ($isPicture && $jsonResult) {
+            do_action('qm/debug', $jsonResult);
+            return $jsonResult;
+        }
         if ($jsonResult === false) {
             throw new \Exception(curl_errno($ch) . ': ' . curl_error($ch));
         }
