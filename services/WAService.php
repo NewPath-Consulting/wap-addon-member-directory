@@ -45,32 +45,39 @@ class WAService
     return $contactFields;
   }
 
-
-	  public function controlAccess($contacts = array(), $filter = null, $select = null) {
+  public function controlAccess($contacts = array(), $filter = null, $select = null) {
     //is current wp user member or public
     $member = false;
-    $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
-    if(in_array("Active", $currentUserStatus) || in_array("PendingRenewal", $currentUserStatus)) { 
-      $member = true;
+    $restricted_statuses = get_option('wawp_restriction_status_name');
+    // If there are restricted statuses, then we must check them against the user's status
+    if (!empty($restricted_statuses)) {
+      $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
+      // If user's status is not in the restricted statuses, then the user cannot see the post
+      if (in_array($currentUserStatus, $restricted_statuses)) {
+        $member = true;
+      }
+    } else {
+      $member = true; //if no resticted levels, let all logged in WA users see. ASK: is this desired behavior? 
     }
-   
+
     if(empty($select)) {
       return $contacts; //can return because there is no content
     } 
 
-    //get /contactfields to see/store what things are allowed for what levels
-    $contactFields = $this->getContactFields(); //this does every field
-    /*if($contactFields['statusCode'] != 200) { //TEST: how to check for error?
+
+    $contactFields = array(); 
+    $contactFields = array_values($this->getContactFields()); //get /contactfields to see/store what things are allowed for what levels
+    //How to check for error? This will cause an error if empty
+    /*if($contactFields['statusCode'] != 200) { 
       return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the error 
     }*/
-    $contactFields = array_values($contactFields); 
-    //for each field store the access level
-    //could possibly store less? is it better to store everything or filter what is stored
-    //caching this would be good, how? //FUTURE nice to have
+
+    //FUTURE: caching this would be good, how? 
     $defaultAccess = array();
-    foreach($contactFields as $contactField) {
-      $defaultAccess[$contactField['SystemCode']] = $contactField['Access'];
+    foreach($contactFields as $contactField) { //for each field store the access level
+      $defaultAccess[$contactField['SystemCode']] = $contactField['Access']; //could store only those in $select if no cache
     }
+
     //filter isn't going to be used in the September 2021 version, leaving this for future developer
     //highly recommend resticting people to system code only for input
     /*$exclude = false;
@@ -103,57 +110,44 @@ class WAService
     }
     if(!empty($excludedContacts)) {
       $exclude = true;
-    }
-*/
+    }*/
 		 
     foreach($contacts as $contact => $contactInfo) {
-      /*if($exclude && isset($excludedContacts[$contactInfo["Id"]])) { //an attribute this contact has private is being filtered on, so can't display contact
-        continue; }*/
-		
-			
-		foreach($contactInfo["FieldValues"] as $field => $value) { //for each selected value, which have already been selected by the api
-	    
- 
-		  $SystemCode = $value["SystemCode"]; //combine below once tested
+      /*if($exclude && isset($excludedContacts[$contactInfo["Id"]])) { 
+        continue; //an attribute this contact has private is being filtered on, so can't display contact
+       }*/
+
+      foreach($contactInfo["FieldValues"] as $field => $value) { //for each selected value
+        $SystemCode = $value["SystemCode"]; 
         if(!($SystemCode == "AccessToProfileByOthers")) {    
-			    $access = $defaultAccess[$SystemCode]; //get default privacy setting
+          $access = $defaultAccess[$SystemCode]; //get default privacy setting
           if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
             $access = $value["CustomAccessLevel"]; //custom takes priority always
           }
-          if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way an error defaults private)
-            //secret time! hide this specific value            
-			      $contacts[$contact]["FieldValues"][$field]["Value"] = "Restricted"; //need to modify value directly 
+          if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way errors default private)       
+            $contacts[$contact]["FieldValues"][$field]["Value"] = "🔒 Restricted"; //hide this specific value
           } 
         } else { //SystemCode == "AccessToProfileByOthers"
-          if($value["Value"] == false) { //if can be shown to others (can't access this any more easily)
+          if($value["Value"] == false) { //if can be shown to others
             unset($contacts[$contact]); //exclude this contact
-            //https://stackoverflow.com/questions/2304570/how-to-delete-object-from-array-inside-foreach-loop   
           } else {
             unset($contacts[$contact]["FieldValues"][$field]); //exclude access to profile by others because we included it 
-            //FUTURE: let is stay? value could only be true if someone can see, kind of pointless
+            //FUTURE: let it stay if chosen? value could only be true if someone can see contact, kind of pointless
           }              
         }
       }  
-	}
-		  return $contacts;
-    //id, field name, access [Nobody, Members, Public]
-    //field name, not system code because that is what filter uses ???? choices
-    //"No matching records (only opted-in members are included)"
-    //cache
-    //find good way to test
-    //double check isset vs empty and things being null
-    //shortcode selects
+	  }
+		return $contacts;
+    //"No matching records (only opted-in members are included)" in table
   }
 
-  public function getContactsList($filter = null, $select = null, $private = true)
+  public function getContactsList($filter = null, $select = null, $private = false)
   {
-    //fyi select only works with single quotes
     $queryParams = array(
       '$async' => 'false'
     );
 
-    //remove this later?
-    if($private) { //The global restriction is a FieldValue (terrible design), so need to get 
+    if($private) { //The global restriction of a contact is a FieldValue (terrible design), so need to get 
       if (!empty($select)) {
         $queryParams = array_merge($queryParams, array('$select' => ($select . ",'AccessToProfileByOthers'")));
       } else {
@@ -164,11 +158,8 @@ class WAService
         $queryParams = array_merge($queryParams, array('$select' => $select));
       }
     }
-  
-    //only Active or PendingRenewal members show up in member directory (or featured member). If this is used elsewhere, should be run with private = false
-    //TODO check for other places this api call is used. private should likely be false by default, as that is the generic behavior
 
-    if($private) { //FUTURE: let this be customizable while private is on
+    if($private) { //FUTURE: let shown statuses be customizable
       if (!empty($filter)) {
         $queryParams = array_merge($queryParams, array('$filter' => ($filter . "AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
       } else {
