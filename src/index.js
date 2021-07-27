@@ -19,7 +19,6 @@ import './style.scss';
  */
 import Edit from './edit';
 import save from './save';
-import contactFields from './ContactFields';
 
 /**
  * Every block starts by registering a new block type definition.
@@ -38,16 +37,31 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 					type: 'string',
 					source: 'attribute',
 					attribute: 'data-system-code'
+				},
+				name: {
+					type: 'string',
+					source: 'attribute',
+					attribute: 'data-name'
 				}
 			}
 		},
 		enable_search: {
 			type: 'boolean',
-			default: false
+			default: false,
+			selector: '#enable_search',
+			attribute: 'data-search-enabled'
 		},
 		page_size: {
 			type: 'number',
-			default: 10
+			default: 10,
+			selector: '#page_size',
+			attribute: 'data-page-size'
+		},
+		saved_search: {
+			type: 'number',
+			default: 0,
+			selector: '#saved_search',
+			attribute: 'data-saved-search'
 		}
 	},
 	/**
@@ -61,14 +75,34 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 	save,
 } );
 
-export default function generateShortcode(attributes) {
+export function renderHiddenFields(attributes) {
+	return (
+		<div className="hidden">	
+			<ul>
+			{
+				attributes.fields_applied.map((field) => {
+					return (
+						<li className="filter" key={ field.id } data-system-code={ field.id } data-name={ field.name }>
+						{ field.name }
+						</li>
+					);
+				})
+			}
+			</ul>
+			<div id="enable_search" data-search-enabled={attributes.enable_search ? "true" : "false"}></div>
+			<div id="page_size" data-page-size={attributes.page_size}></div>
+			<div id="saved_search" data-saved-search={attributes.saved_search}></div>
+		</div>
+	);
+}
+
+export function generateShortcode(attributes) {
 	var shortcode_str = '[wa-contacts ';
 
 	var len = attributes.fields_applied.length;
 
 	for (let i = 0; i < len; i++) {
-		let id = attributes.fields_applied[i].id;
-		shortcode_str += '\'' + contactFields.getFieldName(id) + '\'';
+		shortcode_str += '\'' + attributes.fields_applied[i].name + '\'';
 		shortcode_str += ' ';
 	}
 
@@ -78,7 +112,12 @@ export default function generateShortcode(attributes) {
 		shortcode_str += ' search';
 	}
 
+	let search = attributes.saved_search;
+	if (search != 0 && search != undefined) {
+		shortcode_str += ' saved-search=' + attributes.saved_search;
+	}
+
 	shortcode_str += "] [/wa-contacts]";
 
-	return shortcode_str;
+	return <p>{shortcode_str}</p>;
 }

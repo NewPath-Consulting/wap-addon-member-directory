@@ -139,8 +139,7 @@ class WAService
 	  }
 		return $contacts;
     //"No matching records (only opted-in members are included)" in table
-  }
-
+  }   
   public function getContactsList($filter = null, $select = null, $private = false)
   {
     $queryParams = array(
@@ -198,6 +197,38 @@ class WAService
     } return array_values($contacts['Contacts']);
   }
 
+  public function getSavedSearches() {
+    $url = $this->getAccountURL() . '/savedsearches';
+
+    $savedSearches = $this->apiClient->makeRequest($url);
+    
+    return $savedSearches;
+  }
+
+  public function getSavedSearch($savedSearchId) {
+    $queryParams = array(
+      'excludeArchived' => 'false'
+    );
+    $query = http_build_query($queryParams);
+    $url = $this->getAccountURL() . '/savedsearches/' . $savedSearchId . '?' . $query;
+    do_action('qm/debug', $url);
+    $savedSearch = $this->apiClient->makeRequest($url);
+    return $savedSearch;
+  }    
+
+  public function getPicture($pictureUrl) {
+    $queryParams = array(
+      'fullSize' => 'false',
+      'asBase64' => 'true'
+    );
+
+    $query = http_build_query($queryParams);
+    $url = $pictureUrl . '?' . $query;
+    $picture = $this->apiClient->makeRequest($url, true);
+    do_action('qm/debug', $picture);
+    return $picture;
+  }
+
   private function getAccountDetails()
   {
     $accounts = $this->apiClient->makeRequest(ACCOUNTS_API_URL);
@@ -214,7 +245,5 @@ class WAService
     }
     return $this->accountURL;
   }
-
-
 }
 ?>

@@ -12,13 +12,8 @@ import { __ } from '@wordpress/i18n';
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, PanelRow, CheckboxControl } from '@wordpress/components';
-import { __experimentalText as Text } from '@wordpress/components';
-import { useState } from '@wordpress/element';
-import { getContactFields } from './index';
-import FilterControls from './components/FilterControls';
-import contactFields from './ContactFields';
-import generateShortcode  from './index';
+import FieldControls from './components/FilterControls';
+import { generateShortcode, renderHiddenFields } from './index';
 
 /**
  * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
@@ -40,23 +35,12 @@ export default function Edit({attributes, setAttributes}) {
 	return (
 		<div { ...useBlockProps() }>
 			<InspectorControls key="setting">
-				<FilterControls attributes={attributes} setAttributes={setAttributes}></FilterControls>
+				<FieldControls attributes={attributes} setAttributes={setAttributes}></FieldControls>
 			</InspectorControls>
 			<div {...useBlockProps.save()} >
 				<p>Wild Apricot Member Directory</p>
-					<ul>
-						{attributes.fields_applied.map((field) => {
-							// console.debug(field);
-							return (
-								<li className="filter" key={ field.id } data-system-code={ field.id }>
-									{ contactFields.getFieldName(field.id) }
-								</li>
-							)
-						})}
-					</ul>
-					<p>
-						{ generateShortcode(attributes) }
-					</p>
+					{ renderHiddenFields(attributes) }
+					{ generateShortcode(attributes) }
 			</div>
 		</div>
 	);

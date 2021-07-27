@@ -31,15 +31,20 @@ class ContactsAPI
         add_action('rest_api_init', function () {
             register_rest_route('wafw/v1', '/contacts/search/', array(
               'methods' => 'GET',
-              'callback' => array($this, 'contactsRestRoutes')
+              'callback' => array($this, 'contactsRestRoutes'),
+              'permissions_callback' => '__return_true'
             ));
 
             register_rest_route('wawp/v1', '/contacts/fields/', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'contactFieldsRestRoute'),
-                'permissions_callback' => function() {
-                    return current_user_can('edit_others_posts');
-                }
+                'permissions_callback' => '__return_true'
+            ));
+
+            register_rest_route('wawp/v1', '/savedsearches/', array(
+                'methods' => 'GET',
+                'callback' => array($this, 'savedSearchesRestRoute'),
+                'permissions_callback' => '__return_true'
             ));
         });
     }
@@ -81,7 +86,7 @@ class ContactsAPI
 
         ob_start();
         foreach ($contacts as $contact) {
-            $this->renderFieldValuesList($contact, $profileURL);
+            $this->renderContactDiv($contact, $profileURL);
         }
         $contactsHTML = ob_get_contents();
         ob_end_clean();
@@ -94,25 +99,13 @@ class ContactsAPI
 
         $outer_idx = array_key_first($waAPIKeys);
 
-        // $inner_idx = array_key_first($waAPIKeys[$outer_idx]);
-
         $key = $waAPIKeys[$outer_idx]['key'];
-
-        // $key = $waAPIKeys[$outer_idx][$inner_idx]['key'];
-
-        // do_action('qm/debug', $option[$outer_idx][$inner_idx]['key']);
-
-        // $outer = array_key_first($waAPIKeys);
-        // $key = $outer['key'];
-
-
-        // // $key = $arr['key'];
 
         $waService = new WAService($key);
 
         $waService->init();
 
-        $data = $waService->getContactFields(); //ye
+        $data = $waService->getContactFields();
 
         $response = new WP_REST_Response($data, 200);
 
@@ -120,8 +113,28 @@ class ContactsAPI
         $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
 
         return $response;
+    }
 
-        // return rest_ensure_response($contactFields);
+    public function savedSearchesRestRoute() {
+        $waAPIKeys = SettingsService::getWAapiKeys();
+
+        $outer_idx = array_key_first($waAPIKeys);
+
+        $key = $waAPIKeys[$outer_idx]['key'];
+
+        $waService = new WAService($key);
+
+        $waService->init();
+
+
+        $data = $waService->getSavedSearches();
+
+        $response = new WP_REST_Response($data, 200);
+
+        // Set headers.
+        $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
+
+        return $response;
     }
 
     private function register_shortcodes()
@@ -146,7 +159,8 @@ class ContactsAPI
         $profileURL = $this->extractAndRemoveProfileURL($args);
 
         $pageSize = $this->extractAndRemovePageSize($args);
-        do_action('qm/debug', 'page size: {a}', ['a' => $pageSize]);
+
+        $savedSearch = $this->extractAndRemoveSavedSearch($args);
 
         $dropdownList = "";
         if ($this->extractAndRemoveDropdown($args)) {
@@ -160,6 +174,11 @@ class ContactsAPI
         $queryHash = $contactQuery->save();
 
         $contacts = $this->getContactsFromAPI($sites, $filter, $select);
+        // do_action('qm/debug', $contacts);
+        if (!empty($savedSearch)) {
+            $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
+        }
+        
         $contacts = $this->filterContacts($contacts, $args);
 
         $customOutput = apply_filters(
@@ -179,7 +198,6 @@ class ContactsAPI
     {
         
         $pageSizeNum = (int)$pageSize;
-        do_action('qm/debug', 'type of pg size: {a}', ['a' => gettype($pageSizeNum)]);
         $pagination = count($contacts) > $pageSizeNum;
 
         ob_start();
@@ -204,7 +222,8 @@ class ContactsAPI
         }
 
         foreach ($contacts as $contact) {
-            $this->renderFieldValuesList($contact, $profileURL);
+            // $this->renderFieldValuesList($contact, $profileURL);
+            $this->renderContactDiv($contact, $profileURL);
         }
 
         echo '</div>';
@@ -214,6 +233,47 @@ class ContactsAPI
         echo "</div>";
 
         return ob_get_clean();
+    }
+
+    private function renderContactDiv($fields, $profileURL="") {
+        if (empty($fields)) {
+            return;
+        }
+
+        echo '<div class="wa-contact">';
+        foreach ($fields as $field) {
+            if (!isset($field['Value'])) {
+                continue;
+            }
+
+            if (ContactsUtils::isPicture($field['Value'])) {
+                //data:image/gif;base64,
+                $picture = $this->getPictureFromAPI($field['Value']['Url']);
+                $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
+                echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+            } else if (is_array($field['Value'])) {
+                $this->renderNestedFieldValuesList($field['FieldName'], $field['Value']);
+            } else if ($field['Value'] === "") {
+                continue;
+            } else {
+                $this->renderDivTag(
+                    array(
+                        "class" => sanitize_title_with_dashes($field['FieldName']),
+                        "data-wa-label" => htmlspecialchars($field['FieldName'])
+                    ),
+                    htmlspecialchars(trim(var_export($field['Value'], true), '\''))
+                );
+            }
+        }
+
+        if ($profileURL) {
+            $profileURL = rtrim($profileURL, "/");
+
+            $userID = $fields['Id'];
+            echo "<a class=\"wa-more-info\" href=\"/${profileURL}?user-id=${userID}\">More info</a>";
+        }
+
+        echo '</div>';
     }
 
     private function renderFieldValuesList($fields, $profileURL="")
@@ -227,7 +287,9 @@ class ContactsAPI
                 continue;
             }
 
-            if (is_array($field['Value'])) {
+            if (ContactsUtils::isPicture($field['Value'])) {
+
+            } else if (is_array($field['Value'])) {
                 $this->renderNestedFieldValuesList($field['FieldName'], $field['Value']);
             } elseif ($field['Value'] === "") {
                 $this->renderLITag(
@@ -282,6 +344,13 @@ class ContactsAPI
             return $carry . ' ' . $key . '="' . htmlspecialchars($attrs[$key]) . '"';
         });
         echo "<li $attr>" . $value . '</li>';
+    }
+
+    private function renderDivTag($attrs, $value="") {
+        $attr = array_reduce(array_keys($attrs), function($carry, $key) use ($attrs) {
+            return $carry . ' ' . $key . '="' . htmlspecialchars($attrs[$key]) . '"';
+        });
+        echo "<div $attr>" . $value . '</div>';
     }
 
     private function renderSearchbox($searchId="") {
@@ -346,6 +415,12 @@ class ContactsAPI
         return $pageSize;
     }
 
+    private function extractAndRemoveSavedSearch(&$shortCodeArgs) {
+        $savedSearch = isset($shortCodeArgs['saved-search']) ? $shortCodeArgs['saved-search'] : "";
+        unset($shortCodeArgs['saved-search']);
+        return $savedSearch;
+    }
+
     private function extractAndRemoveSearchToggle(&$shortCodeArgs)
     {
         $searchBox = in_array('search', $shortCodeArgs);
@@ -404,6 +479,42 @@ class ContactsAPI
         return $contacts;
     }
 
+    public function filterContactsWithSavedSearch($contacts, $savedSearchId) {
+        $waAPIKeys = SettingsService::getWAapiKeys();
+        if (empty($waAPIKeys)) {
+            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
+        }
+        $outer_idx = array_key_first($waAPIKeys);
+
+        $key = $waAPIKeys[$outer_idx]['key'];
+
+        $waService = new WAService($key);
+
+        $waService->init();
+
+        // first need to make a request to the saved search
+        $savedSearch = $waService->getSavedSearch($savedSearchId);
+
+        $filtered_contacts = [];
+
+        foreach ($contacts as $contact) {
+            // if contact ID not in saved search thing then don't put it in array
+            if (in_array($contact['Id'], $savedSearch['ContactIds'])) {
+                array_push($filtered_contacts, $contact);
+            }
+        }
+
+        return $filtered_contacts;
+        // returns list of contact IDs.
+
+        // from here i have two options:
+        // make a request to get the entire contact list with needed fields, and filter out contacts not included in the search
+        // OR
+        // make a request for each contact, filter out unwanted fields, then add them all to an array
+
+
+    }
+
     private function filterContacts($contacts, $args) {
         $contacts = new Contacts($contacts);
         $contacts->filterFieldValues($args);
@@ -416,6 +527,24 @@ class ContactsAPI
         $contacts = new Contacts($contacts);
         $contacts = $contacts->searchByKeywords($keywords);
         return $contacts;
+    }
+
+    private function getPictureFromAPI($url) {
+        $waAPIKeys = SettingsService::getWAapiKeys();
+        if (empty($waAPIKeys)) {
+            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
+        }
+        $outer_idx = array_key_first($waAPIKeys);
+
+        $key = $waAPIKeys[$outer_idx]['key'];
+
+        $waService = new WAService($key);
+
+        $waService->init();
+
+        $picture = $waService->getPicture($url);
+
+        return $picture;
     }
 }
 ?>

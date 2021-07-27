@@ -36,5 +36,24 @@ class ContactsUtils {
 
     return $filter;
   }
+
+  public static function isPicture($fieldValues) {
+    if (!isset($fieldValues['Id']) || !isset($fieldValues['Url'])) return false;
+
+    $id = $fieldValues['Id'];
+
+    return (str_contains($id, 'jpg') || str_contains($id, 'png') || str_contains($id, 'gif') || str_contains($id, 'tif'));
+  }
+
+  public static function getPictureType($filename) {
+    $ext = strrchr($filename, '.');
+    return substr($ext, 1);
+  }
+}
+
+if (!function_exists('str_contains')) {
+  function str_contains(string $haystack, string $needle) : bool {
+    return '' === $needle || false !== strpos($haystack, $needle);
+  }
 }
 ?>
