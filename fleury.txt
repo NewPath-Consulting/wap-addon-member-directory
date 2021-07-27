@@ -1,0 +1,52 @@
+{
+  "Contacts": [
+    {
+      "FirstName": "Marc-Andre",
+      "LastName": "Fleury",
+      "Email": "marcandre@newpathtest.com",
+      "DisplayName": "Fleury, Marc-Andre",
+      "ProfileLastUpdated": "2021-07-05T15:21:01.657-04:00",
+      "MembershipLevel": {
+        "Id": 1326410,
+        "Url": "https://api.wildapricot.org/v2.2/accounts/221748/MembershipLevels/1326410",
+        "Name": "Hockey Player"
+      },
+      "FieldValues": [
+        {
+          "FieldName": "Profile last updated",
+          "Value": "2021-07-05T15:21:01.657-04:00",
+          "SystemCode": "LastUpdated"
+        },
+        {
+          "FieldName": "Terms of use accepted",
+          "Value": false,
+          "SystemCode": "SystemRulesAndTermsAccepted"
+        },
+        {
+          "FieldName": "My First name",
+          "Value": "Marc-Andre",
+          "SystemCode": "FirstName"
+        },
+        {
+          "FieldName": "Last name",
+          "Value": "Fleury",
+          "SystemCode": "LastName"
+        },
+        {
+          "FieldName": "Email",
+          "Value": "marcandre@newpathtest.com",
+          "SystemCode": "Email"
+        },
+        {
+          "FieldName": "Access to profile by others",
+          "Value": false,
+          "SystemCode": "AccessToProfileByOthers"
+        }
+      ],
+      "Id": 60700030,
+      "Url": "https://api.wildapricot.org/v2.2/accounts/221748/Contacts/60700030",
+      "IsAccountAdministrator": false,
+      "TermsOfUseAccepted": false
+    }
+  ]
+}

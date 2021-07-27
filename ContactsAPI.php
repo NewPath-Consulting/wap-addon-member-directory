@@ -126,6 +126,7 @@ class ContactsAPI
 
         $waService->init();
 
+
         $data = $waService->getSavedSearches();
 
         $response = new WP_REST_Response($data, 200);
