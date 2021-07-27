@@ -24,12 +24,14 @@
 require_once("vendor/autoload.php");
 require_once("ContactsAPI.php");
 require_once("admin/AdminSettings.php");
+require_once dirname( __FILE__ ) .'/services/WAService.php';//q
 
 use PO\Admin\AdminSettings;
 use PO\classes\ContactsUtils;
 use PO\classes\ContactsListingPersistor;
 use PO\classes\UserProfileShortcode;
 use WAWP\Activator;
+use PO\services\WAService;//q
 
 new ContactsAPI();
 new AdminSettings();
@@ -51,7 +53,21 @@ add_filter('no_texturize_shortcodes', 'shortcodes_to_exempt_from_wptexturize');
 function shortcodes_to_exempt_from_wptexturize($shortcodes) {
 	$shortcodes[] = 'wa-contacts';
 	return $shortcodes;
+
 }
+//for kendra, temporary
+function test1_shortcode() {
+$api = new WAService('x7jtvebvxpk2c82vjubctwf46bv838');//q
+$api->init();
+	$call = $api->getContactFields();
+	//->getContactFields();
+	?><pre><?php var_dump($call); ?></pre><?php
+return "wwewew";
+    
+//return print_r($api->$getContactFields(), true);
+} 
+add_shortcode('test1', 'test1_shortcode');
+
 
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_action_links');
 function add_action_links($links) {
