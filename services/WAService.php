@@ -115,19 +115,23 @@ class WAService
 	    
  
 		  $SystemCode = $value["SystemCode"]; //combine below once tested
-        if(!($SystemCode == "AccessToProfileByOthers" && $value["Value"] == false)) { //if can be shown to others (can't access this any more easily)   
+        if(!($SystemCode == "AccessToProfileByOthers")) {    
           //FUTURE: Access to profile by other is always queried, should remove this (technically someone could want it too, but would be pointless)
-			$access = $defaultAccess[$SystemCode]; //get default privacy setting
+			    $access = $defaultAccess[$SystemCode]; //get default privacy setting
           if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
             $access = $value["CustomAccessLevel"]; //custom takes priority always
           }
           if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way an error defaults private)
             //secret time! hide this specific value            
-			$contacts[$contact]["FieldValues"][$field]["Value"] = "locked"; //need to modify value directly 
+			      $contacts[$contact]["FieldValues"][$field]["Value"] = "Restricted"; //need to modify value directly 
           } 
-        } else {
-          unset($contacts[$contact]); //exclude this contact
-          //https://stackoverflow.com/questions/2304570/how-to-delete-object-from-array-inside-foreach-loop                 
+        } else { //SystemCode == "AccessToProfileByOthers"
+          if($value["Value"] == false) { //if can be shown to others (can't access this any more easily)
+            unset($contacts[$contact]); //exclude this contact
+            //https://stackoverflow.com/questions/2304570/how-to-delete-object-from-array-inside-foreach-loop   
+          } else {
+            unset($contacts[$contact]["FieldValues"]["AccessToProfileByOthers"]); //exclude this contact field because the user likely didn't want
+          }              
         }
       }  
 	}
