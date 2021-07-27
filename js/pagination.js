@@ -2,7 +2,6 @@
     let contact_obj = $('.wa-contact');
     let contacts = Object.entries(contact_obj);
 
-    // console.log(contacts);
     $(document).ready(function() {
         $('.wa-contacts-items').hide();
         $('.wa-contacts').pagination({
@@ -13,7 +12,6 @@
                 $('.wa-pagination').html(html);
             }
         });
-        console.log('search: ', search);
     });
 
     function template(data) {
@@ -25,17 +23,4 @@
         return html;
     }
 
-    function __showSearch() {
-        console.log('showSearch()');
-        $('.wa-pagination').hide();
-        $('.paginationjs').hide();
-        $('wa-contacts-items').show();
-    }
-
-    // console.log('search: ', search);
-
 })(jQuery);
-
-function showSearch() {
-    __showSearch();
-}
