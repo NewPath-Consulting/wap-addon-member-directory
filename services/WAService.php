@@ -116,7 +116,6 @@ class WAService
  
 		  $SystemCode = $value["SystemCode"]; //combine below once tested
         if(!($SystemCode == "AccessToProfileByOthers")) {    
-          //FUTURE: Access to profile by other is always queried, should remove this (technically someone could want it too, but would be pointless)
 			    $access = $defaultAccess[$SystemCode]; //get default privacy setting
           if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
             $access = $value["CustomAccessLevel"]; //custom takes priority always
@@ -130,7 +129,8 @@ class WAService
             unset($contacts[$contact]); //exclude this contact
             //https://stackoverflow.com/questions/2304570/how-to-delete-object-from-array-inside-foreach-loop   
           } else {
-            unset($contacts[$contact]["FieldValues"]["AccessToProfileByOthers"]); //exclude this contact field because the user likely didn't want
+            unset($contacts[$contact]["FieldValues"][$field]); //exclude access to profile by others because we included it 
+            //FUTURE: let is stay? value could only be true if someone can see, kind of pointless
           }              
         }
       }  
