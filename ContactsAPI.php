@@ -95,15 +95,17 @@ class ContactsAPI
     }
 
     public function contactFieldsRestRoute() {
-        $waAPIKeys = SettingsService::getWAapiKeys();
+        // $waAPIKeys = SettingsService::getWAapiKeys();
 
-        $outer_idx = array_key_first($waAPIKeys);
+        // $outer_idx = array_key_first($waAPIKeys);
 
-        $key = $waAPIKeys[$outer_idx]['key'];
+        // $key = $waAPIKeys[$outer_idx]['key'];
 
-        $waService = new WAService($key);
+        // $waService = new WAService($key);
 
-        $waService->init();
+        // $waService->init();
+
+        $waService = new WAService();
 
         $data = $waService->getContactFields();
 
@@ -116,15 +118,17 @@ class ContactsAPI
     }
 
     public function savedSearchesRestRoute() {
-        $waAPIKeys = SettingsService::getWAapiKeys();
+        // $waAPIKeys = SettingsService::getWAapiKeys();
 
-        $outer_idx = array_key_first($waAPIKeys);
+        // $outer_idx = array_key_first($waAPIKeys);
 
-        $key = $waAPIKeys[$outer_idx]['key'];
+        // $key = $waAPIKeys[$outer_idx]['key'];
 
-        $waService = new WAService($key);
+        // $waService = new WAService($key);
 
-        $waService->init();
+        // $waService->init();
+
+        $waService = new WAService();
 
         $data = $waService->getSavedSearches();
 
@@ -450,47 +454,48 @@ class ContactsAPI
     }
 
     public function getContactsFromAPI($sites, $filter, $select) {
-        $waAPIKeys = SettingsService::getWAapiKeys();
+        // $waAPIKeys = SettingsService::getWAapiKeys();
 
-        if (empty($waAPIKeys)) {
-            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
-        }
+        // if (empty($waAPIKeys)) {
+        //     throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
+        // }
 
-        $sites = empty($sites) ? reset($waAPIKeys) : $sites;
+        // $sites = empty($sites) ? reset($waAPIKeys) : $sites;
 
-        $contacts = array();
-        foreach ($sites as $site) {
-            foreach ($waAPIKeys as $key) {
-                if (!strcasecmp($key['site'], $site)) {
-                    $waService = new WAService($key['key']);
-                    $waService->init();
-                    $contacts = array_merge($contacts, $waService->getContactsList($filter, $select));
-                }
-            }
+        // $contacts = array();
+        // foreach ($sites as $site) {
+        //     foreach ($waAPIKeys as $key) {
+        //         if (!strcasecmp($key['site'], $site)) {
+        //             $waService = new WAService($key['key']);
+        //             $waService->init();
+        //             $contacts = array_merge($contacts, $waService->getContactsList($filter, $select));
+        //         }
+        //     }
 
-        }
+        // }
 
-        // $waService = new WAService($waAPIKey);
+        $waService = new WAService();
         // $waService->initWithCache();
         // $waService->init();
-        // $contacts = $waService->getContactsList($filter, $select);
+        $contacts = $waService->getContactsList($filter, $select);
 
         return $contacts;
     }
 
     public function filterContactsWithSavedSearch($contacts, $savedSearchId) {
-        $waAPIKeys = SettingsService::getWAapiKeys();
-        if (empty($waAPIKeys)) {
-            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
-        }
-        $outer_idx = array_key_first($waAPIKeys);
+        // $waAPIKeys = SettingsService::getWAapiKeys();
+        // if (empty($waAPIKeys)) {
+        //     throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
+        // }
+        // $outer_idx = array_key_first($waAPIKeys);
 
-        $key = $waAPIKeys[$outer_idx]['key'];
+        // $key = $waAPIKeys[$outer_idx]['key'];
 
-        $waService = new WAService($key);
+        // $waService = new WAService($key);
 
-        $waService->init();
+        // $waService->init();
 
+        $waService = new WAService();
         // first need to make a request to the saved search
         $savedSearch = $waService->getSavedSearch($savedSearchId);
 
@@ -529,17 +534,19 @@ class ContactsAPI
     }
 
     private function getPictureFromAPI($url) {
-        $waAPIKeys = SettingsService::getWAapiKeys();
-        if (empty($waAPIKeys)) {
-            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
-        }
-        $outer_idx = array_key_first($waAPIKeys);
+        // $waAPIKeys = SettingsService::getWAapiKeys();
+        // if (empty($waAPIKeys)) {
+        //     throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
+        // }
+        // $outer_idx = array_key_first($waAPIKeys);
 
-        $key = $waAPIKeys[$outer_idx]['key'];
+        // $key = $waAPIKeys[$outer_idx]['key'];
 
-        $waService = new WAService($key);
+        // $waService = new WAService($key);
 
-        $waService->init();
+        // $waService->init();
+
+        $waService = new WAService();
 
         $picture = $waService->getPicture($url);
 
