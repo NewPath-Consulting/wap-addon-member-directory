@@ -23,7 +23,6 @@
 
 require_once("vendor/autoload.php");
 require_once("ContactsAPI.php");
-require_once("admin/AdminSettings.php");
 
 use PO\Admin\AdminSettings;
 use PO\classes\ContactsUtils;
@@ -32,7 +31,6 @@ use PO\classes\UserProfileShortcode;
 use WAWP\Activator;
 
 new ContactsAPI();
-new AdminSettings();
 new UserProfileShortcode();
 
 $activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
