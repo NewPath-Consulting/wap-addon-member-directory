@@ -142,7 +142,7 @@ function PageSizeControl(props) {
     const [ value, setValue ] = useState(attributes.page_size);
 
     useEffect(() => {
-        setAttributes({page_size: value});
+        setAttributes({page_size: Number(value)});
     });
 
     return (
