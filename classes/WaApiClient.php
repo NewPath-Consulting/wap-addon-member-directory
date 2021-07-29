@@ -1,6 +1,10 @@
 <?php
 namespace PO\classes;
 
+use WAWP\DataEncryption;
+$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/DataEncryption.php');
+
+require_once ($path);
 // From:
 //  s://github.com/WildApricot/ApiSamples/blob/master/PHP/sampleApplication.php
 class WaApiClient
@@ -12,12 +16,28 @@ class WaApiClient
     private static $_instance;
     private $token;
 
-    public function __construct($apiKey) {
+    // public function __construct($apiKey) {
 
-      if (!extension_loaded('curl')) {
-        throw new \Exception('cURL library is not loaded');
-      }
-      $this->initTokenByApiKey($apiKey);
+    //   if (!extension_loaded('curl')) {
+    //     throw new \Exception('cURL library is not loaded');
+    //   }
+    //   $this->initTokenByApiKey($apiKey);
+    // }
+
+    public function __construct() {
+        $apiKey = $this->getApiKey();
+        $this->initTokenByApiKey($apiKey);
+    }
+
+    private function getApiKey() {
+        $dataEncryption = new DataEncryption();
+        $credentials = get_option('wawp_wal_name');
+        if (empty($credentials)) {
+            throw new \Exception("WildApricot API Keys not configured.");
+        }
+        $e_apiKey = $credentials['wawp_wal_api_key'];
+        $d_apiKey = $dataEncryption->decrypt($e_apiKey);
+        return $d_apiKey;
     }
 
     public function initTokenByContactCredentials(
