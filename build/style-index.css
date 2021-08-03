@@ -46,4 +46,13 @@
   text-align: center;
 }
 
+.wa-profile-link, .back-arrow {
+  text-decoration: underline;
+}
+.wa-profile-link:hover, .back-arrow:hover {
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
 /*# sourceMappingURL=style-index.css.map*/

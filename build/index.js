@@ -6473,6 +6473,9 @@ class FieldControls extends React.Component {
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(SearchControl, {
       attributes: this.state.attributes,
       setAttributes: this.state.setAttributes
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(ProfileLinkControl, {
+      attributes: this.state.attributes,
+      setAttributes: this.state.setAttributes
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PageSizeControl, {
       attributes: this.state.attributes,
       setAttributes: this.state.setAttributes
@@ -6521,6 +6524,23 @@ function SearchControl(props) {
     initialOpen: true
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["ToggleControl"], {
     label: "Enable search",
+    checked: isChecked,
+    onChange: setChecked
+  })));
+}
+
+function ProfileLinkControl(props) {
+  const [isChecked, setChecked] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(props.attributes.profile_link);
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    props.setAttributes({
+      profile_link: isChecked
+    });
+  });
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
+    title: "Profile Link",
+    initialOpen: true
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["ToggleControl"], {
+    label: "Profile link",
     checked: isChecked,
     onChange: setChecked
   })));
@@ -6719,6 +6739,12 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
       default: 0,
       selector: '#saved_search',
       attribute: 'data-saved-search'
+    },
+    profile_link: {
+      type: 'boolean',
+      default: false,
+      selector: '#profile_link',
+      attribute: 'data-profile-link'
     }
   },
 
@@ -6751,6 +6777,9 @@ function renderHiddenFields(attributes) {
   }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     id: "saved_search",
     "data-saved-search": attributes.saved_search
+  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    id: "profile_link",
+    "data-profile-link": attributes.profile_link
   }));
 }
 function generateShortcode(attributes) {
@@ -6772,6 +6801,10 @@ function generateShortcode(attributes) {
 
   if (search != 0 && search != undefined) {
     shortcode_str += ' saved-search=' + attributes.saved_search;
+  }
+
+  if (attributes.profile_link) {
+    shortcode_str += ' profile';
   }
 
   shortcode_str += "] [/wa-contacts]";
