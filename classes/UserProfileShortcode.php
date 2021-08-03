@@ -19,11 +19,17 @@ class UserProfileShortcode {
 
     public function waUserProfileShortcode($args, $content = null)
     {
-        if(empty($_REQUEST['user-id'])) {
+        $userID_arg = $this->extractAndRemoveUserID($args);
+        if(empty($_REQUEST['user-id']) && !$userID_arg) {
             return;
         }
 
-        $userID = sanitize_key($_REQUEST['user-id']);
+        $userID = '';
+        if (empty($_REQUEST['user-id'])) {
+            $userID = $userID_arg;
+        } else {
+            $userID = sanitize_key($_REQUEST['user-id']);
+        }
 
         $filterStatement = array("'User ID' eq ${userID}");
 
@@ -33,26 +39,13 @@ class UserProfileShortcode {
         $sites = array_map('trim', explode(',', $args['sites']));
         unset($args['sites']);
 
-        $waAPIKeys = SettingsService::getWAapiKeys();
-
-        if (empty($waAPIKeys)) {
-            throw new Exception("WildApricot API Keys not configured. Please visit Settings->WildApricot For WP");
-        }
-
         $sites = empty($sites) ? reset($waAPIKeys) : $sites;
 
-        $contacts = array();
-        foreach ($sites as $site) {
-            foreach ($waAPIKeys as $key) {
-                if (!strcasecmp($key['site'], $site)) {
-                    $waService = new WAService($key['key']);
-                    $waService->init();
-                    $contacts = array_merge($contacts, $waService->getContactsList($filter, $select));
-                }
-            }
-        }
+        $waService = new WAService();
+        $contacts = $waService->getContactsList($filter, $select);
 
         $contacts = new Contacts($contacts);
+        
         $contacts->filterFieldValues($args);
 
         $contacts = $contacts->getFieldValuesOnly();
@@ -90,6 +83,12 @@ class UserProfileShortcode {
         echo "</div>";
 
         return ob_get_clean();
+    }
+
+    private function extractAndRemoveUserID(&$shortCodeArgs) {
+        $userID = isset($shortCodeArgs['user-id']) ? $shortCodeArgs['user-id'] : "";
+        unset($shortCodeArgs['user-id']);
+        return $userID;
     }
 
 }
