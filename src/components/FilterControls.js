@@ -62,18 +62,19 @@ export default class FieldControls extends React.Component {
                         })
                     }
                 </PanelBody>
-                {/* <FilterControls
-                    attributes={ this.state.attributes }
-                    setAttributes={ this.state.setAttributes }
-                >
-                </FilterControls> */}
-                <SavedSearchControl attributes={this.state.attributes} setAttributes={this.state.setAttributes}>
+                <SavedSearchControl 
+                    attributes={this.state.attributes} 
+                    setAttributes={this.state.setAttributes}>
                 </SavedSearchControl>
                 <SearchControl 
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
                 >
                 </SearchControl>
+                <ProfileLinkControl
+                    attributes={this.state.attributes}
+                    setAttributes={this.state.setAttributes}
+                ></ProfileLinkControl>
                 <PageSizeControl
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
@@ -130,6 +131,26 @@ function SearchControl(props) {
                     onChange={ setChecked }
                 >
                 </ToggleControl>
+            </PanelRow>
+        </PanelBody>
+    );
+}
+
+function ProfileLinkControl(props) {
+    const [ isChecked, setChecked ] = useState(props.attributes.profile_link);
+
+    useEffect(() => {
+        props.setAttributes({profile_link: isChecked});
+    });
+
+    return (
+        <PanelBody title="Profile Link" initialOpen={ true }>
+            <PanelRow>
+                <ToggleControl
+                    label="Profile link"
+                    checked={ isChecked }
+                    onChange={ setChecked }
+                ></ToggleControl>
             </PanelRow>
         </PanelBody>
     );
