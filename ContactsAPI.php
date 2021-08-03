@@ -23,6 +23,7 @@ class ContactsAPI
             wp_register_script('wafw', plugins_url('/js/wafw.js', __FILE__ ), true);
             wp_register_script('wawp_pagination', plugins_url('/js/pagination.js', __FILE__), array('jquery'),true);
             wp_register_script('pagination_plugin', plugins_url('js/pagination.min.js', __FILE__), array('jquery'), true);
+            wp_register_script('wawp_profile_links', plugins_url('js/profiles.js', __FILE__), array('jquery'), true);
         });
 
     }
@@ -44,6 +45,12 @@ class ContactsAPI
             register_rest_route('wawp/v1', '/savedsearches/', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'savedSearchesRestRoute'),
+                'permissions_callback' => '__return_true'
+            ));
+
+            register_rest_route('wawp/v1', '/profiles/(?P<id>\d+)', array(
+                'methods' => 'GET',
+                'callback' => array($this, 'profileShortcodeRestRoute'),
                 'permissions_callback' => '__return_true'
             ));
         });
@@ -120,13 +127,25 @@ class ContactsAPI
         return $response;
     }
 
-    private function register_shortcodes()
-    {
+    public function profileShortcodeRestRoute($data) {
+        $userID = $data['id'];
+        $shortcode = "[wa-profile 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
+        $output = do_shortcode($shortcode);
+
+        $response = new WP_REST_Response($output, 200);
+
+        // Set headers.
+        $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
+
+        return $response;
+    }
+
+    private function register_shortcodes() {
         add_shortcode("wa-contacts", array($this, "waContactsShortcode"));
     }
 
-    public function waContactsShortcode($args, $content = null)
-    {
+    public function waContactsShortcode($args, $content = null) {
+        do_action('qm/debug', $args);
         if (!is_array($args)) {
             error_log("wa-contacts not configured properly");
             return "";
@@ -140,6 +159,8 @@ class ContactsAPI
         $sites = $this->extractAndRemoveSites($args);
 
         $profileURL = $this->extractAndRemoveProfileURL($args);
+
+        $profile = $this->extractAndRemoveProfileToggle($args);
 
         $pageSize = $this->extractAndRemovePageSize($args);
 
@@ -173,12 +194,10 @@ class ContactsAPI
             return $customOutput;
         }
 
-        return $this->render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $queryHash, $dropdownList);
+        return $this->render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList);
     }
 
-    public function render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, 
-        $queryHash, $dropdownList)
-    {
+    public function render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList) {
         
         $pageSizeNum = (int)$pageSize;
         $pagination = count($contacts) > $pageSizeNum;
@@ -204,9 +223,13 @@ class ContactsAPI
             wp_localize_script('wawp_pagination', 'wawp_memdir_page_size', array('page_size' => $pageSizeNum));
         }
 
+        if ($profile) {
+            wp_enqueue_script('wawp_profile_links');
+            wp_localize_script('wawp_profile_links', 'wawp_pagination_toggle', array('pagination' => $pagination));
+        }
+
         foreach ($contacts as $contact) {
-            // $this->renderFieldValuesList($contact, $profileURL);
-            $this->renderContactDiv($contact, $profileURL);
+            $this->renderContactDiv($contact, $profileURL, $profile);
         }
 
         echo '</div>';
@@ -218,7 +241,7 @@ class ContactsAPI
         return ob_get_clean();
     }
 
-    private function renderContactDiv($fields, $profileURL="") {
+    private function renderContactDiv($fields, $profileURL="", $profile = false) {
         if (empty($fields)) {
             return;
         }
@@ -256,11 +279,16 @@ class ContactsAPI
             echo "<a class=\"wa-more-info\" href=\"/${profileURL}?user-id=${userID}\">More info</a>";
         }
 
+
+        if ($profile) {
+            $userID = $fields['Id'];
+            echo "<div class=\"wa-profile-link\" id=\"profile-link\" data-user-id=\"${userID}\">View profile</div>";
+        }
+
         echo '</div>';
     }
 
-    private function renderFieldValuesList($fields, $profileURL="")
-    {
+    private function renderFieldValuesList($fields, $profileURL="") {
         if (empty($fields)) {
             return;
         }
@@ -302,8 +330,7 @@ class ContactsAPI
         echo '</ul>';
     }
 
-    private function renderNestedFieldValuesList($fieldName, $fields)
-    {
+    private function renderNestedFieldValuesList($fieldName, $fields) {
         if (empty($fields) || !is_array($fields)) {
             return;
         }
@@ -361,8 +388,7 @@ class ContactsAPI
         echo "</select>";
     }
 
-    private function cleanupContent($content)
-    {
+    private function cleanupContent($content) {
         $content = strip_tags($content);
         $content = trim($content);
         $content = $this->convertContentToLineArray($content);
@@ -370,13 +396,11 @@ class ContactsAPI
         return $content;
     }
 
-    private function convertContentToLineArray($content)
-    {
+    private function convertContentToLineArray($content) {
         return array_map('trim', explode(PHP_EOL, $content));
     }
 
-    private function extractAndRemoveCSSClass(&$shortCodeArgs)
-    {
+    private function extractAndRemoveCSSClass(&$shortCodeArgs) {
         $cssClass = "";
         if(isset($shortCodeArgs['class'])) {
             $cssClass = $shortCodeArgs['class'];
@@ -404,15 +428,19 @@ class ContactsAPI
         return $savedSearch;
     }
 
-    private function extractAndRemoveSearchToggle(&$shortCodeArgs)
-    {
+    private function extractAndRemoveSearchToggle(&$shortCodeArgs) {
         $searchBox = in_array('search', $shortCodeArgs);
         $shortCodeArgs = array_diff($shortCodeArgs, array('search'));
         return $searchBox;
     }
 
-    private function extractAndRemoveSites(&$shortCodeArgs)
-    {
+    private function extractAndRemoveProfileToggle(&$shortCodeArgs) {
+        $profile = in_array('profile', $shortCodeArgs);
+        $shortCodeArgs = array_diff($shortCodeArgs, array('profile'));
+        return $profile;
+    }
+
+    private function extractAndRemoveSites(&$shortCodeArgs) {
         if (!isset($shortCodeArgs['sites'])) {
             return array();
         }
