@@ -62,6 +62,12 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 			default: 0,
 			selector: '#saved_search',
 			attribute: 'data-saved-search'
+		},
+		profile_link: {
+			type: 'boolean',
+			default: false,
+			selector: '#profile_link',
+			attribute: 'data-profile-link'
 		}
 	},
 	/**
@@ -92,6 +98,7 @@ export function renderHiddenFields(attributes) {
 			<div id="enable_search" data-search-enabled={attributes.enable_search ? "true" : "false"}></div>
 			<div id="page_size" data-page-size={attributes.page_size}></div>
 			<div id="saved_search" data-saved-search={attributes.saved_search}></div>
+			<div id="profile_link" data-profile-link={attributes.profile_link}></div>
 		</div>
 	);
 }
@@ -115,6 +122,10 @@ export function generateShortcode(attributes) {
 	let search = attributes.saved_search;
 	if (search != 0 && search != undefined) {
 		shortcode_str += ' saved-search=' + attributes.saved_search;
+	}
+
+	if (attributes.profile_link) {
+		shortcode_str += ' profile';
 	}
 
 	shortcode_str += "] [/wa-contacts]";
