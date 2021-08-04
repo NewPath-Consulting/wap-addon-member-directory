@@ -6,6 +6,7 @@ require_once('CacheService.php');
 
 use PO\classes\WaApiClient;
 use PO\services\CacheService;
+//use PO\classes\ContactsUtils; //include for filter
 
 const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
@@ -88,9 +89,9 @@ class WAService
         $filters = array();
         $excludedContacts = array();
 
-        if(!empty($filter)) { //if filter exists
+        if(!empty($filters)) { //if filter exists
             // extract each term, put in array $filters 
-           //Actually use generateFilterStatement($filterList) from ContactsUtils class, this function already exists, nice
+           $filters = ContactsUtils::generateFilterStatement($filter);
                     
             //select filters with api call, privacy turned off to check privacy
             $filterData = $this -> getContactsList(null, $filters, false);
