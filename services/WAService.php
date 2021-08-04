@@ -90,8 +90,8 @@ class WAService
 
         if(!empty($filter)) { //if filter exists
             // extract each term, put in array $filters 
-            //TODO
-
+           //Actually use generateFilterStatement($filterList) from ContactsUtils class, this function already exists, nice
+                    
             //select filters with api call, privacy turned off to check privacy
             $filterData = $this -> getContactsList(null, $filters, false);
             if(empty($filterData)) {
