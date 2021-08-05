@@ -4,6 +4,7 @@ namespace PO\classes;
 use PO\classes\ContactsUtils;
 use PO\services\WAService;
 use PO\services\SettingsService;
+use Walker;
 
 class UserProfileShortcode {
     private static $SHORTCODE_NAME = 'wa-profile';
@@ -68,17 +69,26 @@ class UserProfileShortcode {
             $userFieldValue = $userFields['Value'];
             $userFieldNameLabel = htmlspecialchars($userFields['FieldName']);
 
-            if (is_array($userFieldValue)) {
-                $userFieldValue = $userFieldValue['Label'];
-            }
 
             if (empty($userFieldName) || empty($userFieldValue)) {
                 continue;
             }
 
-            echo "<div class=\"${userFieldName}\" data-wa-label=\"${userFieldNameLabel}\">";
-            echo htmlspecialchars($userFieldValue);
-            echo "</div>";
+            if (ContactsUtils::isPicture($userFieldValue)) {
+                // need to get picture from API
+                $waService = new WAService();
+                $picture = $waService->getPicture($userFieldValue['Url']);
+                $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
+                echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+            } else {
+                if (is_array($userFieldValue)) {
+                    $userFieldValue = $userFieldValue['Label'];
+                }
+                echo "<div class=\"${userFieldName}\" data-wa-label=\"${userFieldNameLabel}\">";
+                echo htmlspecialchars($userFieldValue);
+                echo "</div>";
+            }
+
         }
         echo "</div>";
 
