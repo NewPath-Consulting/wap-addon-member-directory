@@ -46,6 +46,11 @@
   text-align: center;
 }
 
+li.paginationjs-page.active a {
+  background: #707070;
+  color: white;
+}
+
 .wa-profile-link, .back-arrow {
   text-decoration: underline;
 }
