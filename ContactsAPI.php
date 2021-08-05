@@ -129,7 +129,7 @@ class ContactsAPI
 
     public function profileShortcodeRestRoute($data) {
         $userID = $data['id'];
-        $shortcode = "[wa-profile 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
+        $shortcode = "[wa-profile 'Photo 2' 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
         $output = do_shortcode($shortcode);
 
         $response = new WP_REST_Response($output, 200);
@@ -225,7 +225,7 @@ class ContactsAPI
 
         if ($profile) {
             wp_enqueue_script('wawp_profile_links');
-            wp_localize_script('wawp_profile_links', 'wawp_pagination_toggle', array('pagination' => $pagination));
+            wp_localize_script('wawp_profile_links', 'wawp_pagination_toggle', array('pagination' => $pagination, 'search' => $searchBox));
         }
 
         foreach ($contacts as $contact) {
