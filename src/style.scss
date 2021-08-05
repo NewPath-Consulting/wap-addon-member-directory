@@ -45,6 +45,11 @@
 	}
 }
 
+li.paginationjs-page.active a {
+	background: rgb(112, 112, 112);
+	color: white;
+}
+
 .wa-profile-link, .back-arrow {
 	text-decoration: underline;
 	&:hover {
