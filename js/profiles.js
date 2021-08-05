@@ -2,6 +2,9 @@ const PROFILE_API_URL = "/wp-json/wawp/v1/profiles/";
 (function($) {
     var pagination = wawp_pagination_toggle.pagination;
     var dir_selector = pagination ? '.wa-pagination, .paginationjs' : '.wa-contacts-items';
+    if (wawp_pagination_toggle.search) {
+        dir_selector += ', .wa-contacts-search';
+    }
     $(document).ready(function() {
         $('.wa-profile-link').click(function () {
             // make shortcode div and show that
