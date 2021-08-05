@@ -229,7 +229,6 @@ class WAService
         $query = http_build_query($queryParams);
         $url = $pictureUrl . '?' . $query;
         $picture = $this->apiClient->makeRequest($url, true);
-        do_action('qm/debug', $picture);
         return $picture;
     }
 
