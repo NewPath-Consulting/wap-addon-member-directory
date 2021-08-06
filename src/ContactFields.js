@@ -9,7 +9,6 @@ const getContactFields = async () => {
            }
     });
     const data = await resp.text();
-    console.log(data);
     var result_1 = JSON.parse(data);
     return result_1;
 } 
@@ -52,7 +51,8 @@ class ContactFields {
                 access: field.Access,
                 category: cat,
                 support_search: field.SupportSearch,
-                order: field.Order
+                order: field.Order,
+                system_code: field.SystemCode
             };
         });
     }
