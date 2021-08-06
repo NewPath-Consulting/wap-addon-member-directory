@@ -48,8 +48,9 @@ class ContactsAPI
                 'permissions_callback' => '__return_true'
             ));
 
-            register_rest_route('wawp/v1', '/profiles/(?P<id>\d+)', array(
+            register_rest_route('wawp/v1', '/profiles/', array(
                 'methods' => 'GET',
+                'args' => array(),
                 'callback' => array($this, 'profileShortcodeRestRoute'),
                 'permissions_callback' => '__return_true'
             ));
@@ -127,9 +128,17 @@ class ContactsAPI
         return $response;
     }
 
-    public function profileShortcodeRestRoute($data) {
-        $userID = $data['id'];
-        $shortcode = "[wa-profile 'Photo 2' 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
+    public function profileShortcodeRestRoute(WP_REST_Request $request) {
+        $userID = $request['id'];
+        $fields = $request['fields'];
+        $shortcode = "[wa-profile ";
+        foreach ($fields as $field) {
+            $shortcode = $shortcode . "'" . $field . "' ";
+        }
+
+        $shortcode = $shortcode . 'user-id="' . $userID . '"]';;
+        update_option('wawp_shortcode', $shortcode);
+        // $shortcode = "[wa-profile 'Photo 2' 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
         $output = do_shortcode($shortcode);
 
         $response = new WP_REST_Response($output, 200);
