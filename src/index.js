@@ -68,6 +68,24 @@ registerBlockType( 'create-block/wawp-addon-member-directory', {
 			default: false,
 			selector: '#profile_link',
 			attribute: 'data-profile-link'
+		},
+		profile_fields: {
+			type: 'array',
+			default: [],
+			source: 'query',
+			selector: '.profile-field',
+			query: {
+				id: {
+					type: 'string',
+					source: 'attribute',
+					attribute: 'data-system-code'
+				},
+				name: {
+					type: 'string',
+					source: 'attribute',
+					attribute: 'data-name'
+				}				
+			}
 		}
 	},
 	/**
@@ -90,6 +108,17 @@ export function renderHiddenFields(attributes) {
 					return (
 						<li className="filter" key={ field.id } data-system-code={ field.id } data-name={ field.name }>
 						{ field.name }
+						</li>
+					);
+				})
+			}
+			</ul>
+			<ul>
+			{
+				attributes.profile_fields.map((field) => {
+					return (
+						<li className="profile-field" key={field.id} data-system-code={ field.id } data-name={ field.name }>
+							{ field.name }
 						</li>
 					);
 				})
