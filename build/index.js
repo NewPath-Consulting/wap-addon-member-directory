@@ -6160,7 +6160,6 @@ const getContactFields = async () => {
     }
   });
   const data = await resp.text();
-  console.log(data);
   var result_1 = JSON.parse(data);
   return result_1;
 };
@@ -6215,7 +6214,8 @@ class ContactFields {
         access: field.Access,
         category: cat,
         support_search: field.SupportSearch,
-        order: field.Order
+        order: field.Order,
+        system_code: field.SystemCode
       };
     });
   }
@@ -6277,7 +6277,6 @@ const getSavedSearches = async () => {
     }
   });
   const data = await resp.text();
-  console.log(data);
   var result_1 = JSON.parse(data);
   return result_1;
 };
@@ -6352,7 +6351,9 @@ class Field extends React.Component {
     this.state = {
       attributes: props.attributes,
       setAttributes: props.setAttributes,
-      field: props.field
+      field: props.field,
+      // field must be in the format {id: SystemCode, name: Name}
+      profile: props.profile
     };
   }
 
@@ -6360,14 +6361,23 @@ class Field extends React.Component {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(FieldCheckbox, {
       field: this.state.field,
       attributes: this.state.attributes,
-      setAttributes: this.state.setAttributes
+      setAttributes: this.state.setAttributes,
+      profile: this.state.profile,
+      key: this.state.field.name
     }));
   }
 
 }
 
 function FieldCheckbox(props) {
-  let arr = props.attributes.fields_applied;
+  let arr = [];
+
+  if (props.profile) {
+    arr = props.attributes.profile_fields;
+  } else {
+    arr = props.attributes.fields_applied;
+  }
+
   let exists = contains(arr, props.field) == -1 ? false : true;
   const [isChecked, setChecked] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(exists);
   Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
@@ -6379,9 +6389,15 @@ function FieldCheckbox(props) {
       arr.splice(in_array, 1); // remove it
     }
 
-    props.setAttributes({
-      fields_applied: arr
-    });
+    if (props.profile) {
+      props.setAttributes({
+        profile_fields: arr
+      });
+    } else {
+      props.setAttributes({
+        fields_applied: arr
+      });
+    }
   });
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["CheckboxControl"], {
     label: props.field.name,
@@ -6419,6 +6435,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Filter */ "./src/components/Filter.js");
 /* harmony import */ var _ContactFields__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ContactFields */ "./src/ContactFields.js");
 /* harmony import */ var _SavedSearches__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../SavedSearches */ "./src/SavedSearches.js");
+/* harmony import */ var _ProfileFields__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ProfileFields */ "./src/components/ProfileFields.js");
+
 
 
 
@@ -6447,7 +6465,8 @@ class FieldControls extends React.Component {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_2__["Field"], {
         attributes: this.state.attributes,
         setAttributes: this.state.setAttributes,
-        field: field
+        field: field,
+        profile: false
       });
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
       title: "Common Fields",
@@ -6456,7 +6475,8 @@ class FieldControls extends React.Component {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_2__["Field"], {
         attributes: this.state.attributes,
         setAttributes: this.state.setAttributes,
-        field: field
+        field: field,
+        profile: false
       });
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
       title: "Member Fields",
@@ -6465,7 +6485,8 @@ class FieldControls extends React.Component {
       return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_2__["Field"], {
         attributes: this.state.attributes,
         setAttributes: this.state.setAttributes,
-        field: field
+        field: field,
+        profile: false
       });
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(SavedSearchControl, {
       attributes: this.state.attributes,
@@ -6476,6 +6497,10 @@ class FieldControls extends React.Component {
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(ProfileLinkControl, {
       attributes: this.state.attributes,
       setAttributes: this.state.setAttributes
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_ProfileFields__WEBPACK_IMPORTED_MODULE_5__["ProfileFields"], {
+      attributes: this.state.attributes,
+      setAttributes: this.state.setAttributes,
+      data: [...this.state.system, ...this.state.common, ...this.state.member]
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PageSizeControl, {
       attributes: this.state.attributes,
       setAttributes: this.state.setAttributes
@@ -6565,6 +6590,55 @@ function PageSizeControl(props) {
     shiftStep: 5,
     value: value
   })));
+}
+
+/***/ }),
+
+/***/ "./src/components/ProfileFields.js":
+/*!*****************************************!*\
+  !*** ./src/components/ProfileFields.js ***!
+  \*****************************************/
+/*! exports provided: ProfileFields */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfileFields", function() { return ProfileFields; });
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Filter */ "./src/components/Filter.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+class ProfileFields extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: props.data,
+      attributes: props.attributes,
+      setAttributes: props.setAttributes
+    };
+  }
+
+  render() {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__["PanelBody"], {
+      title: "User profile fields",
+      initialOpen: false
+    }, this.state.data.map(field => {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+        attributes: this.state.attributes,
+        setAttributes: this.state.setAttributes,
+        field: field,
+        profile: true
+      });
+    }));
+  }
+
 }
 
 /***/ }),
@@ -6745,6 +6819,24 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('cre
       default: false,
       selector: '#profile_link',
       attribute: 'data-profile-link'
+    },
+    profile_fields: {
+      type: 'array',
+      default: [],
+      source: 'query',
+      selector: '.profile-field',
+      query: {
+        id: {
+          type: 'string',
+          source: 'attribute',
+          attribute: 'data-system-code'
+        },
+        name: {
+          type: 'string',
+          source: 'attribute',
+          attribute: 'data-name'
+        }
+      }
     }
   },
 
@@ -6764,6 +6856,13 @@ function renderHiddenFields(attributes) {
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, attributes.fields_applied.map(field => {
     return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("li", {
       className: "filter",
+      key: field.id,
+      "data-system-code": field.id,
+      "data-name": field.name
+    }, field.name);
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("ul", null, attributes.profile_fields.map(field => {
+    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("li", {
+      className: "profile-field",
       key: field.id,
       "data-system-code": field.id,
       "data-name": field.name
@@ -6917,6 +7016,17 @@ function save({
 /***/ (function(module, exports) {
 
 (function() { module.exports = window["wp"]["i18n"]; }());
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "React" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+(function() { module.exports = window["React"]; }());
 
 /***/ })
 
