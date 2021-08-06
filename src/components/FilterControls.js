@@ -5,6 +5,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { Field, Filter } from './Filter';
 import contactFields from '../ContactFields';
 import {SavedSearches, savedSearches} from '../SavedSearches';
+import { ProfileFields } from './ProfileFields';
 
 export default class FieldControls extends React.Component {
     constructor(props) {
@@ -28,6 +29,7 @@ export default class FieldControls extends React.Component {
                                     attributes={this.state.attributes} 
                                     setAttributes={this.state.setAttributes} 
                                     field={field}
+                                    profile={false}
                                 >
                                 </Field>
                             )
@@ -42,6 +44,7 @@ export default class FieldControls extends React.Component {
                                     attributes={this.state.attributes} 
                                     setAttributes={this.state.setAttributes} 
                                     field={field}
+                                    profile={false}
                                 >
                                 </Field>
                             )
@@ -56,6 +59,7 @@ export default class FieldControls extends React.Component {
                                     attributes={this.state.attributes} 
                                     setAttributes={this.state.setAttributes} 
                                     field={field}
+                                    profile={false}
                                 >
                                 </Field>
                             )
@@ -75,6 +79,11 @@ export default class FieldControls extends React.Component {
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
                 ></ProfileLinkControl>
+                <ProfileFields
+                    attributes={this.state.attributes}
+                    setAttributes={this.state.setAttributes}
+                    data={[...this.state.system, ...this.state.common, ...this.state.member]}
+                ></ProfileFields>
                 <PageSizeControl
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
