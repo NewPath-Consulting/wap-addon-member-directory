@@ -21,7 +21,15 @@ const PROFILE_API_URL = "/wp-json/wawp/v1/profiles/";
             class: 'wa-profile-container'
         }).appendTo('.wa-contacts');
 
-        fetch(PROFILE_API_URL + userID)
+        // get fields from html
+        let field_string = '';
+        $('.profile-field').each(function() {
+            let field_name = $(this).attr('data-name');
+            field_string += ('&fields[]=' + encodeURI(field_name));
+        });
+
+        let url = PROFILE_API_URL + '?id=' + userID + field_string;
+        fetch(url)
         .then((resp) => {
             return resp.text();
         })
