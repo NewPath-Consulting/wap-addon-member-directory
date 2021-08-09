@@ -81,6 +81,7 @@ class WAService
         $defaultAccess = array();
         foreach($contactFields as $contactField) { //for each field store the access level
             $defaultAccess[$contactField['SystemCode']] = $contactField['Access']; //could store only those in $select if no cache
+            //if ever only ones in select, select will have to be by SystemCode only. This will cause issues with Saved searches as it (at least now) uses FieldName            
         }
 
         //filter isn't going to be used in the September 2021 version, leaving this for future developer
@@ -99,6 +100,7 @@ class WAService
             return array(); //can't return if can't guarentee privacy
             }
             //loop each contact and check privacy for each filter (slow, limit filters)
+            //filter can only be SystemCode names for this to work, although the call will work with both            
             foreach($filterData as $contact => $contactInfo) {
             foreach($contactInfo["FieldValues"] as $field => $value) { //for each filtered attribute for each contact
                 $SystemCode = $value["SystemCode"];
@@ -146,7 +148,7 @@ class WAService
         //"No matching records (only opted-in members are included)" in table
     }
 
-    public function getContactsList($filter = null, $select = null, $private = false) {
+    public function getContactsList($filter = null, $select = null, $private = true) {
         $queryParams = array(
             '$async' => 'false'
         );
