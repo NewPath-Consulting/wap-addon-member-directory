@@ -137,7 +137,6 @@ class ContactsAPI
         }
 
         $shortcode = $shortcode . 'user-id="' . $userID . '"]';;
-        update_option('wawp_shortcode', $shortcode);
         // $shortcode = "[wa-profile 'Photo 2' 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
         $output = do_shortcode($shortcode);
 
