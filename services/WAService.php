@@ -58,7 +58,7 @@ class WAService
         if (!empty($restricted_statuses)) {
             $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
             // If user's status is not in the restricted statuses, then the user cannot see the post
-            if (in_array($currentUserStatus, $restricted_statuses)) {
+            if(!empty(array_intersect($currentUserStatus, $restricted_statuses))) { {
             $member = true;
             }
         } else {
