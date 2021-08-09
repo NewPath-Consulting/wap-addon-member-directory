@@ -165,7 +165,7 @@ class WAService
 
         if($private) { //FUTURE: let shown statuses be customizable
             if (!empty($filter)) {
-            $queryParams = array_merge($queryParams, array('$filter' => ($filter . "AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
+            $queryParams = array_merge($queryParams, array('$filter' => ($filter . " AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
             } else {
             $queryParams = array_merge($queryParams, array('$filter' => "(Status eq 'Active' OR Status eq 'PendingRenewal')"));
             }
