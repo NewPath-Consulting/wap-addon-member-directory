@@ -47,7 +47,7 @@ class UserProfileShortcode {
                 if (!strcasecmp($key['site'], $site)) {
                     $waService = new WAService($key['key']);
                     $waService->init();
-                    $contacts = array_merge($contacts, $waService->getContactsList($filter, $select, true)); // content restriction 
+                    $contacts = array_merge($contacts, $waService->getContactsList($filter, $select )); //content restriction, letting it go be default
                 }
             }
         }
