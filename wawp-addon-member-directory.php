@@ -38,7 +38,8 @@ $activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activa
 require_once ($activator_dir);
 
 function create_block_wawp_addon_member_directory_block_init() {
-	register_block_type_from_metadata( __DIR__ );
+	register_block_type_from_metadata( plugin_dir_path(__FILE__) . 'blocks/member-directory' );
+	register_block_type_from_metadata(plugin_dir_path(__FILE__) . 'blocks/member-profile');
 	if (!class_exists('WAWP\Addon')) {
 		deactivate_plugins(plugin_basename(__FILE__));
 		add_action('admin_notices', 'memdir_wawp_not_loaded');
