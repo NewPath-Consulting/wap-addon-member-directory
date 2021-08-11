@@ -32,7 +32,7 @@ class UserProfileShortcode {
             $userID = sanitize_key($_REQUEST['user-id']);
         }
 
-        $filterStatement = array("'User ID' eq ${userID}");
+        $filterStatement = array("ID eq ${userID}"); //ID by system code not field name for content restriction
 
         $filter = ContactsUtils::generateFilterStatement($filterStatement);
         $select = ContactsUtils::generateSelectStatement($args);
@@ -58,7 +58,7 @@ class UserProfileShortcode {
         ob_start();
 
         if (empty($userProfile)) {
-            echo "Nothing to show.";
+            echo "No matching records (only opted-in members are included)";
             return ob_get_clean();
         }
 

@@ -6,6 +6,7 @@ require_once('CacheService.php');
 
 use PO\classes\WaApiClient;
 use PO\services\CacheService;
+//use PO\classes\ContactsUtils; //include for filter
 
 const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
@@ -57,7 +58,7 @@ class WAService
         if (!empty($restricted_statuses)) {
             $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
             // If user's status is not in the restricted statuses, then the user cannot see the post
-            if (in_array($currentUserStatus, $restricted_statuses)) {
+            if(!empty(array_intersect($currentUserStatus, $restricted_statuses))) { {
             $member = true;
             }
         } else {
@@ -80,6 +81,7 @@ class WAService
         $defaultAccess = array();
         foreach($contactFields as $contactField) { //for each field store the access level
             $defaultAccess[$contactField['SystemCode']] = $contactField['Access']; //could store only those in $select if no cache
+            //if ever only ones in select, select will have to be by SystemCode only. This will cause issues with Saved searches as it (at least now) uses FieldName            
         }
 
         //filter isn't going to be used in the September 2021 version, leaving this for future developer
@@ -88,16 +90,17 @@ class WAService
         $filters = array();
         $excludedContacts = array();
 
-        if(!empty($filter)) { //if filter exists
+        if(!empty($filters)) { //if filter exists
             // extract each term, put in array $filters 
-            //TODO
-
+           $filters = ContactsUtils::generateFilterStatement($filter);
+                    
             //select filters with api call, privacy turned off to check privacy
             $filterData = $this -> getContactsList(null, $filters, false);
             if(empty($filterData)) {
             return array(); //can't return if can't guarentee privacy
             }
             //loop each contact and check privacy for each filter (slow, limit filters)
+            //filter can only be SystemCode names for this to work, although the call will work with both            
             foreach($filterData as $contact => $contactInfo) {
             foreach($contactInfo["FieldValues"] as $field => $value) { //for each filtered attribute for each contact
                 $SystemCode = $value["SystemCode"];
@@ -145,7 +148,7 @@ class WAService
         //"No matching records (only opted-in members are included)" in table
     }
 
-    public function getContactsList($filter = null, $select = null, $private = false) {
+    public function getContactsList($filter = null, $select = null, $private = true) {
         $queryParams = array(
             '$async' => 'false'
         );
@@ -164,7 +167,7 @@ class WAService
 
         if($private) { //FUTURE: let shown statuses be customizable
             if (!empty($filter)) {
-            $queryParams = array_merge($queryParams, array('$filter' => ($filter . "AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
+            $queryParams = array_merge($queryParams, array('$filter' => ($filter . " AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
             } else {
             $queryParams = array_merge($queryParams, array('$filter' => "(Status eq 'Active' OR Status eq 'PendingRenewal')"));
             }
