@@ -379,17 +379,6 @@ function contains(array, item) {
 
 /***/ }),
 
-/***/ "./blocks/components/Filter.js":
-/*!*************************************!*\
-  !*** ./blocks/components/Filter.js ***!
-  \*************************************/
-/*! exports provided: Field */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/source-map-loader/index.js):\nError: ENOENT: no such file or directory, open '/Users/natalieb/dev/npc/wordpress2/wp-content/plugins/wawp-addon-member-directory/blocks/components/Filter.js'");
-
-/***/ }),
-
 /***/ "./blocks/components/FilterControls.js":
 /*!*********************************************!*\
   !*** ./blocks/components/FilterControls.js ***!
@@ -650,7 +639,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Filter */ "./blocks/components/Filter.js");
+/* harmony import */ var _Field__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Field */ "./blocks/components/Field.js");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);
 
@@ -672,7 +661,7 @@ class ProfileFields extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Compone
       title: "User Profile Fields",
       initialOpen: false
     }, this.state.data.map(field => {
-      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Filter__WEBPACK_IMPORTED_MODULE_2__["Field"], {
+      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_Field__WEBPACK_IMPORTED_MODULE_2__["Field"], {
         attributes: this.state.attributes,
         setAttributes: this.state.setAttributes,
         field: field,

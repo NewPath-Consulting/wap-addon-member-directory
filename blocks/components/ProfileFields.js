@@ -1,5 +1,5 @@
 import React from "react";
-import { Field } from "./Filter";
+import { Field } from "./Field";
 import { PanelBody } from "@wordpress/components";
 
 export class ProfileFields extends React.Component {
