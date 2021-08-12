@@ -57,6 +57,12 @@ registerBlockType( 'wawp-member-addons/member-profile', {
 			default: '',
 			selector: '#user_id',
 			attribute: 'data-user-id'
+		},
+		hide_restricted_fields: {
+			type: 'boolean',
+			default: true,
+			selector: '#hide_restricted_fields',
+			attribute: 'data-hide-restricted-fields'
 		}
 	},
 	/**
@@ -83,6 +89,7 @@ export function renderHiddenFields(attributes) {
 			}
 			</ul>
 			<div id="user_id" data-user-id={ attributes.user_id } ></div>
+			<div id="hide_restricted_fields" data-hide-restricted-fields={attributes.hide_restricted_fields}>{ attributes.hide_restricted_fields }</div>
 		</div>
 	);
 }
@@ -98,6 +105,10 @@ export function generateShortcode(attributes) {
 	}
 
 	shortcode_str += ' user-id=' + attributes.user_id;
+
+	if (attributes.hide_restricted_fields) {
+		shortcode_str += ' hide_restricted_fields';
+	}
 
 	shortcode_str += ']';
 

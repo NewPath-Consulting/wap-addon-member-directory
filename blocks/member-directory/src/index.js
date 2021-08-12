@@ -86,6 +86,12 @@ registerBlockType( 'wawp-member-addons/member-directory', {
 					attribute: 'data-name'
 				}				
 			}
+		},
+		hide_restricted_fields: {
+			type: 'boolean',
+			default: true,
+			selector: '#hide_restricted_fields',
+			attribute: 'data-hide-restricted-fields'
 		}
 	},
 	/**
@@ -128,6 +134,7 @@ export function renderHiddenFields(attributes) {
 			<div id="page_size" data-page-size={attributes.page_size}></div>
 			<div id="saved_search" data-saved-search={attributes.saved_search}></div>
 			<div id="profile_link" data-profile-link={attributes.profile_link}></div>
+			<div id="hide_restricted_fields" data-hide-restricted-fields={attributes.hide_restricted_fields}>{ attributes.hide_restricted_fields }</div>
 		</div>
 	);
 }
@@ -155,6 +162,10 @@ export function generateShortcode(attributes) {
 
 	if (attributes.profile_link) {
 		shortcode_str += ' profile';
+	}
+	
+	if (attributes.hide_restricted_fields) {
+		shortcode_str += ' hide_restricted_fields';
 	}
 
 	shortcode_str += "] [/wa-contacts]";
