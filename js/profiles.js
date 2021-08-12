@@ -9,7 +9,6 @@ const PROFILE_API_URL = "/wp-json/wawp/v1/profiles/";
         $('.wa-profile-link').click(function () {
             // make shortcode div and show that
             let user_id = $(this).attr('data-user-id');
-            console.log(user_id);
             toggleDirectory();
             generateProfileShortcode(user_id);
         });
@@ -21,6 +20,12 @@ const PROFILE_API_URL = "/wp-json/wawp/v1/profiles/";
             class: 'wa-profile-container'
         }).appendTo('.wa-contacts');
 
+        // hide restricted fields?
+
+        let hideResFields = $('#hide_restricted_fields').attr('data-hide-restricted-fields');
+
+        // console.log(hideResFields);
+
         // get fields from html
         let field_string = '';
         $('.profile-field').each(function() {
@@ -28,7 +33,8 @@ const PROFILE_API_URL = "/wp-json/wawp/v1/profiles/";
             field_string += ('&fields[]=' + encodeURI(field_name));
         });
 
-        let url = PROFILE_API_URL + '?id=' + userID + field_string;
+        let url = PROFILE_API_URL + '?id=' + userID + '&hideResFields=' + hideResFields + field_string;
+        console.log(url);
         fetch(url)
         .then((resp) => {
             return resp.text();
