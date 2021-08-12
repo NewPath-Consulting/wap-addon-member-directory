@@ -131,12 +131,20 @@ class ContactsAPI
     public function profileShortcodeRestRoute(WP_REST_Request $request) {
         $userID = $request['id'];
         $fields = $request['fields'];
+        $hideResFields = $request['hideResFields'];
         $shortcode = "[wa-profile ";
         foreach ($fields as $field) {
             $shortcode = $shortcode . "'" . $field . "' ";
         }
 
-        $shortcode = $shortcode . 'user-id="' . $userID . '"]';;
+        $shortcode = $shortcode . 'user-id="' . $userID . '"';
+
+        if ($hideResFields) {
+            $shortcode = $shortcode . ' hide_restricted_fields';
+        }
+
+        $shortcode = $shortcode . ']';
+        update_option('shortcode', $shortcode);
         // $shortcode = "[wa-profile 'Photo 2' 'User ID' 'My First name' 'Middle Name' 'Last name' 'Job Title' 'Email' 'Phone' user-id='" . $userID . "']";
         $output = do_shortcode($shortcode);
 
@@ -153,7 +161,6 @@ class ContactsAPI
     }
 
     public function waContactsShortcode($args, $content = null) {
-        do_action('qm/debug', $args);
         if (!is_array($args)) {
             error_log("wa-contacts not configured properly");
             return "";
@@ -173,6 +180,8 @@ class ContactsAPI
         $pageSize = $this->extractAndRemovePageSize($args);
 
         $savedSearch = $this->extractAndRemoveSavedSearch($args);
+
+        $hideResField = $this->extractAndRemoveRestrictedFieldsToggle($args);
 
         $dropdownList = "";
         if ($this->extractAndRemoveDropdown($args)) {
@@ -202,10 +211,10 @@ class ContactsAPI
             return $customOutput;
         }
 
-        return $this->render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList);
+        return $this->render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList, $hideResField);
     }
 
-    public function render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList) {
+    public function render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList, $hideResField) {
         
         $pageSizeNum = (int)$pageSize;
         $pagination = count($contacts) > $pageSizeNum;
@@ -237,7 +246,7 @@ class ContactsAPI
         }
 
         foreach ($contacts as $contact) {
-            $this->renderContactDiv($contact, $profileURL, $profile);
+            $this->renderContactDiv($contact, $profileURL, $profile, $hideResField);
         }
 
         echo '</div>';
@@ -249,7 +258,7 @@ class ContactsAPI
         return ob_get_clean();
     }
 
-    private function renderContactDiv($fields, $profileURL="", $profile = false) {
+    private function renderContactDiv($fields, $profileURL="", $profile = false, $hideResField) {
         if (empty($fields)) {
             return;
         }
@@ -265,6 +274,8 @@ class ContactsAPI
                 $picture = $this->getPictureFromAPI($field['Value']['Url']);
                 $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
                 echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+            } else if ($field['Value'] == "🔒 Restricted" && $hideResField) {
+                continue;
             } else if (is_array($field['Value'])) {
                 $this->renderNestedFieldValuesList($field['FieldName'], $field['Value']);
             } else if ($field['Value'] === "") {
@@ -446,6 +457,12 @@ class ContactsAPI
         $profile = in_array('profile', $shortCodeArgs);
         $shortCodeArgs = array_diff($shortCodeArgs, array('profile'));
         return $profile;
+    }
+
+    private function extractAndRemoveRestrictedFieldsToggle(&$shortCodeArgs) {
+        $resFields = in_array('hide_restricted_fields', $shortCodeArgs);
+        $shortCodeArgs = array_diff($shortCodeArgs, array('hide_restricted_fields'));
+        return $resFields;
     }
 
     private function extractAndRemoveSites(&$shortCodeArgs) {
