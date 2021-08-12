@@ -34,6 +34,8 @@ class UserProfileShortcode {
 
         $filterStatement = array("ID eq ${userID}"); //ID by system code not field name for content restriction
 
+        $hideResField = $this->extractAndRemoveRestrictedFieldsToggle($args);
+
         $filter = ContactsUtils::generateFilterStatement($filterStatement);
         $select = ContactsUtils::generateSelectStatement($args);
 
@@ -51,10 +53,11 @@ class UserProfileShortcode {
 
         $contacts = $contacts->getFieldValuesOnly();
 
-        return $this->render($contacts[0]);
+
+        return $this->render($contacts[0], $hideResField);
     }
 
-    private function render($userProfile=NULL, $class="wa-profile") {
+    private function render($userProfile, $hideResField, $class="wa-profile")  {
         ob_start();
 
         if (empty($userProfile)) {
@@ -80,6 +83,8 @@ class UserProfileShortcode {
                 $picture = $waService->getPicture($userFieldValue['Url']);
                 $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
                 echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+            } else if ($userFieldValue == "🔒 Restricted" && $hideResField) {
+                continue;
             } else {
                 if (is_array($userFieldValue)) {
                     $userFieldValue = $userFieldValue['Label'];
@@ -99,6 +104,12 @@ class UserProfileShortcode {
         $userID = isset($shortCodeArgs['user-id']) ? $shortCodeArgs['user-id'] : "";
         unset($shortCodeArgs['user-id']);
         return $userID;
+    }
+
+    private function extractAndRemoveRestrictedFieldsToggle(&$shortCodeArgs) {
+        $resFields = in_array('hide_restricted_fields', $shortCodeArgs);
+        $shortCodeArgs = array_diff($shortCodeArgs, array('hide_restricted_fields'));
+        return $resFields;
     }
 
 }
