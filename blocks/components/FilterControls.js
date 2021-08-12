@@ -89,6 +89,7 @@ export class FieldControls extends React.Component {
                     setAttributes={this.state.setAttributes}
                 >
                 </PageSizeControl>
+                <RestrictedFieldsControl attributes={this.state.attributes} setAttributes={this.state.setAttributes}></RestrictedFieldsControl>
             </Panel>
         );
     }
@@ -156,6 +157,7 @@ export class ProfileFieldControls extends React.Component {
                     }
                 </PanelBody>
                 <UserIdControl attributes={this.state.attributes} setAttributes={this.state.setAttributes} ></UserIdControl>
+                <RestrictedFieldsControl attributes={this.state.attributes} setAttributes={this.state.setAttributes}></RestrictedFieldsControl>
             </Panel>
         )
     }
@@ -274,6 +276,26 @@ function UserIdControl(props) {
                 onChange={ ( nextValue ) => setValue( nextValue ) }
                 label="User ID"
             />
+        </PanelBody>
+    );
+}
+
+function RestrictedFieldsControl(props) {
+    const [ isChecked, setChecked ] = useState(props.attributes.hide_restricted_fields);
+
+    useEffect(() => {
+        props.setAttributes({hide_restricted_fields: isChecked});
+    });
+
+    return (
+        <PanelBody title="Hide Restricted Fields" initialOpen={ true }>
+            <PanelRow>
+                <ToggleControl
+                    label="Hide restricted fields"
+                    checked={ isChecked }
+                    onChange={ setChecked }
+                ></ToggleControl>
+            </PanelRow>
         </PanelBody>
     );
 }
