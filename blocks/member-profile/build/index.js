@@ -466,6 +466,9 @@ class FieldControls extends React.Component {
     }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(PageSizeControl, {
       attributes: this.state.attributes,
       setAttributes: this.state.setAttributes
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RestrictedFieldsControl, {
+      attributes: this.state.attributes,
+      setAttributes: this.state.setAttributes
     }));
   }
 
@@ -515,6 +518,9 @@ class ProfileFieldControls extends React.Component {
         profile: false
       });
     })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(UserIdControl, {
+      attributes: this.state.attributes,
+      setAttributes: this.state.setAttributes
+    }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(RestrictedFieldsControl, {
       attributes: this.state.attributes,
       setAttributes: this.state.setAttributes
     }));
@@ -621,6 +627,23 @@ function UserIdControl(props) {
     onChange: nextValue => setValue(nextValue),
     label: "User ID"
   }));
+}
+
+function RestrictedFieldsControl(props) {
+  const [isChecked, setChecked] = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useState"])(props.attributes.hide_restricted_fields);
+  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    props.setAttributes({
+      hide_restricted_fields: isChecked
+    });
+  });
+  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelBody"], {
+    title: "Hide Restricted Fields",
+    initialOpen: true
+  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["PanelRow"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__["ToggleControl"], {
+    label: "Hide restricted fields",
+    checked: isChecked,
+    onChange: setChecked
+  })));
 }
 
 /***/ }),
@@ -903,6 +926,12 @@ Object(_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__["registerBlockType"])('waw
       default: '',
       selector: '#user_id',
       attribute: 'data-user-id'
+    },
+    hide_restricted_fields: {
+      type: 'boolean',
+      default: true,
+      selector: '#hide_restricted_fields',
+      attribute: 'data-hide-restricted-fields'
     }
   },
 
@@ -929,7 +958,10 @@ function renderHiddenFields(attributes) {
   })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
     id: "user_id",
     "data-user-id": attributes.user_id
-  }));
+  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", {
+    id: "hide_restricted_fields",
+    "data-hide-restricted-fields": attributes.hide_restricted_fields
+  }, attributes.hide_restricted_fields));
 }
 function generateShortcode(attributes) {
   var shortcode_str = '[wa-profile ';
@@ -941,6 +973,11 @@ function generateShortcode(attributes) {
   }
 
   shortcode_str += ' user-id=' + attributes.user_id;
+
+  if (attributes.hide_restricted_fields) {
+    shortcode_str += ' hide_restricted_fields';
+  }
+
   shortcode_str += ']';
   return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, shortcode_str);
 }
