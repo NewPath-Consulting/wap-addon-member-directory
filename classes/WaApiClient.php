@@ -99,7 +99,6 @@ class WaApiClient
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $jsonResult = curl_exec($ch);
         if ($isPicture && $jsonResult) {
-            do_action('qm/debug', $jsonResult);
             return $jsonResult;
         }
         if ($jsonResult === false) {

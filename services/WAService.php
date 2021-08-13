@@ -10,8 +10,7 @@ use PO\services\CacheService;
 
 const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
-class WAService
-{
+class WAService {
     private $apiKey;
     private $apiClient;
     private $accountURL = false;
@@ -30,8 +29,7 @@ class WAService
         $this->apiClient = new WaApiClient();
     }
 
-    public function initWithCache()
-    {
+    public function initWithCache() {
         $this->useCache = true;
         $this->init();
     }
@@ -58,7 +56,7 @@ class WAService
         if (!empty($restricted_statuses)) {
             $currentUserStatus = get_user_meta(get_current_user_id(), 'wawp_user_status_key'); 
             // If user's status is not in the restricted statuses, then the user cannot see the post
-            if(!empty(array_intersect($currentUserStatus, $restricted_statuses))) { {
+            if(!empty(array_intersect($currentUserStatus, $restricted_statuses))) { 
             $member = true;
             }
         } else {
@@ -125,27 +123,27 @@ class WAService
             }*/
 
             foreach($contactInfo["FieldValues"] as $field => $value) { //for each selected value
-            $SystemCode = $value["SystemCode"]; 
-            if(!($SystemCode == "AccessToProfileByOthers")) {    
-                $access = $defaultAccess[$SystemCode]; //get default privacy setting
-                if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
-                $access = $value["CustomAccessLevel"]; //custom takes priority always
+                $SystemCode = $value["SystemCode"]; 
+                if(!($SystemCode == "AccessToProfileByOthers")) {    
+                    $access = $defaultAccess[$SystemCode]; //get default privacy setting
+                    if(isset($value["CustomAccessLevel"])) { //if CustomAccessLevel exists
+                        $access = $value["CustomAccessLevel"]; //custom takes priority always
+                    }
+                    if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way errors default private)       
+                        $contacts[$contact]["FieldValues"][$field]["Value"] = "🔒 Restricted"; //hide this specific value
+                    } 
+                } else { //SystemCode == "AccessToProfileByOthers"
+                    if($value["Value"] == false) { //if can be shown to others
+                        unset($contacts[$contact]); //exclude this contact
+                    } else {
+                        unset($contacts[$contact]["FieldValues"][$field]); //exclude access to profile by others because we included it 
+                        //FUTURE: let it stay if chosen? value could only be true if someone can see contact, kind of pointless
+                    }              
                 }
-                if(!($access == "Public" || ($access == "Members" && $member))) { //if not either of allowed (this way errors default private)       
-                $contacts[$contact]["FieldValues"][$field]["Value"] = "🔒 Restricted"; //hide this specific value
-                } 
-            } else { //SystemCode == "AccessToProfileByOthers"
-                if($value["Value"] == false) { //if can be shown to others
-                unset($contacts[$contact]); //exclude this contact
-                } else {
-                unset($contacts[$contact]["FieldValues"][$field]); //exclude access to profile by others because we included it 
-                //FUTURE: let it stay if chosen? value could only be true if someone can see contact, kind of pointless
-                }              
-            }
             }  
-            }
-            return $contacts;
-        //"No matching records (only opted-in members are included)" in table
+        }
+
+        return $contacts;
     }
 
     public function getContactsList($filter = null, $select = null, $private = true) {
@@ -155,25 +153,25 @@ class WAService
 
         if($private) { //The global restriction of a contact is a FieldValue (terrible design), so need to get 
             if (!empty($select)) {
-            $queryParams = array_merge($queryParams, array('$select' => ($select . ",'AccessToProfileByOthers'")));
+                $queryParams = array_merge($queryParams, array('$select' => ($select . ",'AccessToProfileByOthers'")));
             } else {
-            $queryParams = array_merge($queryParams, array('$select' => "'AccessToProfileByOthers'"));
+                $queryParams = array_merge($queryParams, array('$select' => "'AccessToProfileByOthers'"));
             }
         } else {
             if (!empty($select)) {
-            $queryParams = array_merge($queryParams, array('$select' => $select));
+                $queryParams = array_merge($queryParams, array('$select' => $select));
             }
         }
 
         if($private) { //FUTURE: let shown statuses be customizable
             if (!empty($filter)) {
-            $queryParams = array_merge($queryParams, array('$filter' => ($filter . " AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
+                $queryParams = array_merge($queryParams, array('$filter' => ($filter . " AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
             } else {
-            $queryParams = array_merge($queryParams, array('$filter' => "(Status eq 'Active' OR Status eq 'PendingRenewal')"));
+                $queryParams = array_merge($queryParams, array('$filter' => "(Status eq 'Active' OR Status eq 'PendingRenewal')"));
             }
         } else {
             if (!empty($filter)) {
-            $queryParams = array_merge($queryParams, array('$filter' => ($filter)));
+                $queryParams = array_merge($queryParams, array('$filter' => ($filter)));
             }
         }
 
@@ -189,8 +187,8 @@ class WAService
             $contacts = $apiCache->getValue($url);
 
             if (empty($contacts)) {
-            $contacts = $this->apiClient->makeRequest($url);
-            $apiCache->saveValue($url, $contacts);
+                $contacts = $this->apiClient->makeRequest($url);
+                $apiCache->saveValue($url, $contacts);
             }
         } else {
             $contacts = $this->apiClient->makeRequest($url);
@@ -201,7 +199,9 @@ class WAService
         }
         if($private) {
             return $this->controlAccess(array_values($contacts['Contacts']), $filter, $select); 
-        } return array_values($contacts['Contacts']);
+        } 
+
+        return array_values($contacts['Contacts']);
     }  
 
     public function getSavedSearches() {
@@ -210,7 +210,7 @@ class WAService
         $savedSearches = $this->apiClient->makeRequest($url);
 
         return $savedSearches;
-        }
+    }
 
     public function getSavedSearch($savedSearchId) {
         $queryParams = array(
@@ -232,7 +232,6 @@ class WAService
         $query = http_build_query($queryParams);
         $url = $pictureUrl . '?' . $query;
         $picture = $this->apiClient->makeRequest($url, true);
-        do_action('qm/debug', $picture);
         return $picture;
     }
 
@@ -241,10 +240,9 @@ class WAService
 
         // TODO: handle multiple accounts, right now returns one
         return $accounts[0];
-        }
+    }
 
-        private function getAccountURL()
-        {
+    private function getAccountURL() {
         if (empty($this->accountURL)) {
             $account = $this->getAccountDetails();
             $this->accountURL = $account['Url'];

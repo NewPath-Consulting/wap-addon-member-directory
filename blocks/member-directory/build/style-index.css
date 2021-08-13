@@ -4,7 +4,7 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-.wp-block-create-block-wawp-addon-member-directory {
+.wp-block-wawp-member-addons-member-directory {
   background-color: #21759b;
   color: #fff;
   padding: 2px;
@@ -44,6 +44,20 @@
   color: #333;
   text-decoration: none;
   text-align: center;
+}
+
+li.paginationjs-page.active a {
+  background: #707070;
+  color: white;
+}
+
+.wa-profile-link, .back-arrow {
+  text-decoration: underline;
+}
+.wa-profile-link:hover, .back-arrow:hover {
+  text-decoration: none;
+  cursor: pointer;
+  opacity: 0.7;
 }
 
 /*# sourceMappingURL=style-index.css.map*/

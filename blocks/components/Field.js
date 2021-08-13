@@ -1,6 +1,5 @@
-import { PanelRow, CheckboxControl, SelectControl } from '@wordpress/components';
+import { PanelRow, CheckboxControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
-import contactFields from '../ContactFields';
 
 export class Field extends React.Component {
     constructor(props) {
@@ -8,7 +7,8 @@ export class Field extends React.Component {
         this.state = ({
             attributes: props.attributes,
             setAttributes: props.setAttributes,
-            field: props.field
+            field: props.field, // field must be in the format {id: SystemCode, name: Name}
+            profile: props.profile
         });
     }
 
@@ -19,6 +19,8 @@ export class Field extends React.Component {
                     field={this.state.field}
                     attributes={this.state.attributes}
                     setAttributes={this.state.setAttributes}
+                    profile={this.state.profile}
+                    key={this.state.field.name}
                 >
                 </FieldCheckbox>
             </PanelRow>
@@ -27,7 +29,13 @@ export class Field extends React.Component {
 }
 
 function FieldCheckbox(props) {
-    let arr = props.attributes.fields_applied
+    let arr = [];
+    if (props.profile) {
+        arr = props.attributes.profile_fields;
+    } else {
+        arr = props.attributes.fields_applied;
+    }
+    
     let exists = contains(arr, props.field) == -1 ? false : true;
 
     const [ isChecked, setChecked ] = useState(exists);
@@ -43,7 +51,12 @@ function FieldCheckbox(props) {
             // remove it
         }
 
-        props.setAttributes({fields_applied: arr});
+        if (props.profile) {
+            props.setAttributes({profile_fields: arr});
+        } else {
+            props.setAttributes({fields_applied: arr});
+        }
+        
     });
     
     return (

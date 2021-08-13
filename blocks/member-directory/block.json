@@ -1,9 +1,9 @@
 {
 	"apiVersion": 2,
-	"name": "create-block/wawp-addon-member-directory",
-	"title": "WAWP Member Directory Addon",
+	"name": "wawp-member-addons/member-directory",
+	"title": "WAWP Member Directory",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "groups",
 	"description": "Add a Wild Apricot Member Directory to your website!",
 	"supports": {
 		"html": false

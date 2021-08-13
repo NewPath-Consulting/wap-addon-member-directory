@@ -6,6 +6,10 @@
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
+		"start:member-directory": "wp-scripts start blocks/member-directory/src/index.js --output-path=blocks/member-directory/build/",
+		"build:member-directory": "wp-scripts build blocks/member-directory/src/index.js --output-path=blocks/member-directory/build/",
+		"start:member-profile": "wp-scripts start blocks/member-profile/src/index.js --output-path=blocks/member-profile/build/",
+		"build:member-profile": "wp-scripts build blocks/member-profile/src/index.js --output-path=blocks/member-profile/build/",
 		"build": "wp-scripts build",
 		"format": "wp-scripts format",
 		"lint:css": "wp-scripts lint-style",
