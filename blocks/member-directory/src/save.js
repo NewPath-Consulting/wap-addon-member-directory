@@ -26,7 +26,6 @@ import { generateShortcode, renderHiddenFields } from './index';
 export default function save({attributes}) {
 	return (
 		<div {...useBlockProps.save()} >
-			<p>Wild Apricot Member Directory</p>
 				{ renderHiddenFields(attributes) }
 				{ generateShortcode(attributes) }
 		</div>
