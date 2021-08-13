@@ -13,7 +13,7 @@ class Contacts {
 
         foreach ($valuesToKeep as $value) {
           foreach ($contact['FieldValues'] as $customField) {
-            if ($customField['FieldName'] === $value) {
+            if (strcasecmp($customField['FieldName'], $value) == 0) {
               $fieldValues[] = $customField;
             }
           }
