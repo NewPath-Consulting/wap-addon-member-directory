@@ -45,7 +45,13 @@ class UserProfileShortcode {
         $sites = empty($sites) ? reset($waAPIKeys) : $sites;
 
         $waService = new WAService();
-        $contacts = $waService->getContactsList($filter, $select);
+        $current_user_id = get_user_meta(get_current_user_id(), "wawp_wa_user_id");
+	$contacts;
+	if(!empty(array_intersect(array($userID), $current_user_id))) { //If user being displayed is the current user (sus for security)
+		$contacts = $waService->getContactsList($filter, $select, false); //run without restriction
+	} else {
+		$contacts = $waService->getContactsList($filter, $select, true); 
+	}
 
         $contacts = new Contacts($contacts);
         
