@@ -833,7 +833,7 @@ function Edit({
   }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])(_components_FilterControls__WEBPACK_IMPORTED_MODULE_3__["FieldControls"], {
     attributes: attributes,
     setAttributes: setAttributes
-  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("p", null, "Wild Apricot Member Directory"), Object(_index__WEBPACK_IMPORTED_MODULE_4__["renderHiddenFields"])(attributes), Object(_index__WEBPACK_IMPORTED_MODULE_4__["generateShortcode"])(attributes)));
+  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__["createElement"])("div", _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_2__["useBlockProps"].save(), Object(_index__WEBPACK_IMPORTED_MODULE_4__["renderHiddenFields"])(attributes), Object(_index__WEBPACK_IMPORTED_MODULE_4__["generateShortcode"])(attributes)));
 }
 
 /***/ }),

@@ -38,7 +38,6 @@ export default function Edit({attributes, setAttributes}) {
 				<ProfileFieldControls attributes={attributes} setAttributes={setAttributes}></ProfileFieldControls>
 			</InspectorControls>
 			<div {...useBlockProps.save()} >
-				<p>Wild Apricot Member Directory</p>
 					{ renderHiddenFields(attributes) }
 					{ generateShortcode(attributes) }
 			</div>
