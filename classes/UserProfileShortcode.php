@@ -68,14 +68,26 @@ class UserProfileShortcode {
         echo "<div class=\"${class}\">";
         foreach ($userProfile as $userFields) {
 
+            
+
             $userFieldName = sanitize_title_with_dashes($userFields['FieldName']);
             $userFieldValue = $userFields['Value'];
             $userFieldNameLabel = htmlspecialchars($userFields['FieldName']);
 
+            
 
             if (empty($userFieldName) || empty($userFieldValue)) {
                 continue;
             }
+
+            if ($userFieldValue == "🔒 Restricted" && $hideResField) {
+                continue;
+            }
+            echo "<div id=\"${userFieldName}\" class=\"field\">";
+
+            echo "<span class=\"field-name\">";
+            echo htmlspecialchars($userFieldNameLabel);
+            echo "</span>";
 
             if (ContactsUtils::isPicture($userFieldValue)) {
                 // need to get picture from API
@@ -83,16 +95,16 @@ class UserProfileShortcode {
                 $picture = $waService->getPicture($userFieldValue['Url']);
                 $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
                 echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
-            } else if ($userFieldValue == "🔒 Restricted" && $hideResField) {
-                continue;
-            } else {
+            }else {
                 if (is_array($userFieldValue)) {
                     $userFieldValue = $userFieldValue['Label'];
                 }
-                echo "<div class=\"${userFieldName}\" data-wa-label=\"${userFieldNameLabel}\">";
+                echo "<span class=\"${userFieldName} field-value\" data-wa-label=\"${userFieldNameLabel}\">";
                 echo htmlspecialchars($userFieldValue);
-                echo "</div>";
+                echo "</span>";
             }
+
+            echo "</div>";
 
         }
         echo "</div>";

@@ -58,3 +58,10 @@ li.paginationjs-page.active a {
 		opacity: 0.7;
 	}
 }
+
+.field {
+	width: 80%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	justify-items: start;
+}
