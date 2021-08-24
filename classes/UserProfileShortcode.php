@@ -46,12 +46,12 @@ class UserProfileShortcode {
 
         $waService = new WAService();
         $current_user_id = get_user_meta(get_current_user_id(), "wawp_wa_user_id");
-	$contacts;
-	if(!empty(array_intersect(array($userID), $current_user_id))) { //If user being displayed is the current user (sus for security)
-		$contacts = $waService->getContactsList($filter, $select, false); //run without restriction
-	} else {
-		$contacts = $waService->getContactsList($filter, $select, true); 
-	}
+        $contacts;
+        if(!empty(array_intersect(array($userID), $current_user_id))) { //If user being displayed is the current user (sus for security)
+            $contacts = $waService->getContactsList($filter, $select, false); //run without restriction
+        } else {
+            $contacts = $waService->getContactsList($filter, $select, true); 
+        }
 
         $contacts = new Contacts($contacts);
         
@@ -73,14 +73,9 @@ class UserProfileShortcode {
 
         echo "<div class=\"${class}\">";
         foreach ($userProfile as $userFields) {
-
-            
-
             $userFieldName = sanitize_title_with_dashes($userFields['FieldName']);
             $userFieldValue = $userFields['Value'];
             $userFieldNameLabel = htmlspecialchars($userFields['FieldName']);
-
-            
 
             if (empty($userFieldName) || empty($userFieldValue)) {
                 continue;
