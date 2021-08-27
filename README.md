@@ -88,7 +88,36 @@ Each element in the member directory and member profile has a unique CSS class i
 
 ### Member Directory IDs and Classes
 
-The member directory will be in a class called `wp-block-wawp-member-addons-member-directory`
+The member directory will be in a class called `wp-block-wawp-member-addons-member-directory`.
+
+All hidden fields will be in a class called `hidden`.
+
+The following IDs contain the various block options:
+
+```
+<div id="enable_search" data-search-enabled="false"></div>
+
+<div id="page_size" data-page-size="1"></div>
+
+<div id="saved_search" data-saved-search="0"></div>
+
+<div id="profile_link" data-profile-link="true"></div>
+
+<div id="hide_restricted_fields" data-hide-restricted-fields="false"></div>
+```
+
+All contacts will be paginated in the class `wa-contacts`. The pagination will be contained in a class called `wa-pagination`. Each page of the pagination is in a class called `wa-pagination-page`. Each contact or member is in a class called `wa-contact`. Each field value will use the class of the field name as well as a custom attribute called `wa-data-label` with the name of the field as the value.
+
+Here is an example of a `wa-contact` element which contains one member and the View profile link.
+
+```
+<div class="wa-contact">
+<div class="donor" data-wa-label="Donor">
+<div class="my-first-name" data-wa-label="My First name">Carol</div>
+<div class="email" data-wa-label="Email">carol@newpathconsulting.com</div>
+<div class="wa-profile-link" id="profile-link" data-user-id="49286448">View profile</div>
+</div>
+```
 
 ### Member Profile IDs and Classes
 
