@@ -56,9 +56,54 @@ The below syntax is built automatically by the block but it can be included manu
 The `profile` and `hide_restricted_fields` can be used to turn on these options.
 
 
-## Profile Short Code
+# Configuring the WAP Member Profile Block
+
+
+To configure a member profile block, select system fields, common fields and membership fields from your Wild Apricot database. These will be included in the single profile.
+
+### Block Options
+Click the Block options and select the fields to include under System Fields, Common Fields and Member Fields.
+
+<img width="953" alt="member profile block configuration options" src="https://user-images.githubusercontent.com/458134/131164172-dfeb2a2d-e328-4c7a-894d-35fd004ec1c0.png">
+
+
+### Hide Restricted Fields
+
+This toggle will hide any restricted fields that are not available to the public or members using the privacy features of Wild Apricot.
+
+
+## Member Profile Shortcode
+
+The `wa-profile` shortcode is built dynamically based on the options selected under block.
+
+The below syntax is built automatically by the block but it can be included manually into any block or content area in WordPress.
+
+`[wa-profile <database fields> user-id=<Wild Apricot UserID> hide_restricted_fields]`
+
+The `hide_restricted_fields` can be used to turn on this option.
 
 ## Customizing the CSS
+
+Each element in the member directory and member profile has a unique CSS class inserted which can be customized in the CSS style sheet.
+
+### Member Directory IDs and Classes
+
+The member directory will be in a class called `wp-block-wawp-member-addons-member-directory`
+
+### Member Profile IDs and Classes
+
+The whole profile will be in a class called `wa-profile`.
+
+Each field will have an ID using the same name of the field. For example here is a profile with just the `City` field, and the value `Toronto`:
+
+`<div id="city" class="field">
+
+<span class="field-name">City</span>
+
+<span class="city field-value" data-wa-label="City">Toronto</span>
+</div>`
+
+The row contains the ID city and a class field. Each element of the row has the `field-name` class and the value has a class `fieldname field-value`. A custom attribute `data-wa-label` is included for convenience.
 
 ## Developer Notes
 
