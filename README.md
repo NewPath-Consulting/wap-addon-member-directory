@@ -96,7 +96,8 @@ The whole profile will be in a class called `wa-profile`.
 
 Each field will have an ID using the same name of the field. For example here is a profile with just the `City` field, and the value `Toronto`:
 
-```<div id="city" class="field">
+```
+<div id="city" class="field">
 
 <span class="field-name">City</span>
 
