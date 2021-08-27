@@ -96,12 +96,13 @@ The whole profile will be in a class called `wa-profile`.
 
 Each field will have an ID using the same name of the field. For example here is a profile with just the `City` field, and the value `Toronto`:
 
-`<div id="city" class="field">
+```<div id="city" class="field">
 
 <span class="field-name">City</span>
 
 <span class="city field-value" data-wa-label="City">Toronto</span>
-</div>`
+</div>
+```
 
 The row contains the ID city and a class field. Each element of the row has the `field-name` class and the value has a class `fieldname field-value`. A custom attribute `data-wa-label` is included for convenience.
 
