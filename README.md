@@ -1,16 +1,16 @@
 # WAP Member Directory Addon
-This plugin contains a member directory block (`wa-contacts`) and a member profile block (`wa-profile`). The code for each block resides in respective folders in `blocks/`.
+This plugin contains a member directory block (`wa-contacts`) which displays many member profiles with search options and a member profile block (`wa-profile`) which displays a single member profile each with customizable fields. The code for each block resides in respective folders in `blocks/`.
 
 # Installation
-To install this add on you must have installed [Wild Apricot Press](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md) ahead of time. You also will need to use a license key to add this add on. License keys can be obtained on the [NewPath website](https://newpathconsulting.com/wawp).
+To install this add on you must have installed [Wild Apricot Press] (https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md ahead of time. You also will need to obtain a license key on the [NewPath website](https://newpathconsulting.com/wawp) license key to use this add on. 
 
-The addon zip archive can be installed using Plugins -> Add New. Once installed, you should go to the [WAP License Key screen](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md#licensing-wawp) to add your WAP license key. Free addons like Member Directory use the same license key as WAP.
+The addon zip archive can be installed using Plugins -> Add New. Once installed, go to the [WAP License Key screen](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md#licensing-wawp) (WAP Settings > Licensing) to add your WAP license key. Free add ons like Member Directory use the same license key as the core WAP plugin.
 
 # Usage
 
 ## Using the block in the block editor
 
-The WAP membership directory block is accessed in the block editor like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when youre in a block. Type / when in a block and type 'wa' or 'wild apricot' and the relevenat blocks will appear.
+The WAP membership directory block is accessed in the block editor like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when you're in a block. Type / when in a block and type 'wa' or 'wild apricot' and the relevenat blocks will appear.
 
 <img width="207" alt="add profile block" src="https://user-images.githubusercontent.com/458134/131161812-ebc09bed-c157-4550-8cd4-170a482c96b3.png">
 
@@ -26,21 +26,22 @@ Click the Block options and select the fields to include under System Fields, Co
 
 The Filters drop down will enable you to use a Saved Search in Wild Apricot to create a member directory connected to search that always reflects the latest membership data. When the Saved Search results change, so does the member directory using this search.
 
+IMPORTANT: If you want to maintain member privacy, do not to publicize the criteria of this saved search. As in Wild Apricot, members appear in saved searchs regardless if the field being filtered on is public. An example of how this could expose sensitive member info would be if there was a field "Number of Guns Owned", and a filter for "Guns > 0" was published on a page that indicated that this was the filter, even if a user made this information accessible to admin only, it would now be exposed to the public.
+
 ### Enable Search
 
-You can also enable a search box to enable a quick search of the directory.
+You can also enable a search box to enable a quick search of the directory to front end users.
 
 ### Profile Link
 To allow a visitor to click to a longer profile of a member select the profile link toggle. Use the User Profile Fields drop down to select which fields you would like to show in the single member profile.
 
 ### Page Size
 
-The page size option can be used to restrict how many members show on one page. A paging user interface control will appear to show more members.
+The page size option can be used to restrict how many members show on one page. A paging user interface control will appear at the bottom of the block to show more members.
 
 ### Hide Restricted Fields
 
-This toggle will hide any restricted fields that are not available to the public or members using the privacy features of Wild Apricot.
-
+This toggle will allow users to only view content respective to their levels, ie member information can only be viewed by members. This is controlled by user and global privacy settings from Wild Apricot. For security, admin only information cannot be viewed through this block, please access this directly through Wild Apricot. 
 <img width="953" alt="member profile block configuration options" src="https://user-images.githubusercontent.com/458134/131162876-cb02ccf9-6921-4c06-bd89-d59025bb03bb.png">
 
 
@@ -69,8 +70,7 @@ Click the Block options and select the fields to include under System Fields, Co
 
 ### Hide Restricted Fields
 
-This toggle will hide any restricted fields that are not available to the public or members using the privacy features of Wild Apricot.
-
+This toggle will only allow users to view content respective to their levels, ie member information can only be viewed by members. This is controlled by user and global privacy settings from Wild Apricot. For security, admin only information cannot be viewed through this block, please access this directly through Wild Apricot. 
 
 ## Member Profile Shortcode
 
