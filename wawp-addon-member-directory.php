@@ -35,7 +35,7 @@ new UserProfileShortcode();
 
 //$activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
 //require_once ($activator_dir);
-require_once plugin_dir_path(__FILE__) . 'src/Activator.php';
+require_once plugin_dir_path(__FILE__) . '../Wild-Apricot-Press/src/Activator.php';
 
 
 function create_block_wawp_addon_member_directory_block_init() {
