@@ -4,7 +4,7 @@
  * Description:       Add a Wild Apricot Member Directory to your website!
  * Requires at least: 5.7
  * Requires PHP:      7.0
- * Version:           0.1.0
+ * Version:           1.0b1
  * Author:            NewPath Consulting
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -33,7 +33,7 @@ use WAWP\Activator;
 new ContactsAPI();
 new UserProfileShortcode();
 
-$activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
+$activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/Wild-Apricot-Press/src/Activator.php');
 
 require_once ($activator_dir);
 
@@ -70,5 +70,5 @@ function memdir_wawp_not_loaded() {
 add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 
 if (class_exists('WAWP\Activator')) {
-	$activator = new WAWP\Activator('wawp-addon-member-directory', plugin_basename(__FILE__), 'WAWP Member Directory Add-on');
+	$activator = new WAWP\Activator('wawp-addon-member-directory', plugin_basename(__FILE__), 'WAP Member Directory Add-on');
 }

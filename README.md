@@ -1,4 +1,4 @@
-# WAWP Member Directory Addon
+# WAP Member Directory Addon
 This plugin contains a member directory block (`member-directory`) and a member profile block (`member-profile`). The code for each block resides in respective folders in `blocks/`.
 
 ## Getting started
