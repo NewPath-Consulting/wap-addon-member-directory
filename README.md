@@ -40,7 +40,7 @@ You can also enable a quick search of the member directory to visitors. All the 
 
 ### Profile Link
 
-Enabling a user profile link will show a link from each profile to a more detailed detailed, individual profile of a member. This option uses the `wa-profile` shortcode described elsewhere.  Use the "User Profile" fields section to select which fields you would like to show in the single member profile.
+Enabling a user profile link will show a link from each profile to a more detailed detailed, individual profile of a member. This option uses the [`wa-profile` shortcode](https://github.com/NewPath-Consulting/wawp-addon-member-directory/blob/master/README.md#configuring-the-wap-member-profile-block).  Use the "User Profile" fields section to select which fields you would like to show in the single member profile.
 
 ![wap user profile fields](https://user-images.githubusercontent.com/458134/132219772-7cf515b3-275b-4249-978c-2b1c5af5d89a.jpg)
 
@@ -62,35 +62,28 @@ The `wa-contacts` shortcode is built dynamically, based on the options selected 
 
 The below syntax is built automatically by the block, but it can be included manually, into any block or content area in WordPress.
 
-`[wa-contacts <database fields to include>  page-size=<number of records to show> saved-search=<saved search ID> profile hide_restricted_fields]
+`[wa-contacts <database fields to include>  page-size=<number of records to show> search saved-search=<saved search ID> profile hide_restricted_fields]
 [/wa-contacts]`
 
-The `profile` and `hide_restricted_fields` can be used to turn on these options.
+The `profile`, `search` and `hide_restricted_fields` can be used to turn on respective block options.
 
-
-# Configuring the WAP Member Profile Block
-
-To configure a member profile block, select system fields, common fields and membership fields, from your Wild Apricot database. These will be included in the single profile.
-
-### Block Options
-Click the Block options and select the fields to include under "System Fields", "Common Fields" and "Member Fields".
-
-<img width="953" alt="member profile block configuration options" src="https://user-images.githubusercontent.com/458134/131164172-dfeb2a2d-e328-4c7a-894d-35fd004ec1c0.png">
-
-
-### Hide Restricted Fields
-
-This toggle will only allow users to view content, respective to their levels, ie member information can only be viewed by members. This is controlled by user and global privacy settings from Wild Apricot. For security, admin only information cannot be viewed through this block, please access this directly through Wild Apricot. 
 
 ## Member Profile Shortcode
 
-The `wa-profile` shortcode is built dynamically based on the options selected under block.
+The WAP Member Profile block builds the `wa-profile` shortcode based on the Block options.
 
-The below syntax is built automatically by the block but it can be included manually into any block or content area in WordPress.
+![wap member profile](https://user-images.githubusercontent.com/458134/132220887-6718fa24-51e9-4339-954b-92e7cd415832.jpg)
+
+The options allow the selection of any system, common or membership fields to show in the single profile. A unique Wild Apricot User ID must be filled out to identify which contact or member is displayed in this block.
+
+![WAP Profile Block Options 2](https://user-images.githubusercontent.com/458134/132221415-e58afaf7-7701-4682-b69a-567f50786ab8.jpg)
+
+The shortcode syntax is built into the block based on options chosen in  Block, but it can be included manually into any block or content area in WordPress.
 
 `[wa-profile <database fields> user-id=<Wild Apricot UserID> hide_restricted_fields]`
 
 The `hide_restricted_fields` can be used to turn on this option.
+
 
 ## Customizing the CSS
 
