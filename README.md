@@ -20,11 +20,15 @@ To configure a member directory, you can select system fields, common fields and
 
 ### Block Options
 
-Click the Block options and select the fields to include, under System Fields, Common Fields and Member Fields.
+Click the Block options and select the fields to include, under System Fields, Common Fields and Member Fields. Click the down arrow to show the available fields that can be selected for the membership directory block.
+
+![wap member directory membership fields](https://user-images.githubusercontent.com/458134/132218960-0fc68691-074c-46ff-9fd6-3b4d765a6a06.jpg)
 
 ### Filters
 
-The Filters drop-down will enable you to use a previously created "Saved Search" in your Wild Apricot system. The saved search will filter and create a member directory that will always reflect the latest membership data. When the "Saved Search" results changes, so does the member directory using this search.
+The Filters drop-down will enable you to use a previously created "Saved Search" from Wild Apricot. The saved search will filter and create a member directory that will always reflect the latest membership data based on your search criteria. When the "Saved Search" results changes, so does the member directory block that uses this search.
+
+![wap saved search](https://user-images.githubusercontent.com/458134/132219102-408453b9-9b74-4373-9ee8-182f872a452e.jpg)
 
 IMPORTANT: If you want to maintain member privacy, do not publicize the criteria of a saved search. As in Wild Apricot, members will appear in a saved searchs, regardless of the field used for the filter. An example of how publicizing the saved search criterial could expose sensitive member information: if there is a field "Number of Guns Owned", and a filter for "Guns > 0" was used for a member directory, and the saved search was publicized, that would expose the members who pass this criteria even if the Number of Guns Owned field was not in the member directory layout.
 
@@ -32,24 +36,29 @@ IMPORTANT: If you want to maintain member privacy, do not publicize the criteria
 
 You can also enable a quick search of the member directory to visitors. All the fields in the member directory will be searched. Any fields *not* included in the direcory will not be searchable.
 
+![wap enable search](https://user-images.githubusercontent.com/458134/132219282-cafe9377-0e6b-43df-9b54-d2ef0996a1ee.jpg)
+
 ### Profile Link
 
-To allow a visitor to click to a more detailed profile of a member, select the profile link toggle. Use the "User Profile" fields to select which fields you would like to show in the single member profile.
+Enabling a user profile link will show a link from each profile to a more detailed detailed, individual profile of a member. This option uses the `wa-profile` shortcode described elsewhere.  Use the "User Profile" fields section to select which fields you would like to show in the single member profile.
+
+![wap user profile fields](https://user-images.githubusercontent.com/458134/132219772-7cf515b3-275b-4249-978c-2b1c5af5d89a.jpg)
 
 ### Page Size
 
-The page size option can be used to restrict how many members are shown on one page. A paging interface control menu, will appear at the bottom of the block to show more members.
+The page size option can be used to restrict how many members are shown on one page of a member directory block. Once enabled a set of page indictators will appear under the member directory to allow a visitor to page through the membership directory.
+
+![wap page size](https://user-images.githubusercontent.com/458134/132219903-f2567257-7cfc-41f8-9f6d-1cbd99b06bc9.jpg)
 
 ### Hide Restricted Fields
 
 This toggle will hide any privacy-restriced fields from showing in the member directory (ie member information can only be viewed by members). This is controlled by contact and global privacy settings in Wild Apricot. For security, fields that are set to "admin only" cannot be viewed in the member directory block.
 
-<img width="953" alt="member profile block configuration options" src="https://user-images.githubusercontent.com/458134/131162876-cb02ccf9-6921-4c06-bd89-d59025bb03bb.png">
-
+![wap hide restricted fields](https://user-images.githubusercontent.com/458134/132220147-a9eab400-2d84-4eaf-8fdb-1e8252060a97.jpg)
 
 ## Member Directory Shortcode
 
-The `wa-contact` shortcode is built dynamically, based on the options selected under the block.
+The `wa-contacts` shortcode is built dynamically, based on the options selected under the block.
 
 The below syntax is built automatically by the block, but it can be included manually, into any block or content area in WordPress.
 
