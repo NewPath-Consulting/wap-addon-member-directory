@@ -12,7 +12,7 @@ The add-on can be installed using the standard plugin installation procedure. Go
 
 The WAP membership directory block is accessed in the block editor, like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when you're in a block, in the URL field. Type / when in a block and type 'wap' or 'wild apricot' and the relevant blocks will appear.
 
-<img width="207" alt="add profile block" src="https://user-images.githubusercontent.com/458134/131161812-ebc09bed-c157-4550-8cd4-170a482c96b3.png">
+![wap blocks](https://user-images.githubusercontent.com/458134/132218267-279747ca-7d16-4cae-8bf1-9b357e7938dd.jpg)
 
 ## Configuring a WAP Member Directory block
 
