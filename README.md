@@ -1,3 +1,14 @@
+=== WAP Member Directory Add-on ===
+Contributors: asirota
+Tags: wildapricot, sso, membership
+Requires at least: 5.7
+Tested up to: 5.7
+Requires PHP: 7.0
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+WAP Member Directory Add-on enables WordPress websites to render native member directories and member profiles from Wild Apricot.
+
 # WAP Member Directory Add-on
 This plugin contains a member directory block (`wa-contacts`) which displays many member profiles with search options and a member profile block (`wa-profile`), which displays a single member profile each with customizable fields. The code for each block resides in respective folders in `blocks/`.
 
