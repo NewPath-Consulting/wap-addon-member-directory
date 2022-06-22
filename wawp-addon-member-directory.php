@@ -28,22 +28,24 @@ use PO\Admin\AdminSettings;
 use PO\classes\ContactsUtils;
 use PO\classes\ContactsListingPersistor;
 use PO\classes\UserProfileShortcode;
-use WAWP\Activator;
+// use WAWP\Activator;
 
 new ContactsAPI();
 new UserProfileShortcode();
 
-$activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
+// $activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
 
-require_once ($activator_dir);
+// require_once ($activator_dir);
 
+add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
-	register_block_type_from_metadata( plugin_dir_path(__FILE__) . 'blocks/member-directory' );
-	register_block_type_from_metadata(plugin_dir_path(__FILE__) . 'blocks/member-profile');
 	if (!class_exists('WAWP\Addon')) {
 		deactivate_plugins(plugin_basename(__FILE__));
 		add_action('admin_notices', 'memdir_wawp_not_loaded');
+		return;
 	}
+	register_block_type_from_metadata( plugin_dir_path(__FILE__) . 'blocks/member-directory' );
+	register_block_type_from_metadata(plugin_dir_path(__FILE__) . 'blocks/member-profile');
 }
 
 add_filter('no_texturize_shortcodes', 'shortcodes_to_exempt_from_wptexturize');
@@ -67,8 +69,21 @@ function memdir_wawp_not_loaded() {
 	);
 }
 
-add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 
-if (class_exists('WAWP\Activator')) {
-	$activator = new WAWP\Activator('wawp-addon-member-directory', plugin_basename(__FILE__), 'WAWP Member Directory Add-on');
+
+// put this in plugins_loaded action
+if (class_exists('WAWP\Addon')) {
+	$slug = 'wawp-addon-member-directory';
+	WAWP\Addon::instance()::new_addon(array(
+		'slug' => $slug,
+		'name' => 'WAWP Member Directory Add-on',
+		'filename' => plugin_basename(__FILE__),
+		'license_check_option' => 'license-check-' . $slug,
+		'is_addon' => 1,
+		'blocks' => array(
+			'wawp-member-addons/member-directory',
+			'wawp-member-addons/member-profile'
+		)
+	));
+	// $activator = new WAWP\Activator('wawp-addon-member-directory', plugin_basename(__FILE__), 'WAWP Member Directory Add-on');
 }
