@@ -33,7 +33,10 @@ use PO\classes\UserProfileShortcode;
 new ContactsAPI();
 new UserProfileShortcode();
 
-// $activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
+const SLUG = 'wawp-addon-member-directory'; 
+const SHOW_NOTICE_ACTIVATION = 'show_notice_activation_' . SLUG;
+const LICENSE_CHECK = 'license-check-' . SLUG;
+const NAME = 'WAWP Member Directory Addon';
 
 // require_once ($activator_dir);
 
@@ -62,23 +65,23 @@ function add_action_links($links) {
 	return array_merge($links, $mylinks);
 }
 
-function memdir_wawp_not_loaded() {
-	printf(
-		'<div class="error"<p>%s</p></div>',
-		__('This plugin requires that Wild Apricot for Wordpress is installed.')
-	);
+function wawp_not_loaded_notice_msg() {
+	echo "<div class='error'><p><strong>";
+	echo NAME . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
+	unset($_GET['activate']);
+	return;
 }
 
 
 
 // put this in plugins_loaded action
 if (class_exists('WAWP\Addon')) {
-	$slug = 'wawp-addon-member-directory';
 	WAWP\Addon::instance()::new_addon(array(
-		'slug' => $slug,
+		'slug' => SLUG,
 		'name' => 'WAWP Member Directory Add-on',
 		'filename' => plugin_basename(__FILE__),
-		'license_check_option' => 'license-check-' . $slug,
+		'license_check_option' => 'license-check-' . SLUG,
+		'show_activation_notice' => 'show_notice_activation_' . SLUG,
 		'is_addon' => 1,
 		'blocks' => array(
 			'wawp-member-addons/member-directory',
