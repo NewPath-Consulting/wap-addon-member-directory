@@ -43,10 +43,11 @@ const NAME = 'WAWP Member Directory Addon';
 add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
 	if (!class_exists('WAWP\Addon')) {
-		deactivate_plugins(plugin_basename(__FILE__));
-		add_action('admin_notices', 'memdir_wawp_not_loaded');
+		wawp_not_loaded_die();
 		return;
 	}
+	$license_valid = WAWP\Addon::instance()::has_valid_license(SLUG);
+	if (!$license_valid) return;
 	register_block_type_from_metadata( plugin_dir_path(__FILE__) . 'blocks/member-directory' );
 	register_block_type_from_metadata(plugin_dir_path(__FILE__) . 'blocks/member-profile');
 }
@@ -72,9 +73,11 @@ function wawp_not_loaded_notice_msg() {
 	return;
 }
 
+function wawp_not_loaded_die() {
+	deactivate_plugins(plugin_basename(__FILE__));
+	add_action('admin_notices', 'wawp_not_loaded_notice_msg');
+}
 
-
-// put this in plugins_loaded action
 if (class_exists('WAWP\Addon')) {
 	WAWP\Addon::instance()::new_addon(array(
 		'slug' => SLUG,
@@ -88,5 +91,26 @@ if (class_exists('WAWP\Addon')) {
 			'wawp-member-addons/member-profile'
 		)
 	));
-	// $activator = new WAWP\Activator('wawp-addon-member-directory', plugin_basename(__FILE__), 'WAWP Member Directory Add-on');
 }
+
+
+register_activation_hook(plugin_basename(__FILE__), 'activate');
+
+function activate() {
+	if (!class_exists('WAWP\Addon')) {
+		wawp_not_loaded_die();
+		return;
+	}
+
+	WAWP\Addon::instance()::activate(SLUG);
+}
+
+register_deactivation_hook(plugin_basename(__FILE__), 'deactivate');
+
+function deactivate() {
+	// remove from addons list
+	$addons = get_option('wawp_addons');
+	unset($addons[SLUG]);
+	update_option('wawp_addons', $addons);
+}
+?>
