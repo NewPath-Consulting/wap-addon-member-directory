@@ -38,7 +38,6 @@ const SHOW_NOTICE_ACTIVATION = 'show_notice_activation_' . SLUG;
 const LICENSE_CHECK = 'license-check-' . SLUG;
 const NAME = 'WAWP Member Directory Addon';
 
-// require_once ($activator_dir);
 
 add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
