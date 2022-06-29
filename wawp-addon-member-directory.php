@@ -39,6 +39,10 @@ const LICENSE_CHECK = 'license-check-' . SLUG;
 const NAME = 'WAWP Member Directory Addon';
 
 
+/**
+ * Init hook.
+ * Register the blocks if WAWP is loaded and there is a valid license for this plugin.
+ */
 add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
 	if (!class_exists('WAWP\Addon')) {
@@ -65,6 +69,9 @@ function add_action_links($links) {
 	return array_merge($links, $mylinks);
 }
 
+/**
+ * Error message for if WAWP is not installed or activated.
+ */
 function wawp_not_loaded_notice_msg() {
 	echo "<div class='error'><p><strong>";
 	echo NAME . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
@@ -72,15 +79,22 @@ function wawp_not_loaded_notice_msg() {
 	return;
 }
 
+/**
+ * Deactivates the plugin and adds error message to admin_notices.
+ */
 function wawp_not_loaded_die() {
 	deactivate_plugins(plugin_basename(__FILE__));
 	add_action('admin_notices', 'wawp_not_loaded_notice_msg');
 }
 
+/**
+ * Adds the plugin to the list of addons.
+ * This is outside of a function because the addon needs to be added on every page because the lifetime of the static Addon instance is for one page.
+ */
 if (class_exists('WAWP\Addon')) {
 	WAWP\Addon::instance()::new_addon(array(
 		'slug' => SLUG,
-		'name' => 'WAWP Member Directory Add-on',
+		'name' => NAME,
 		'filename' => plugin_basename(__FILE__),
 		'license_check_option' => 'license-check-' . SLUG,
 		'show_activation_notice' => 'show_notice_activation_' . SLUG,
@@ -90,11 +104,15 @@ if (class_exists('WAWP\Addon')) {
 			'wawp-member-addons/member-profile'
 		)
 	));
-}
+}	
 
 
+/**
+ * Activation function.
+ * Checks if WAWP is loaded. Deactivate if not.
+ * Calls Addon::activate() function which checks for a license key and sets appropriate flags.
+ */
 register_activation_hook(plugin_basename(__FILE__), 'activate');
-
 function activate() {
 	if (!class_exists('WAWP\Addon')) {
 		wawp_not_loaded_die();
@@ -104,8 +122,11 @@ function activate() {
 	WAWP\Addon::instance()::activate(SLUG);
 }
 
+/**
+ * Deactivation function.
+ * Deletes the plugin from the list of WAWP plugins in the options table.
+ */
 register_deactivation_hook(plugin_basename(__FILE__), 'deactivate');
-
 function deactivate() {
 	// remove from addons list
 	$addons = get_option('wawp_addons');
