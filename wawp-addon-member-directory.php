@@ -46,7 +46,7 @@ const NAME = 'WAWP Member Directory Addon';
 add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
 	if (!class_exists('WAWP\Addon')) {
-		wawp_not_loaded_die();
+		wawp_memdir_not_loaded_die();
 		return;
 	}
 	$license_valid = WAWP\Addon::instance()::has_valid_license(SLUG);
@@ -72,7 +72,7 @@ function add_action_links($links) {
 /**
  * Error message for if WAWP is not installed or activated.
  */
-function wawp_not_loaded_notice_msg() {
+function wawp_memdir_not_loaded_notice_msg() {
 	echo "<div class='error'><p><strong>";
 	echo NAME . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
 	unset($_GET['activate']);
@@ -82,9 +82,9 @@ function wawp_not_loaded_notice_msg() {
 /**
  * Deactivates the plugin and adds error message to admin_notices.
  */
-function wawp_not_loaded_die() {
+function wawp_memdir_not_loaded_die() {
 	deactivate_plugins(plugin_basename(__FILE__));
-	add_action('admin_notices', 'wawp_not_loaded_notice_msg');
+	add_action('admin_notices', 'wawp_memdir_not_loaded_notice_msg');
 }
 
 /**
@@ -109,11 +109,11 @@ if (class_exists('WAWP\Addon')) {
 
 /**
  * Activation function.
- * Checks if WAWP is loaded. Deactivate if not.
+ * Checks if WAWP is loaded. Deactivate `if not.
  * Calls Addon::activate() function which checks for a license key and sets appropriate flags.
  */
-register_activation_hook(plugin_basename(__FILE__), 'activate');
-function activate() {
+register_activation_hook(plugin_basename(__FILE__), 'wawp_memdir_activate');
+function wawp_memdir_activate() {
 	if (!class_exists('WAWP\Addon')) {
 		wawp_not_loaded_die();
 		return;
@@ -126,8 +126,8 @@ function activate() {
  * Deactivation function.
  * Deletes the plugin from the list of WAWP plugins in the options table.
  */
-register_deactivation_hook(plugin_basename(__FILE__), 'deactivate');
-function deactivate() {
+register_deactivation_hook(plugin_basename(__FILE__), 'wawp_memdir_deactivate');
+function wawp_memdir_deactivate() {
 	// remove from addons list
 	$addons = get_option('wawp_addons');
 	unset($addons[SLUG]);
