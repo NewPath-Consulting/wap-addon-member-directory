@@ -95,7 +95,7 @@ function wawp_memdir_not_loaded_die() {
 if (class_exists('WAWP\Addon')) {
 	WAWP\Addon::instance()::new_addon(array(
 		'slug' => WAWP_MEMDIR_SLUG,
-		'WAWP_MEMDIR_NAME' => WAWP_MEMDIR_NAME,
+		'name' => WAWP_MEMDIR_NAME,
 		'filename' => plugin_basename(__FILE__),
 		'license_check_option' => WAWP_MEMDIR_LICENSE_CHECK,
 		'show_activation_notice' => WAWP_MEMDIR_SHOW_NOTICE_ACTIVATION,
