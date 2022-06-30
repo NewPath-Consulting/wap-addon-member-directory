@@ -2,7 +2,7 @@
 	"apiVersion": 2,
 	"name": "wawp-member-addons/member-profile",
 	"version": "0.1.0",
-	"title": "WAWP Member Profile",
+	"title": "WAP Member Profile",
 	"category": "widgets",
 	"icon": "id-alt",
 	"description": "Display a profile for Wild Apricot contacts and members on your website!",

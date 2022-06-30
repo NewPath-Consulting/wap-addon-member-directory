@@ -2,7 +2,7 @@
 namespace PO\classes;
 
 use WAWP\DataEncryption;
-$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/DataEncryption.php');
+$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/Wild-Apricot-Press/src/DataEncryption.php');
 
 require_once ($path);
 // From:
