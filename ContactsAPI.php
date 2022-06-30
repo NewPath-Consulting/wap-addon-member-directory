@@ -33,26 +33,26 @@ class ContactsAPI
             register_rest_route('wafw/v1', '/contacts/search/', array(
               'methods' => 'GET',
               'callback' => array($this, 'contactsRestRoutes'),
-              'permissions_callback' => '__return_true'
+              'permission_callback' => '__return_true'
             ));
 
             register_rest_route('wawp/v1', '/contacts/fields/', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'contactFieldsRestRoute'),
-                'permissions_callback' => '__return_true'
+                'permission_callback' => '__return_true'
             ));
 
             register_rest_route('wawp/v1', '/savedsearches/', array(
                 'methods' => 'GET',
                 'callback' => array($this, 'savedSearchesRestRoute'),
-                'permissions_callback' => '__return_true'
+                'permission_callback' => '__return_true'
             ));
 
             register_rest_route('wawp/v1', '/profiles/', array(
                 'methods' => 'GET',
                 'args' => array(),
                 'callback' => array($this, 'profileShortcodeRestRoute'),
-                'permissions_callback' => '__return_true'
+                'permission_callback' => '__return_true'
             ));
         });
     }
@@ -133,8 +133,10 @@ class ContactsAPI
         $fields = $request['fields'];
         $hideResFields = $request['hideResFields'];
         $shortcode = "[wa-profile ";
-        foreach ($fields as $field) {
-            $shortcode = $shortcode . "'" . $field . "' ";
+        if (!empty($fields)) {
+            foreach ($fields as $field) {
+                $shortcode = $shortcode . "'" . $field . "' ";
+            }
         }
 
         $shortcode = $shortcode . 'user-id="' . $userID . '"';
@@ -198,7 +200,7 @@ class ContactsAPI
         if (!empty($savedSearch)) {
             $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
         }
-        
+
         $contacts = $this->filterContacts($contacts, $args);
 
         $customOutput = apply_filters(
@@ -214,7 +216,7 @@ class ContactsAPI
     }
 
     public function render($contacts, $cssClass, $searchBox, $profileURL, $pageSize, $profile, $queryHash, $dropdownList, $hideResField) {
-        
+
         $pageSizeNum = (int)$pageSize;
         $pagination = count($contacts) > $pageSizeNum;
 

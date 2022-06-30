@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name:       WAWP Member Directory Addon
+ * Plugin Name:       WAP Member Directory Add-on
  * Description:       Add a Wild Apricot Member Directory to your website!
  * Requires at least: 5.7
  * Requires PHP:      7.0
- * Version:           0.1.0
+ * Version:           1.0
  * Author:            NewPath Consulting
- * License:           GPL-2.0-or-later
+ * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       wawp-addon-member-directory
  *
@@ -36,7 +36,7 @@ new UserProfileShortcode();
 const WAWP_MEMDIR_SLUG = 'wawp-addon-member-directory'; 
 const WAWP_MEMDIR_SHOW_NOTICE_ACTIVATION = 'show_notice_activation_' . WAWP_MEMDIR_SLUG;
 const WAWP_MEMDIR_LICENSE_CHECK = 'license-check-' . WAWP_MEMDIR_SLUG;
-const WAWP_MEMDIR_NAME = 'WAWP Member Directory Addon';
+const WAWP_MEMDIR_NAME = 'WAP Member Directory Addon';
 
 
 /**
@@ -64,7 +64,8 @@ function shortcodes_to_exempt_from_wptexturize($shortcodes) {
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'add_action_links');
 function add_action_links($links) {
 	$mylinks = array(
-		'<a href="' . admin_url('options-general.php?page=waconnector_options') . '">Settings</a>',
+		'<a href="' . admin_url('admin.php?page=wawp-licensing') . '">Settings</a>',
+
 	);
 	return array_merge($links, $mylinks);
 }
