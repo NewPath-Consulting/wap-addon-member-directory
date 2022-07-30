@@ -28,23 +28,31 @@ use PO\Admin\AdminSettings;
 use PO\classes\ContactsUtils;
 use PO\classes\ContactsListingPersistor;
 use PO\classes\UserProfileShortcode;
-use WAWP\Activator;
+// use WAWP\Activator;
 
 new ContactsAPI();
 new UserProfileShortcode();
 
-//$activator_dir = wp_normalize_path(ABSPATH . 'wp-content/plugins/wawp/src/Activator.php');
-//require_once ($activator_dir);
-require_once plugin_dir_path(__FILE__) . '../Wild-Apricot-Press/src/Activator.php';
+const WAWP_MEMDIR_SLUG = 'wawp-addon-member-directory'; 
+const WAWP_MEMDIR_SHOW_NOTICE_ACTIVATION = 'show_notice_activation_' . WAWP_MEMDIR_SLUG;
+const WAWP_MEMDIR_LICENSE_CHECK = 'license-check-' . WAWP_MEMDIR_SLUG;
+const WAWP_MEMDIR_NAME = 'WAP Member Directory Addon';
 
 
+/**
+ * Init hook.
+ * Register the blocks if WAWP is loaded and there is a valid license for this plugin.
+ */
+add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
+	if (!class_exists('WAWP\Addon')) {
+		wawp_memdir_not_loaded_die();
+		return;
+	}
+	$license_valid = WAWP\Addon::instance()::has_valid_license(WAWP_MEMDIR_SLUG);
+	if (!$license_valid) return;
 	register_block_type_from_metadata( plugin_dir_path(__FILE__) . 'blocks/member-directory' );
 	register_block_type_from_metadata(plugin_dir_path(__FILE__) . 'blocks/member-profile');
-	if (!class_exists('WAWP\Addon')) {
-		deactivate_plugins(plugin_basename(__FILE__));
-		add_action('admin_notices', 'memdir_wawp_not_loaded');
-	}
 }
 
 add_filter('no_texturize_shortcodes', 'shortcodes_to_exempt_from_wptexturize');
@@ -62,15 +70,68 @@ function add_action_links($links) {
 	return array_merge($links, $mylinks);
 }
 
-function memdir_wawp_not_loaded() {
-	printf(
-		'<div class="error"<p>%s</p></div>',
-		__('This plugin requires that Wild Apricot Press (WAP) is installed.')
-	);
+/**
+ * Error message for if WAWP is not installed or activated.
+ */
+function wawp_memdir_not_loaded_notice_msg() {
+	echo "<div class='error'><p><strong>";
+	echo WAWP_MEMDIR_NAME . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
+	unset($_GET['activate']);
+	return;
 }
 
-add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
-
-if (class_exists('WAWP\Activator')) {
-	$activator = new WAWP\Activator('wawp-addon-member-directory', plugin_basename(__FILE__), 'WAP Member Directory Add-on');
+/**
+ * Deactivates the plugin and adds error message to admin_notices.
+ */
+function wawp_memdir_not_loaded_die() {
+	deactivate_plugins(plugin_basename(__FILE__));
+	add_action('admin_notices', 'wawp_memdir_not_loaded_notice_msg');
 }
+
+/**
+ * Adds the plugin to the list of addons.
+ * This is outside of a function because the addon needs to be added on every page because the lifetime of the static Addon instance is for one page.
+ */
+if (class_exists('WAWP\Addon')) {
+	WAWP\Addon::instance()::new_addon(array(
+		'slug' => WAWP_MEMDIR_SLUG,
+		'name' => WAWP_MEMDIR_NAME,
+		'filename' => plugin_basename(__FILE__),
+		'license_check_option' => WAWP_MEMDIR_LICENSE_CHECK,
+		'show_activation_notice' => WAWP_MEMDIR_SHOW_NOTICE_ACTIVATION,
+		'is_addon' => 1,
+		'blocks' => array(
+			'wawp-member-addons/member-directory',
+			'wawp-member-addons/member-profile'
+		)
+	));
+}	
+
+
+/**
+ * Activation function.
+ * Checks if WAWP is loaded. Deactivate `if not.
+ * Calls Addon::activate() function which checks for a license key and sets appropriate flags.
+ */
+register_activation_hook(plugin_basename(__FILE__), 'wawp_memdir_activate');
+function wawp_memdir_activate() {
+	if (!class_exists('WAWP\Addon')) {
+		wawp_not_loaded_die();
+		return;
+	}
+
+	WAWP\Addon::instance()::activate(WAWP_MEMDIR_SLUG);
+}
+
+/**
+ * Deactivation function.
+ * Deletes the plugin from the list of WAWP plugins in the options table.
+ */
+register_deactivation_hook(plugin_basename(__FILE__), 'wawp_memdir_deactivate');
+function wawp_memdir_deactivate() {
+	// remove from addons list
+	$addons = get_option('wawp_addons');
+	unset($addons[WAWP_MEMDIR_SLUG]);
+	update_option('wawp_addons', $addons);
+}
+?>
