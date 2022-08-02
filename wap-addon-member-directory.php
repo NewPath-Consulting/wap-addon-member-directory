@@ -33,7 +33,7 @@ use PO\classes\UserProfileShortcode;
 new ContactsAPI();
 new UserProfileShortcode();
 
-const WAWP_MEMDIR_SLUG = 'wawp-addon-member-directory'; 
+const WAWP_MEMDIR_SLUG = 'wap-addon-member-directory'; 
 const WAWP_MEMDIR_SHOW_NOTICE_ACTIVATION = 'show_notice_activation_' . WAWP_MEMDIR_SLUG;
 const WAWP_MEMDIR_LICENSE_CHECK = 'license-check-' . WAWP_MEMDIR_SLUG;
 const WAWP_MEMDIR_NAME = 'WAP Member Directory Addon';
@@ -46,7 +46,7 @@ const WAWP_MEMDIR_NAME = 'WAP Member Directory Addon';
 add_action( 'init', 'create_block_wawp_addon_member_directory_block_init' );
 function create_block_wawp_addon_member_directory_block_init() {
 	if (!class_exists('WAWP\Addon')) {
-		wawp_memdir_not_loaded_die();
+		add_action('admin_init', 'wawp_memdir_not_loaded_die');
 		return;
 	}
 	$license_valid = WAWP\Addon::instance()::has_valid_license(WAWP_MEMDIR_SLUG);
@@ -74,7 +74,7 @@ function add_action_links($links) {
  * Error message for if WAWP is not installed or activated.
  */
 function wawp_memdir_not_loaded_notice_msg() {
-	echo "<div class='error'><p><strong>";
+	echo "<div class='notice notice-error'><p><strong>";
 	echo WAWP_MEMDIR_NAME . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
 	unset($_GET['activate']);
 	return;
@@ -107,16 +107,15 @@ if (class_exists('WAWP\Addon')) {
 	));
 }	
 
-
 /**
  * Activation function.
- * Checks if WAWP is loaded. Deactivate `if not.
+ * Checks if WAWP is loaded. Deactivate if not.
  * Calls Addon::activate() function which checks for a license key and sets appropriate flags.
  */
 register_activation_hook(plugin_basename(__FILE__), 'wawp_memdir_activate');
 function wawp_memdir_activate() {
 	if (!class_exists('WAWP\Addon')) {
-		wawp_not_loaded_die();
+		add_action('admin_init', 'wawp_memdir_not_loaded_die');
 		return;
 	}
 

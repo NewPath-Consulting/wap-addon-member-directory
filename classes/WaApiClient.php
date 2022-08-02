@@ -1,8 +1,8 @@
 <?php
 namespace PO\classes;
 
-use WAWP\DataEncryption;
-$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/Wild-Apricot-Press/src/DataEncryption.php');
+use WAWP\Data_Encryption;
+$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/Wild-Apricot-Press/src/class-data-encryption.php');
 
 require_once ($path);
 // From:
@@ -24,13 +24,14 @@ class WaApiClient
     //   $this->initTokenByApiKey($apiKey);
     // }
 
+    // TODO: try/catch
     public function __construct() {
         $apiKey = $this->getApiKey();
         $this->initTokenByApiKey($apiKey);
     }
 
     private function getApiKey() {
-        $dataEncryption = new DataEncryption();
+        $dataEncryption = new Data_Encryption();
         $credentials = get_option('wawp_wal_name');
         if (empty($credentials)) {
             throw new \Exception("WildApricot API Keys not configured.");
@@ -123,7 +124,7 @@ class WaApiClient
             urlencode($this->tokenScope)
         );
 
-        throw new Exception(
+        throw new \Exception(
             'Change clientId and clientSecret to values specific for your authorized application. For details see:  https://help.wildapricot.com/display/DOC/Authorizing+external+applications'
         );
         // $clientId = 'SamplePhpApplication';
