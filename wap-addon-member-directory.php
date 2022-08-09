@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       WAP Member Directory Add-on
+ * Plugin Name:       WildApricot Press Member Directory Add-on
  * Description:       Add a Wild Apricot Member Directory to your website!
  * Requires at least: 5.7
- * Requires PHP:      7.0
+ * Requires PHP:      7.4
  * Version:           1.0
  * Author:            NewPath Consulting
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       wawp-addon-member-directory
+ * Text Domain:       wap-addon-member-directory
  *
  * @package           create-block
  */
