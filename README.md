@@ -12,6 +12,7 @@ WAP Member Directory Add-on enables WordPress websites to render native member d
 
 # Release History
 August 9 2022 - 1.0b4 - submitted to WP Repo
+
 June 30 2022 - 1.0b3 - fixed license code
 
 # WAP Member Directory Add-on
