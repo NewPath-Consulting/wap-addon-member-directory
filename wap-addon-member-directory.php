@@ -4,7 +4,7 @@
  * Description:       Add a Wild Apricot Member Directory to your website!
  * Requires at least: 5.7
  * Requires PHP:      7.4
- * Version:           1.0
+ * Version:           1.0.0
  * Author:            NewPath Consulting
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
