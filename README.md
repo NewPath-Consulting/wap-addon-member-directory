@@ -1,47 +1,49 @@
 === WildApricot Press Member Directory Add-on ===
 Contributors: nataliebrotherton, asirota
-Tags: wap, wildapricot, wild apricot, sso, membership
+Tags: wildapricot, wild apricot, membership, event management, events, membership management
 Requires at least: 5.7
 Tested up to: 6.0
 Requires PHP: 7.4
-Stable Tag: 1.0b4
+Stable Tag: 1.0.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-WAP Member Directory Add-on enables WordPress websites to render native member directories and member profiles from Wild Apricot.
-
-# Release History
-August 9 2022 - 1.0b4 - submitted to WP Repo
-
-June 30 2022 - 1.0b3 - fixed license code
+WAP Member Directory Add-on enables WordPress websites to render native WildApricot member directories and member profiles, without using iframes!
 
 # WAP Member Directory Add-on
 This plugin contains a member directory block (`wa-contacts`) which displays many member profiles with search options and a member profile block (`wa-profile`), which displays a single member profile each with customizable fields. The code for each block resides in respective folders in `blocks/`.
 
-# Installation
+
+## How to install
+1. Download the latest release under the Releases tab in Githuhb
+2. Use the Plugins > Add New feature and upload the compressed zip archive to your WordPress site.
+3. Activate the plugin
+4. Add a License key under WildApricot Press > Licensing.
+
+
 To install this add-on, you must install [Wild Apricot Press](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md) first. You will also need to obtain a license key, at the [NewPath website](https://newpathconsulting.com/wap), to enable this add-on. 
 
 The add-on can be installed using the standard plugin installation procedure. Go to Plugins -> Add New and upload the plugin archive file. Once installed, go to the [WAP License Key screen](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md#licensing-wawp) > (WAP Settings > Licensing), to add your WAP license key. Free add-ons, such as the Member Directory, use the same license key, as the core WAP plugin.
 
-# Usage
+## How to use
 
-## Using the block in the block editor
+### Using the block in the block editor
 
 The WAP membership directory block is accessed in the block editor, like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when you're in a block, in the URL field. Type / when in a block and type 'wap' or 'wild apricot' and the relevant blocks will appear.
 
 ![wap blocks](https://user-images.githubusercontent.com/458134/132218267-279747ca-7d16-4cae-8bf1-9b357e7938dd.jpg)
 
-## Configuring a WAP Member Directory block
+### Configuring a WAP Member Directory block
 
 To configure a member directory, you can select system fields, common fields and membership fields, from your Wild Apricot database. These will be included in the member directory.
 
-### Block Options
+#### Block Options
 
 Click the Block options and select the fields to include, under System Fields, Common Fields and Member Fields. Click the down arrow to show the available fields that can be selected for the membership directory block.
 
 ![wap member directory membership fields](https://user-images.githubusercontent.com/458134/132218960-0fc68691-074c-46ff-9fd6-3b4d765a6a06.jpg)
 
-### Filters
+#### Filters
 
 The Filters drop-down will enable you to use a previously created "Saved Search" from Wild Apricot. The saved search will filter and create a member directory that will always reflect the latest membership data based on your search criteria. When the "Saved Search" results changes, so does the member directory block that uses this search.
 
@@ -49,31 +51,31 @@ The Filters drop-down will enable you to use a previously created "Saved Search"
 
 IMPORTANT: If you want to maintain member privacy, do not publicize the criteria of a saved search. As in Wild Apricot, members will appear in a saved searchs, regardless of the field used for the filter. An example of how publicizing the saved search criterial could expose sensitive member information: if there is a field "Number of Guns Owned", and a filter for "Guns > 0" was used for a member directory, and the saved search was publicized, that would expose the members who pass this criteria even if the Number of Guns Owned field was not in the member directory layout.
 
-### Enable Search
+#### Enable Search
 
 You can also enable a quick search of the member directory to visitors. All the fields in the member directory will be searched. Any fields *not* included in the direcory will not be searchable.
 
 ![wap enable search](https://user-images.githubusercontent.com/458134/132219282-cafe9377-0e6b-43df-9b54-d2ef0996a1ee.jpg)
 
-### Profile Link
+#### Profile Link
 
 Enabling a user profile link will show a link from each profile to a more detailed detailed, individual profile of a member. This option uses the [`wa-profile` shortcode](https://github.com/NewPath-Consulting/wawp-addon-member-directory/blob/master/README.md#configuring-the-wap-member-profile-block).  Use the "User Profile" fields section to select which fields you would like to show in the single member profile.
 
 ![wap user profile fields](https://user-images.githubusercontent.com/458134/132219772-7cf515b3-275b-4249-978c-2b1c5af5d89a.jpg)
 
-### Page Size
+#### Page Size
 
 The page size option can be used to restrict how many members are shown on one page of a member directory block. Once enabled a set of page indictators will appear under the member directory to allow a visitor to page through the membership directory.
 
 ![wap page size](https://user-images.githubusercontent.com/458134/132219903-f2567257-7cfc-41f8-9f6d-1cbd99b06bc9.jpg)
 
-### Hide Restricted Fields
+#### Hide Restricted Fields
 
 This toggle will hide any privacy-restriced fields from showing in the member directory (ie member information can only be viewed by members). This is controlled by contact and global privacy settings in Wild Apricot. For security, fields that are set to "admin only" cannot be viewed in the member directory block.
 
 ![wap hide restricted fields](https://user-images.githubusercontent.com/458134/132220147-a9eab400-2d84-4eaf-8fdb-1e8252060a97.jpg)
 
-## Member Directory Shortcode
+#### Member Directory Shortcode
 
 The `wa-contacts` shortcode is built dynamically, based on the options selected under the block.
 
@@ -85,7 +87,7 @@ The below syntax is built automatically by the block, but it can be included man
 The `profile`, `search` and `hide_restricted_fields` can be used to turn on respective block options.
 
 
-## Member Profile Shortcode
+#### Member Profile Shortcode
 
 The WAP Member Profile block builds the `wa-profile` shortcode based on the Block options.
 
@@ -102,11 +104,11 @@ The shortcode syntax is built into the block based on options chosen in  Block, 
 The `hide_restricted_fields` can be used to turn on this option.
 
 
-## Customizing the CSS
+### Customizing the CSS
 
 Each element in the member directory and member profile has a unique CSS class inserted which can be customized in the CSS style sheet.
 
-### Member Directory IDs and Classes
+#### Member Directory IDs and Classes
 
 The member directory will be in a class called `wp-block-wawp-member-addons-member-directory`.
 
@@ -139,7 +141,7 @@ Here is an example of a `wa-contact` element which contains one member and the V
 </div>
 ```
 
-### Member Profile IDs and Classes
+#### Member Profile IDs and Classes
 
 The member profile will be rendered using a class called `wa-profile`.
 
@@ -156,8 +158,36 @@ Each field will have an ID using the same name of the field. For example here is
 
 The row contains the ID city and a class field. Each element of the row has the `field-name` class and the value has a class `fieldname field-value`. A custom attribute `data-wa-label` is included for convenience.
 
-## Developer Notes
+## How to contribute
 
-1. Run `npm install` in the root directory of this repo.
-2. To build the blocks in development mode, enter the command `npm run start:member-directory` for the directory block and `npm run start:member-profile` for the profile block.
-3. To build the blocks in production mode, enter the command `npm run build:member-directory` for the directory block and `npm run build:member-profile` for the profile block.
+### Setup
+0. Clone this repository in your WordPress site's `wp-content/plugins` folder.
+1. Follow the instructions on [WordPress's block development environment setup tutorial](https://developer.wordpress.org/block-editor/handbook/tutorials/devenv/).
+2. Enter the command `npm install` in the root of this directory.
+
+### Run and test
+3. Run `npm start` to run the React compiler.
+4. To test this plugin, activate it from the plugin UI and find "WAP Wild Apricot iFrame" in the block inserter. Since the plugin folder is already in the plugins directory, there is no need to reinstall it when you're testing. **Always make sure the build (in `build`) files are up-to-date when testing this plugin**.
+
+### Other useful `npm` commands
+`npm start`
+Starts the build for development.
+
+`npm run build`
+Builds the code for production.
+
+`npm run format`
+Formats files.
+
+`npm run lint:css`
+Lints CSS files.
+
+`npm run lint:js`
+Lints JavaScript files.
+
+`npm run packages-update`
+Updates WordPress packages to the latest version.
+
+# Release History
+August 9 2022 - 1.0.0 - first public release
+June 30 2022 - 1.0b3 - fixed license code
