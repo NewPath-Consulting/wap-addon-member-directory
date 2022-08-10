@@ -190,4 +190,5 @@ Updates WordPress packages to the latest version.
 
 # Release History
 August 9 2022 - 1.0.0 - first public release
+
 June 30 2022 - 1.0b3 - fixed license code
