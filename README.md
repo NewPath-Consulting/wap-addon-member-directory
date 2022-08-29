@@ -1,4 +1,4 @@
-=== WildApricot Press Member Directory Add-on ===
+=== NewPath WildApricotPress Add-on – Member Directory ===
 Contributors: nataliebrotherton, asirota
 Tags: wildapricot, wild apricot, membership, event management, events, membership management
 Requires at least: 5.7
@@ -8,9 +8,9 @@ Stable Tag: 1.0.0
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-WAP Member Directory Add-on enables WordPress websites to render native WildApricot member directories and member profiles, without using iframes!
+NewPath WildApricotPress Add-on – Member Directory enables WordPress websites to render native WildApricot member directories and member profiles, without using iframes!
 
-# WAP Member Directory Add-on
+# NewPath WildApricotPress Add-on – Member Directory
 This plugin contains a member directory block (`wa-contacts`) which displays many member profiles with search options and a member profile block (`wa-profile`), which displays a single member profile each with customizable fields. The code for each block resides in respective folders in `blocks/`.
 
 
@@ -21,7 +21,7 @@ This plugin contains a member directory block (`wa-contacts`) which displays man
 4. Add a License key under WildApricot Press > Licensing.
 
 
-To install this add-on, you must install [Wild Apricot Press](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md) first. You will also need to obtain a license key, at the [NewPath website](https://newpathconsulting.com/wap), to enable this add-on. 
+To install this add-on, you must install [NewPath Wild Apricot Press](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md) first. You will also need to obtain a license key, at the [NewPath website](https://newpathconsulting.com/wap), to enable this add-on. 
 
 The add-on can be installed using the standard plugin installation procedure. Go to Plugins -> Add New and upload the plugin archive file. Once installed, go to the [WAP License Key screen](https://github.com/NewPath-Consulting/Wild-Apricot-For-Wordpress/blob/master/README.md#licensing-wawp) > (WAP Settings > Licensing), to add your WAP license key. Free add-ons, such as the Member Directory, use the same license key, as the core WAP plugin.
 
@@ -29,7 +29,7 @@ The add-on can be installed using the standard plugin installation procedure. Go
 
 ### Using the block in the block editor
 
-The WAP membership directory block is accessed in the block editor, like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when you're in a block, in the URL field. Type / when in a block and type 'wap' or 'wild apricot' and the relevant blocks will appear.
+The NewPath WildApricotPress Add-on – Member Directory block is accessed in the block editor, like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when you're in a block, in the URL field. Type / when in a block and type 'wap' or 'wild apricot' and the relevant blocks will appear.
 
 ![wap blocks](https://user-images.githubusercontent.com/458134/132218267-279747ca-7d16-4cae-8bf1-9b357e7938dd.jpg)
 
