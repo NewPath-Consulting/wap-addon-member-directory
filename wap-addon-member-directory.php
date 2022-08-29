@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       WildApricot Press Member Directory Add-on
+ * Plugin Name:       NewPath WildApricotPress Add-on – Member Directory
  * Description:       Add a native Wild Apricot Member Directory to your website
  * Requires at least: 5.7
  * Requires PHP:      7.4
