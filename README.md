@@ -23,7 +23,7 @@ To install this add-on, you must install [NewPath Wild Apricot Press](https://wo
 - Custom CSS can be applied or inherited from the theme
 - All block functions are WildApricot API-powered
 
-Check out the [FAQ section](https://wordpress.org/plugins/xxx/#faq) and [screenshots](https://wordpress.org/plugins/xxx/#screenshots) for more details.
+Check out the [FAQ section](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-member-directory/faq) and [screenshots](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots) for more details.
 
 ## License
 Please visit the [NewPath WildApricot Press website](https://newpathconsulting.com/wap/) to obtain your license key or to inquire further about the plugin!
@@ -40,7 +40,7 @@ To activate the plugin, enter your license key in **WildApricot Press > Licensin
 
 The NewPath WildApricotPress Add-on – Member Directory block is accessed in the block editor, like any other block. You can also use a [slash (/) command](https://wordpress.org/support/article/adding-a-new-block/#slash-command) when you're in a block, in the URL field. Type / when in a block and type 'wap' or 'wild apricot' and the relevant blocks will appear.
 
-[Screenshot - adding a membership directory block](https://user-images.githubusercontent.com/458134/132218267-279747ca-7d16-4cae-8bf1-9b357e7938dd.jpg)
+[Screenshot - adding a membership directory block](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 = How do I configure a membership directory? =
 
@@ -50,13 +50,13 @@ To configure a member directory, you can select system fields, common fields and
 
 Click the Block options and select the fields to include, under System Fields, Common Fields and Member Fields. Click the down arrow to show the available fields that can be selected for the membership directory block.
 
-[Screenshot - Member directory membership fields](https://user-images.githubusercontent.com/458134/132218960-0fc68691-074c-46ff-9fd6-3b4d765a6a06.jpg)
+[Screenshot - Member directory membership fields](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 > Filters
 
 The Filters drop-down will enable you to use a previously created "Saved Search" from Wild Apricot. The saved search will filter and create a member directory that will always reflect the latest membership data based on your search criteria. When the "Saved Search" results changes, so does the member directory block that uses this search.
 
-[Screenshot - Selecting a WildApricot Saved Search](https://user-images.githubusercontent.com/458134/132219102-408453b9-9b74-4373-9ee8-182f872a452e.jpg)
+[Screenshot - Selecting a WildApricot Saved Search](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 IMPORTANT: If you want to maintain member privacy, do not publicize the criteria of a saved search. As in Wild Apricot, members will appear in a saved searchs, regardless of the field used for the filter. An example of how publicizing the saved search criterial could expose sensitive member information: if there is a field "Number of Guns Owned", and a filter for "Guns > 0" was used for a member directory, and the saved search was publicized, that would expose the members who pass this criteria even if the Number of Guns Owned field was not in the member directory layout.
 
@@ -64,25 +64,25 @@ IMPORTANT: If you want to maintain member privacy, do not publicize the criteria
 
 You can also enable a quick search of the member directory to visitors. All the fields in the member directory will be searched. Any fields *not* included in the direcory will not be searchable.
 
-[Screenshot - Enable search](https://user-images.githubusercontent.com/458134/132219282-cafe9377-0e6b-43df-9b54-d2ef0996a1ee.jpg)
+[Screenshot - Enable search](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 > Profile Link
 
 Enabling a user profile link will show a link from each profile to a more detailed detailed, individual profile of a member. This option uses the [`wa-profile` shortcode](https://github.com/NewPath-Consulting/wawp-addon-member-directory/blob/master/README.md#configuring-the-wap-member-profile-block).  Use the "User Profile" fields section to select which fields you would like to show in the single member profile.
 
-[Screenshot -  Selecting User profile fields](https://user-images.githubusercontent.com/458134/132219772-7cf515b3-275b-4249-978c-2b1c5af5d89a.jpg)
+[Screenshot -  Selecting User profile fields](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 > Page Size
 
 The page size option can be used to restrict how many members are shown on one page of a member directory block. Once enabled a set of page indictators will appear under the member directory to allow a visitor to page through the membership directory.
 
-[Screenshot - Selecting number of results per page](https://user-images.githubusercontent.com/458134/132219903-f2567257-7cfc-41f8-9f6d-1cbd99b06bc9.jpg)
+[Screenshot - Selecting number of results per page](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 > Hide Restricted Fields
 
 This toggle will hide any privacy-restriced fields from showing in the member directory (ie member information can only be viewed by members). This is controlled by contact and global privacy settings in Wild Apricot. For security, fields that are set to "admin only" cannot be viewed in the member directory block.
 
-[Screenshot - Hide restricted fields](https://user-images.githubusercontent.com/458134/132220147-a9eab400-2d84-4eaf-8fdb-1e8252060a97.jpg)
+[Screenshot - Hide restricted fields](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 
 == What shortcodes are supported? =
@@ -103,11 +103,11 @@ The `profile`, `search` and `hide_restricted_fields` can be used to turn on resp
 
 The WAP Member Profile block builds the `wa-profile` shortcode based on the Block options.
 
-[Screenshot - Member profile](https://user-images.githubusercontent.com/458134/132220887-6718fa24-51e9-4339-954b-92e7cd415832.jpg)
+[Screenshot - Member profile](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 The options allow the selection of any system, common or membership fields to show in the single profile. A unique Wild Apricot User ID must be filled out to identify which contact or member is displayed in this block.
 
-[Screenshot - Members Profile Block Options](https://user-images.githubusercontent.com/458134/132221415-e58afaf7-7701-4682-b69a-567f50786ab8.jpg)
+[Screenshot - Members Profile Block Options](https://wordpress.org/plugins/newpath-wildapricotpress-add-on-memberdirectory/screenshots)
 
 The shortcode syntax is built into the block based on options chosen in  Block, but it can be included manually into any block or content area in WordPress.
 
@@ -175,6 +175,11 @@ The row contains the ID city and a class field. Each element of the row has the 
 2. Member directory membership fields
 3. Member profile
 4. Members Profile Block Options
+5. Using a Saved Search for a Member Directory
+6. Enabling Searching the Member Directory
+7. Turning on ability to link to a full member profile
+8. Changing the maximum number of members per page
+9. Enabling Hiding Restricted Fields
 
 == Changelog ==
 
