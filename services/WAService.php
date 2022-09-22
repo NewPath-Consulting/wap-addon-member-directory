@@ -4,6 +4,7 @@ namespace PO\services;
 require_once(plugin_dir_path(__DIR__) . "/classes/WaApiClient.php");
 require_once('CacheService.php');
 
+use \WAWP\Log as Log;
 use PO\classes\WaApiClient;
 use PO\services\CacheService;
 //use PO\classes\ContactsUtils; //include for filter
@@ -14,16 +15,6 @@ class WAService {
     private $apiKey;
     private $apiClient;
     private $accountURL = false;
-
-    // public function __construct($apiKey)
-    // {
-    //   $this->apiKey = $apiKey;
-    // }
-
-    // public function init()
-    // {
-    //   $this->apiClient = new WaApiClient($this->apiKey);
-    // }
 
     public function __construct() {
         $this->apiClient = new WaApiClient();
@@ -41,7 +32,7 @@ class WAService {
 
         $query = http_build_query($queryParams);
 
-        $url = $this->getAccountURL() . '/contactfields?' . $query;
+        $url = $this->getEndpointURL() . '/contactfields?' . $query;
 
         $contactFields = $this->apiClient->makeRequest($url);
 
@@ -178,7 +169,7 @@ class WAService {
         $query = http_build_query($queryParams, null, '&', PHP_QUERY_RFC3986);
 
         $url =
-            $this->getAccountURL() .
+            $this->getEndpointURL() .
             '/Contacts?' .
             $query;
 
@@ -205,7 +196,7 @@ class WAService {
     }  
 
     public function getSavedSearches() {
-        $url = $this->getAccountURL() . '/savedsearches';
+        $url = $this->getEndpointURL() . '/savedsearches';
 
         $savedSearches = $this->apiClient->makeRequest($url);
 
@@ -217,7 +208,7 @@ class WAService {
             'excludeArchived' => 'false'
         );
         $query = http_build_query($queryParams);
-        $url = $this->getAccountURL() . '/savedsearches/' . $savedSearchId . '?' . $query;
+        $url = $this->getEndpointURL() . '/savedsearches/' . $savedSearchId . '?' . $query;
         do_action('qm/debug', $url);
         $savedSearch = $this->apiClient->makeRequest($url);
         return $savedSearch;
@@ -235,18 +226,21 @@ class WAService {
         return $picture;
     }
 
-    private function getAccountDetails() {
-        $accounts = $this->apiClient->makeRequest(ACCOUNTS_API_URL);
-
-        // TODO: handle multiple accounts, right now returns one
-        return $accounts[0];
-    }
-
-    private function getAccountURL() {
+    private function getEndpointURL() {
+        
         if (empty($this->accountURL)) {
-            $account = $this->getAccountDetails();
-            $this->accountURL = $account['Url'];
+
+            try {
+                $account_id = $this->apiClient->getAccountID();
+
+            } catch (\Exception $e) {
+                Log::wap_log_error($e->getMessage(), 1);
+            }
+
+            $this->accountURL = ACCOUNTS_API_URL . $account_id;
         }
+
+        
         return $this->accountURL;
     }
 
