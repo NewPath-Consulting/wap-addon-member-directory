@@ -4,9 +4,6 @@ namespace PO\classes;
 use \WAWP\Log as Log;
 use \WAWP\Data_Encryption;
 use \WAWP\WA_API;
-$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/Wild-Apricot-Press/src/class-data-encryption.php');
-
-require_once ($path);
 // From:
 //  s://github.com/WildApricot/ApiSamples/blob/master/PHP/sampleApplication.php
 class WaApiClient
