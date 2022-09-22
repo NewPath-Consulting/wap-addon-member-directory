@@ -65,13 +65,7 @@ class WaApiClient
             $this->tokenScope = $scope;
         }
 
-        $this->token = $this->getAuthTokenByApiKey($apiKey);
-        if (!$this->token) {
-            throw new \Exception('Unable to get authorization token.');
-        }
-    }
-
-    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = null)
+    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = array())
     {
         if (!$this->token) {
             throw new \Exception(
@@ -79,95 +73,41 @@ class WaApiClient
             );
         }
 
-        $ch = curl_init();
+        // construct headers with authorization token
         $headers = array(
-            'Authorization: Bearer ' . $this->token,
-            'Content-Type: application/json'
+            'Authorization' => 'Bearer ' . $this->token,
+            'Accept' => 'application/json',
+            'User-Agent' => self::USER_AGENT
         );
-        curl_setopt($ch, CURLOPT_URL, $url);
 
-        if ($data) {
+        $args = array();
+
+        // add data to request args and headers
+        if (!empty($data)) {
             $jsonData = json_encode($data);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+
+            $args['body'] = $data;
 
             $headers = array_merge($headers, array(
                 'Content-Length: ' . strlen($jsonData)
             ));
         }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $verb);
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $jsonResult = curl_exec($ch);
-        if ($isPicture && $jsonResult) {
-            return $jsonResult;
+        $args['headers'] = $headers;
+
+        // make post request to hook and decode response data
+        if ($verb == 'GET') {
+            $response = wp_remote_get($url, $args);
+        } else if ($verb == 'POST') {
+            $response = wp_remote_post($url, $args);
         }
-        if ($jsonResult === false) {
-            throw new \Exception(curl_errno($ch) . ': ' . curl_error($ch));
-        }
-
-        curl_close($ch);
-        return json_decode($jsonResult, true);
-    }
-
-    private function getAuthTokenByAdminCredentials($login, $password)
-    {
-        if ($login == '') {
-            throw new \Exception('login is empty');
+        $response_data = $response['body'];
+        if ($isPicture && $response_data) {
+            return $response_data;
         }
 
-        $data = sprintf(
-            "grant_type=%s&username=%s&password=%s&scope=%s",
-            'password',
-            urlencode($login),
-            urlencode($password),
-            urlencode($this->tokenScope)
-        );
-
-        throw new \Exception(
-            'Change clientId and clientSecret to values specific for your authorized application. For details see:  https://help.wildapricot.com/display/DOC/Authorizing+external+applications'
-        );
-        // $clientId = 'SamplePhpApplication';
-        // $clientSecret = 'open_wa_api_client';
-        $authorizationHeader =
-            "Authorization: Basic " .
-            base64_encode($clientId . ":" . $clientSecret);
-
-        return $this->getAuthToken($data, $authorizationHeader);
-    }
-
-    private function getAuthTokenByApiKey($apiKey)
-    {
-        $data = sprintf(
-            "grant_type=%s&scope=%s",
-            'client_credentials',
-            $this->tokenScope
-        );
-
-        $authorizationHeader =
-            "Authorization: Basic " . base64_encode("APIKEY:" . $apiKey);
-        return $this->getAuthToken($data, $authorizationHeader);
-    }
-
-    private function getAuthToken($data, $authorizationHeader)
-    {
-        $ch = curl_init();
-        $headers = array(
-            $authorizationHeader,
-            'Content-Length: ' . strlen($data)
-        );
-        $headers = array(
-            $authorizationHeader
-        );
-        curl_setopt($ch, CURLOPT_URL, WaApiClient::AUTH_URL);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-
-        if ($response === false) {
-            throw new \Exception(curl_errno($ch) . ': ' . curl_error($ch));
+        if (!$response_data) {
+            throw new \Exception('failed making request');
         }
 
         $result = json_decode($response, true);
