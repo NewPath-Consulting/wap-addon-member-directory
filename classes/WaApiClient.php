@@ -73,13 +73,15 @@ class WaApiClient
         } else if ($verb == 'POST') {
             $response = wp_remote_post($url, $args);
         }
-        $response_data = $response['body'];
-        if ($isPicture && $response_data) {
-            return $response_data;
+
+        if (!$response) {
+            throw new \Exception('failed making request');
         }
 
-        if (!$response_data) {
-            throw new \Exception('failed making request');
+        $response_data = $response['body'];
+
+        if ($isPicture) {
+            return $response_data;
         }
 
         return json_decode($response_data, true);
