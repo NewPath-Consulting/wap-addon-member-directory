@@ -1,9 +1,9 @@
 {
   "autoload": {
     "psr-4": {
-      "PO\\classes\\": "classes",
-      "PO\\services\\": "services",
-      "PO\\admin\\": "admin"
+      "WAWP\\Memdir_Block\\classes\\": "classes",
+      "WAWP\\Memdir_Block\\services\\": "services",
+      "WAWP\\Memdir_Block\\admin\\": "admin"
     }
   }
 }

@@ -7,30 +7,31 @@ namespace Composer\Autoload;
 class ComposerStaticInit26919c04270e2d11cb43386d6ee4c548
 {
     public static $prefixLengthsPsr4 = array (
-        'P' => 
+        'W' => 
         array (
-            'PO\\services\\' => 12,
-            'PO\\classes\\' => 11,
+            'WAWP\\Memdir_Block\\services\\' => 27,
+            'WAWP\\Memdir_Block\\classes\\' => 26,
+            'WAWP\\Memdir_Block\\admin\\' => 24,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'PO\\services\\' => 
+        'WAWP\\Memdir_Block\\services\\' => 
         array (
             0 => __DIR__ . '/../..' . '/services',
         ),
-        'PO\\classes\\' => 
+        'WAWP\\Memdir_Block\\classes\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
+        ),
+        'WAWP\\Memdir_Block\\admin\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/admin',
         ),
     );
 
     public static $classMap = array (
-        'PO\\classes\\Contacts' => __DIR__ . '/../..' . '/classes/Contacts.php',
-        'PO\\classes\\ContactsUtils' => __DIR__ . '/../..' . '/classes/ContactsUtils.php',
-        'PO\\classes\\WaApiClient' => __DIR__ . '/../..' . '/classes/WaApiClient.php',
-        'PO\\services\\CacheService' => __DIR__ . '/../..' . '/services/CacheService.php',
-        'PO\\services\\WAService' => __DIR__ . '/../..' . '/services/WAService.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
