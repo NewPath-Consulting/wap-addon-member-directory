@@ -1,5 +1,5 @@
 <?php
-namespace PO\classes;
+namespace WAWP\Memdir_Block\classes;
 
 class Contacts {
     private $contacts = array();

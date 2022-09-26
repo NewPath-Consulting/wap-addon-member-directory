@@ -24,10 +24,9 @@
 require_once("vendor/autoload.php");
 require_once("ContactsAPI.php");
 
-use PO\Admin\AdminSettings;
-use PO\classes\ContactsUtils;
-use PO\classes\ContactsListingPersistor;
-use PO\classes\UserProfileShortcode;
+use WAWP\Memdir_Block\classes\ContactsUtils;
+use WAWP\Memdir_Block\classes\ContactsListingPersistor;
+use WAWP\Memdir_Block\classes\UserProfileShortcode;
 // use WAWP\Activator;
 
 new ContactsAPI();

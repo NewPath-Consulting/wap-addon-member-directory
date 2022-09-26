@@ -1,5 +1,5 @@
 <?php
-namespace PO\classes;
+namespace WAWP\Memdir_Block\classes;
 
 use \WAWP\Log as Log;
 use \WAWP\Data_Encryption;

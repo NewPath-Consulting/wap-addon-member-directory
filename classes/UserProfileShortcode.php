@@ -1,9 +1,9 @@
 <?php
 
-namespace PO\classes;
-use PO\classes\ContactsUtils;
-use PO\services\WAService;
-use PO\services\SettingsService;
+namespace WAWP\Memdir_Block\classes;
+use WAWP\Memdir_Block\classes\ContactsUtils;
+use WAWP\Memdir_Block\services\WAService;
+use WAWP\Memdir_Block\services\SettingsService;
 use Walker;
 
 class UserProfileShortcode {

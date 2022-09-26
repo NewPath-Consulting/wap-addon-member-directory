@@ -1,12 +1,12 @@
 <?php
-namespace PO\services;
+namespace WAWP\Memdir_Block\services;
 
 require_once(plugin_dir_path(__DIR__) . "/classes/WaApiClient.php");
 require_once('CacheService.php');
 
 use \WAWP\Log as Log;
-use PO\classes\WaApiClient;
-use PO\services\CacheService;
+use WAWP\Memdir_Block\classes\WaApiClient;
+use WAWP\Memdir_Block\services\CacheService;
 //use PO\classes\ContactsUtils; //include for filter
 
 const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';

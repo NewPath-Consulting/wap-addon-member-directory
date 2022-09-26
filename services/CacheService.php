@@ -1,6 +1,6 @@
 <?php
 
-namespace PO\services;
+namespace WAWP\Memdir_Block\services;
 
 const CACHE_PREFIX = "NPC-WA-";
 const DEFAULT_CACHE_EXPIRY = HOUR_IN_SECONDS;
