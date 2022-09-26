@@ -74,8 +74,8 @@ function add_action_links($links) {
  * Error message for if WAWP is not installed or activated.
  */
 function wawp_memdir_not_loaded_notice_msg() {
-	echo "<div class='notice notice-error'><p><strong>";
-	echo WAWP_MEMDIR_NAME . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
+	echo '<div class="notice notice-error"><p><strong>';
+	echo esc_html(WAWP_MEMDIR_NAME) . '</strong> requires that Wild Apricot for Wordpress is installed and activated.</p></div>';
 	unset($_GET['activate']);
 	return;
 }

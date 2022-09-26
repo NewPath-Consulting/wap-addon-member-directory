@@ -221,7 +221,7 @@ class ContactsAPI
         $pagination = count($contacts) > $pageSizeNum;
 
         ob_start();
-        echo "<div class=\"$cssClass\">";
+        echo '<div class="' . esc_html($cssClass) . '">';
 
         if ($searchBox) {
             wp_enqueue_script('wafw');
@@ -274,7 +274,8 @@ class ContactsAPI
                 //data:image/gif;base64,
                 $picture = $this->getPictureFromAPI($field['Value']['Url']);
                 $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
-                echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+                echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
+                    esc_html($picture) . '"/>';
             } else if ($field['Value'] == "🔒 Restricted" && $hideResField) {
                 continue;
             } else if (is_array($field['Value'])) {
@@ -284,10 +285,10 @@ class ContactsAPI
             } else {
                 $this->renderDivTag(
                     array(
-                        "class" => sanitize_title_with_dashes($field['FieldName']),
-                        "data-wa-label" => htmlspecialchars($field['FieldName'])
+                        'class' => sanitize_title_with_dashes($field['FieldName']),
+                        'data-wa-label' => esc_html($field['FieldName'])
                     ),
-                    htmlspecialchars(trim(var_export($field['Value'], true), '\''))
+                    esc_html(trim(var_export($field['Value'], true), '\''))
                 );
             }
         }
@@ -296,13 +297,15 @@ class ContactsAPI
             $profileURL = rtrim($profileURL, "/");
 
             $userID = $fields['Id'];
-            echo "<a class=\"wa-more-info\" href=\"/${profileURL}?user-id=${userID}\">More info</a>";
+
+            $url = '/' . $profileURL . '?user-id=' . $userID;
+            echo '<a class="wa-more-info" href="' . esc_url($url) . '">More info</a>'; 
         }
 
 
         if ($profile) {
             $userID = $fields['Id'];
-            echo "<div class=\"wa-profile-link\" id=\"profile-link\" data-user-id=\"${userID}\">View profile</div>";
+            echo '<div class="wa-profile-link" id="profile-link" data-user-id="' . esc_attr($userID) . '">View profile</div>';
         }
 
         echo '</div>';
@@ -325,17 +328,17 @@ class ContactsAPI
             } elseif ($field['Value'] === "") {
                 $this->renderLITag(
                     array(
-                        "class" => sanitize_title_with_dashes($field['FieldName']) . " empty",
-                        "data-wa-label" => htmlspecialchars($field['FieldName'])
+                        'class' => sanitize_title_with_dashes($field['FieldName']) . " empty",
+                        'data-wa-label' => esc_html($field['FieldName'])
                     )
                 );
             } else {
                 $this->renderLITag(
                     array(
-                        "class" => sanitize_title_with_dashes($field['FieldName']),
-                        "data-wa-label" => htmlspecialchars($field['FieldName'])
+                        'class' => sanitize_title_with_dashes($field['FieldName']),
+                        'data-wa-label' => esc_html($field['FieldName'])
                     ),
-                    htmlspecialchars(trim(var_export($field['Value'], true), '\''))
+                    esc_html(trim(var_export($field['Value'], true), '\''))
                 );
             }
         }
@@ -344,7 +347,10 @@ class ContactsAPI
             $profileURL = rtrim($profileURL, "/");
 
             $userID = $fields['Id'];
-            echo "<a class=\"wa-more-info\" href=\"/${profileURL}?user-id=${userID}\">More info</a>";
+
+            $url = '/' . $profileURL . '?user-id=' . $userID;
+
+            echo '<a class="wa-more-info" href="' . esc_url($url) . '">More info</a>';
         }
 
         echo '</ul>';
@@ -355,12 +361,12 @@ class ContactsAPI
             return;
         }
 
-        if (isset($fields["Id"])) {
-            $liContent = isset($fields['Label']) ? htmlspecialchars($fields['Label']) : "";
+        if (isset($fields['Id'])) {
+            $liContent = isset($fields['Label']) ? esc_html($fields['Label']) : "";
         } else {
             $liContent = '<ul>';
             foreach ($fields as $field) {
-                $liContent .= '<li>' . htmlspecialchars($field['Label']) . '</li>';
+                $liContent .= '<li>' . esc_html($field['Label']) . '</li>';
             }
             $liContent.= '</ul>';
         }
@@ -371,24 +377,24 @@ class ContactsAPI
 
     private function renderLITag($attrs, $value="") {
         $attr = array_reduce(array_keys($attrs), function($carry, $key) use ($attrs) {
-            return $carry . ' ' . $key . '="' . htmlspecialchars($attrs[$key]) . '"';
+            return $carry . ' ' . $key . '="' . esc_html($attrs[$key]) . '"';
         });
-        echo "<li $attr>" . $value . '</li>';
+        echo '<li ' . esc_attr($attr) . '>' . esc_html($value) . '</li>';
     }
 
     private function renderDivTag($attrs, $value="") {
         $attr = array_reduce(array_keys($attrs), function($carry, $key) use ($attrs) {
-            return $carry . ' ' . $key . '="' . htmlspecialchars($attrs[$key]) . '"';
+            return $carry . ' ' . $key . '="' . esc_html($attrs[$key]) . '"';
         });
-        echo "<div $attr>" . $value . '</div>';
+        echo '<div ' . esc_attr($attr) . '>' . esc_html($value) . '</div>';
     }
 
     private function renderSearchbox($searchId="") {
         $searchBoxName = 'wa-contacts-search';
-        echo "<form class=\"$searchBoxName\" data-search-id=$searchId>";
-        echo "<input type=\"text\" name=\"$searchBoxName\">";
+        echo '<form class="' . esc_attr($searchBoxName) . '" data-search-id="' . esc_attr($searchId) . '">';
+        echo '<input type="text" name="' . esc_attr($searchBoxName) . '">';
         echo '<input type="submit" name="submit" value="Search">';
-        echo "</form>";
+        echo '</form>';
     }
 
     private function renderDropdown($sites) {
@@ -400,7 +406,7 @@ class ContactsAPI
         $sites = array_merge(array("Show All"), $sites);
 
         $selectOptions = array_map(function($option) {
-            return "<option>$option</option>";
+            return '<option>' . esc_html($option) . '</option>';
         }, $sites);
 
         echo '<select class="sites">';

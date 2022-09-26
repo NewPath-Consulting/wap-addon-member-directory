@@ -68,48 +68,49 @@ class UserProfileShortcode {
         ob_start();
 
         if (empty($userProfile)) {
-            echo "No matching records (only opted-in members are included)";
+            echo 'No matching records (only opted-in members are included)';
             return ob_get_clean();
         }
 
-        echo "<div class=\"${class}\">";
+        echo '<div class="' . esc_attr($class) . '">';
         foreach ($userProfile as $userFields) {
             $userFieldName = sanitize_title_with_dashes($userFields['FieldName']);
             $userFieldValue = $userFields['Value'];
-            $userFieldNameLabel = htmlspecialchars($userFields['FieldName']);
+            $userFieldNameLabel = esc_html($userFields['FieldName']);
 
             if (empty($userFieldName) || empty($userFieldValue)) {
                 continue;
             }
 
-            if ($userFieldValue == "🔒 Restricted" && $hideResField) {
+            if ($userFieldValue == '🔒 Restricted' && $hideResField) {
                 continue;
             }
-            echo "<div id=\"${userFieldName}\" class=\"field\">";
+            echo '<div id="' . esc_attr($userFieldName) . '" class="field">';
 
-            echo "<span class=\"field-name\">";
-            echo htmlspecialchars($userFieldNameLabel);
-            echo "</span>";
+            echo '<span class="field-name">';
+            echo esc_html($userFieldNameLabel);
+            echo '</span>';
 
             if (ContactsUtils::isPicture($userFieldValue)) {
                 // need to get picture from API
                 $waService = new WAService();
                 $picture = $waService->getPicture($userFieldValue['Url']);
                 $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
-                echo "<img src=\"data:image/${imgType};base64,${picture}\"/>";
+                echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
+                esc_html($picture) . '"/>';
             }else {
                 if (is_array($userFieldValue)) {
                     $userFieldValue = $userFieldValue['Label'];
                 }
-                echo "<span class=\"${userFieldName} field-value\" data-wa-label=\"${userFieldNameLabel}\">";
-                echo htmlspecialchars($userFieldValue);
-                echo "</span>";
+                echo '<span class="' . esc_attr($userFieldName) . ' field-value" data-wa-label="' . esc_attr($userFieldNameLabel) . '">';
+                echo esc_html($userFieldValue);
+                echo '</span>';
             }
 
-            echo "</div>";
+            echo '</div>';
 
         }
-        echo "</div>";
+        echo '</div>';
 
         return ob_get_clean();
     }
