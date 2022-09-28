@@ -1,77 +1,43 @@
 <?php
 namespace PO\classes;
 
-use WAWP\Data_Encryption;
-$path = wp_normalize_path(ABSPATH . 'wp-content/plugins/Wild-Apricot-Press/src/class-data-encryption.php');
-
-require_once ($path);
+use \WAWP\Log as Log;
+use \WAWP\Data_Encryption;
+use \WAWP\WA_API;
 // From:
 //  s://github.com/WildApricot/ApiSamples/blob/master/PHP/sampleApplication.php
 class WaApiClient
 {
     const AUTH_URL = 'https://oauth.wildapricot.org/auth/token';
+    const USER_AGENT = 'WildApricotPress/1.0';
 
-    private $tokenScope = 'auto';
-
-    private static $_instance;
+    private $wa_api;
     private $token;
 
-    // public function __construct($apiKey) {
-
-    //   if (!extension_loaded('curl')) {
-    //     throw new \Exception('cURL library is not loaded');
-    //   }
-    //   $this->initTokenByApiKey($apiKey);
-    // }
-
-    // TODO: try/catch
     public function __construct() {
-        $apiKey = $this->getApiKey();
-        $this->initTokenByApiKey($apiKey);
+        try {
+            $this->initToken();
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), 1);
+        }
     }
 
-    private function getApiKey() {
+    public function getAccountID() {
         $dataEncryption = new Data_Encryption();
-        $credentials = get_option('wawp_wal_name');
-        if (empty($credentials)) {
-            throw new \Exception("WildApricot API Keys not configured.");
-        }
-        $e_apiKey = $credentials['wawp_wal_api_key'];
-        $d_apiKey = $dataEncryption->decrypt($e_apiKey);
-        return $d_apiKey;
+
+        $account_id_e = get_transient(\WAWP\WA_Integration::ADMIN_ACCOUNT_ID_TRANSIENT);
+        $account_id = $dataEncryption->decrypt($account_id_e);
+
+        return $account_id;
     }
 
-    public function initTokenByContactCredentials(
-        $userName,
-        $password,
-        $scope = null
-    ) {
-        if ($scope) {
-            $this->tokenScope = $scope;
-        }
-
-        $this->token = $this->getAuthTokenByAdminCredentials(
-            $userName,
-            $password
-        );
-        if (!$this->token) {
-            throw new \Exception('Unable to get authorization token.');
-        }
+    public function initToken() {
+        $access_data = WA_API::verify_valid_access_token();
+        $this->wa_api = new WA_API($access_data['access_token'], $access_data['account_id']);
+        $this->token = $access_data['access_token'];
     }
 
-    public function initTokenByApiKey($apiKey, $scope = null)
-    {
-        if ($scope) {
-            $this->tokenScope = $scope;
-        }
-
-        $this->token = $this->getAuthTokenByApiKey($apiKey);
-        if (!$this->token) {
-            throw new \Exception('Unable to get authorization token.');
-        }
-    }
-
-    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = null)
+    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = array())
     {
         if (!$this->token) {
             throw new \Exception(
@@ -79,117 +45,45 @@ class WaApiClient
             );
         }
 
-        $ch = curl_init();
+        // construct headers with authorization token
         $headers = array(
-            'Authorization: Bearer ' . $this->token,
-            'Content-Type: application/json'
+            'Authorization' => 'Bearer ' . $this->token,
+            'Accept' => 'application/json',
+            'User-Agent' => self::USER_AGENT
         );
-        curl_setopt($ch, CURLOPT_URL, $url);
 
-        if ($data) {
+        $args = array();
+
+        // add data to request args and headers
+        if (!empty($data)) {
             $jsonData = json_encode($data);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+
+            $args['body'] = $data;
 
             $headers = array_merge($headers, array(
                 'Content-Length: ' . strlen($jsonData)
             ));
         }
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $verb);
 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $jsonResult = curl_exec($ch);
-        if ($isPicture && $jsonResult) {
-            return $jsonResult;
+        $args['headers'] = $headers;
+
+        // make post request to hook and decode response data
+        if ($verb == 'GET') {
+            $response = wp_remote_get($url, $args);
+        } else if ($verb == 'POST') {
+            $response = wp_remote_post($url, $args);
         }
-        if ($jsonResult === false) {
-            throw new \Exception(curl_errno($ch) . ': ' . curl_error($ch));
-        }
-
-        curl_close($ch);
-        return json_decode($jsonResult, true);
-    }
-
-    private function getAuthTokenByAdminCredentials($login, $password)
-    {
-        if ($login == '') {
-            throw new \Exception('login is empty');
+        $response_data = $response['body'];
+        if ($isPicture && $response_data) {
+            return $response_data;
         }
 
-        $data = sprintf(
-            "grant_type=%s&username=%s&password=%s&scope=%s",
-            'password',
-            urlencode($login),
-            urlencode($password),
-            urlencode($this->tokenScope)
-        );
-
-        throw new \Exception(
-            'Change clientId and clientSecret to values specific for your authorized application. For details see:  https://help.wildapricot.com/display/DOC/Authorizing+external+applications'
-        );
-        // $clientId = 'SamplePhpApplication';
-        // $clientSecret = 'open_wa_api_client';
-        $authorizationHeader =
-            "Authorization: Basic " .
-            base64_encode($clientId . ":" . $clientSecret);
-
-        return $this->getAuthToken($data, $authorizationHeader);
-    }
-
-    private function getAuthTokenByApiKey($apiKey)
-    {
-        $data = sprintf(
-            "grant_type=%s&scope=%s",
-            'client_credentials',
-            $this->tokenScope
-        );
-
-        $authorizationHeader =
-            "Authorization: Basic " . base64_encode("APIKEY:" . $apiKey);
-        return $this->getAuthToken($data, $authorizationHeader);
-    }
-
-    private function getAuthToken($data, $authorizationHeader)
-    {
-        $ch = curl_init();
-        $headers = array(
-            $authorizationHeader,
-            'Content-Length: ' . strlen($data)
-        );
-        $headers = array(
-            $authorizationHeader
-        );
-        curl_setopt($ch, CURLOPT_URL, WaApiClient::AUTH_URL);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-
-        if ($response === false) {
-            throw new \Exception(curl_errno($ch) . ': ' . curl_error($ch));
+        if (!$response_data) {
+            throw new \Exception('failed making request');
         }
 
-        $result = json_decode($response, true);
-        curl_close($ch);
-        return $result['access_token'];
+        return json_decode($response_data, true);
     }
-
-    // public static function getInstance()
-    // {
-    //     if (!is_object(self::$_instance)) {
-    //         self::$_instance = new self();
-    //     }
-
-    //     return self::$_instance;
-    // }
-
-    // final public function __clone()
-    // {
-    //     throw new Exception(
-    //         'It\'s impossible to clone singleton "' . __CLASS__ . '"!'
-    //     );
-    // }
 
     public function __destruct()
     {

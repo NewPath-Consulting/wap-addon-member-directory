@@ -20,6 +20,7 @@ class UserProfileShortcode {
 
     public function waUserProfileShortcode($args, $content = null)
     {
+        // get user id from shortcode arguments
         $userID_arg = $this->extractAndRemoveUserID($args);
         if(empty($_REQUEST['user-id']) && !$userID_arg) {
             return;
@@ -46,7 +47,7 @@ class UserProfileShortcode {
 
         $waService = new WAService();
         $current_user_id = get_user_meta(get_current_user_id(), "wawp_wa_user_id");
-        $contacts;
+        // $contacts;
         if($userID == $current_user_id) { //If user being displayed is the current user
             $contacts = $waService->getContactsList($filter, $select, false); //run without restriction
         } else {
