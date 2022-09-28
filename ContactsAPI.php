@@ -1,10 +1,10 @@
 <?php
 
-use PO\services\WAService;
-use PO\services\SettingsService;
-use PO\classes\ContactsUtils;
-use PO\classes\Contacts;
-use PO\classes\ContactsListingPersistor;
+use WAWP\Memdir_Block\services\WAService;
+use WAWP\Memdir_Block\services\SettingsService;
+use WAWP\Memdir_Block\classes\ContactsUtils;
+use WAWP\Memdir_Block\classes\Contacts;
+use WAWP\Memdir_Block\classes\ContactsListingPersistor;
 
 class ContactsAPI
 {

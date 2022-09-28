@@ -1,8 +1,8 @@
 <?php
 
-namespace PO\classes;
+namespace WAWP\Memdir_Block\classes;
 
-use PO\classes\ContactsUtils;
+use WAWP\Memdir_Block\classes\ContactsUtils;
 
 class ContactsListingPersistor {
 
