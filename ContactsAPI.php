@@ -409,8 +409,10 @@ class ContactsAPI
             return '<option>' . esc_html($option) . '</option>';
         }, $sites);
 
+        $selectOptions = implode("\n", $selectOptions);
+
         echo '<select class="sites">';
-        echo implode("\n", $selectOptions);
+        echo esc_html($selectOptions);
         echo "</select>";
     }
 
