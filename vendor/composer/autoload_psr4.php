@@ -8,5 +8,4 @@ $baseDir = dirname($vendorDir);
 return array(
     'WAWP\\Memdir_Block\\services\\' => array($baseDir . '/services'),
     'WAWP\\Memdir_Block\\classes\\' => array($baseDir . '/classes'),
-    'WAWP\\Memdir_Block\\admin\\' => array($baseDir . '/admin'),
 );

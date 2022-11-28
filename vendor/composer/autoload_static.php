@@ -11,7 +11,6 @@ class ComposerStaticInit26919c04270e2d11cb43386d6ee4c548
         array (
             'WAWP\\Memdir_Block\\services\\' => 27,
             'WAWP\\Memdir_Block\\classes\\' => 26,
-            'WAWP\\Memdir_Block\\admin\\' => 24,
         ),
     );
 
@@ -23,10 +22,6 @@ class ComposerStaticInit26919c04270e2d11cb43386d6ee4c548
         'WAWP\\Memdir_Block\\classes\\' => 
         array (
             0 => __DIR__ . '/../..' . '/classes',
-        ),
-        'WAWP\\Memdir_Block\\admin\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/admin',
         ),
     );
 
