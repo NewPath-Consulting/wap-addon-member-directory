@@ -132,4 +132,3 @@ function wawp_memdir_deactivate() {
 	unset($addons[WAWP_MEMDIR_SLUG]);
 	update_option('wawp_addons', $addons);
 }
-?>

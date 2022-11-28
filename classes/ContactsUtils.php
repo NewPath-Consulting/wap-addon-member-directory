@@ -56,4 +56,3 @@ if (!function_exists('str_contains')) {
     return '' === $needle || false !== strpos($haystack, $needle);
   }
 }
-?>

@@ -541,4 +541,3 @@ class ContactsAPI
         return $picture;
     }
 }
-?>

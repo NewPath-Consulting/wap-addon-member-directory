@@ -56,5 +56,3 @@ class CacheService {
     return $this->prefix;
   }
 }
-
-?>
