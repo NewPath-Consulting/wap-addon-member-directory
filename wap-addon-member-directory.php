@@ -21,8 +21,8 @@
  * @see https://developer.wordpress.org/block-editor/tutorials/block-tutorial/writing-your-first-block-type/
  */
 
-require_once("vendor/autoload.php");
-require_once("ContactsAPI.php");
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/ContactsAPI.php';
 
 use WAWP\Memdir_Block\classes\ContactsUtils;
 use WAWP\Memdir_Block\classes\ContactsListingPersistor;
