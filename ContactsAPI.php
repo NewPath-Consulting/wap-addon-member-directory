@@ -278,7 +278,7 @@ class ContactsAPI
         return ob_get_clean();
     }
 
-    private function renderContactDiv($fields, $profileURL="", $profile = false, $hideResField) {
+    private function renderContactDiv($fields, $profileURL="", $profile = false, $hideResField = false) {
         if (empty($fields)) {
             return;
         }
@@ -564,4 +564,3 @@ class ContactsAPI
         return $picture;
     }
 }
-?>

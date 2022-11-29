@@ -92,4 +92,3 @@ class WaApiClient
         $this->token = null;
     }
 }
-?>
