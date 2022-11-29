@@ -74,8 +74,8 @@ class WaApiClient
             $response = wp_remote_post($url, $args);
         }
 
-        if (!$response) {
-            throw new \Exception('failed making request');
+        if (!$response || is_wp_error($response)) {
+            throw new \Exception('failed making request', $response->get_error_code());
         }
 
         $response_data = $response['body'];
