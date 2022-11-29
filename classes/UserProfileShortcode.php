@@ -99,12 +99,17 @@ class UserProfileShortcode {
             echo '</span>';
 
             if (ContactsUtils::isPicture($userFieldValue)) {
-                // need to get picture from API
-                $waService = new WAService();
-                $picture = $waService->getPicture($userFieldValue['Url']);
-                $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
-                echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
-                esc_html($picture) . '"/>';
+                try {
+                    // need to get picture from API
+                    $waService = new WAService();
+                    $picture = $waService->getPicture($userFieldValue['Url']);
+                    $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
+                    echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
+                    esc_html($picture) . '"/>';
+                } catch (\Exception $e) {
+                    Log::wap_log_error($e->getMessage(), true);
+                }
+
             }else {
                 if (is_array($userFieldValue)) {
                     $userFieldValue = $userFieldValue['Label'];

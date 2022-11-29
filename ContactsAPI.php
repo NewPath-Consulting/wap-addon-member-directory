@@ -281,11 +281,15 @@ class ContactsAPI
             }
 
             if (ContactsUtils::isPicture($field['Value'])) {
-                //data:image/gif;base64,
-                $picture = $this->getPictureFromAPI($field['Value']['Url']);
-                $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
-                echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
-                    esc_html($picture) . '"/>';
+                try {
+                    $picture = $this->getPictureFromAPI($field['Value']['Url']);
+                    $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
+                    echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
+                        esc_html($picture) . '"/>';
+                } catch (\Exception $e) {
+                    Log::wap_log_error($e->getMessage(), true);
+                }
+
             } else if ($field['Value'] == "🔒 Restricted" && $hideResField) {
                 continue;
             } else if (is_array($field['Value'])) {
