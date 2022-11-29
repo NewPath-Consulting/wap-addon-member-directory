@@ -60,7 +60,12 @@ class WAService {
 
 
         $contactFields = array(); 
-        $contactFields = array_values($this->getContactFields()); //get /contactfields to see/store what things are allowed for what levels
+        try {
+            $contactFields = array_values($this->getContactFields()); //get /contactfields to see/store what things are allowed for what levels
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+        }
+        
         //How to check for error? This will cause an error if empty
         /*if($contactFields['statusCode'] != 200) { 
             return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the error 
@@ -234,7 +239,7 @@ class WAService {
                 $account_id = $this->apiClient->getAccountID();
 
             } catch (\Exception $e) {
-                Log::wap_log_error($e->getMessage(), 1);
+                Log::wap_log_error($e->getMessage(), tr);
             }
 
             $this->accountURL = ACCOUNTS_API_URL . $account_id;

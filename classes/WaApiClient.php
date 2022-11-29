@@ -18,7 +18,7 @@ class WaApiClient
         try {
             $this->initToken();
         } catch (\Exception $e) {
-            Log::wap_log_error($e->getMessage(), 1);
+            Log::wap_log_error($e->getMessage(), true);
         }
     }
 

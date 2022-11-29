@@ -6,6 +6,8 @@ use WAWP\Memdir_Block\classes\ContactsUtils;
 use WAWP\Memdir_Block\classes\Contacts;
 use WAWP\Memdir_Block\classes\ContactsListingPersistor;
 
+use WAWP\Log as Log;
+
 class ContactsAPI
 {
     const DEFAULT_CSS_CLASS = "wa-contacts";
@@ -105,9 +107,12 @@ class ContactsAPI
     public function contactFieldsRestRoute() {
         $waService = new WAService();
 
-        $data = $waService->getContactFields();
-
-        $response = new WP_REST_Response($data, 200);
+        try {
+            $data = $waService->getContactFields();
+            $response = new WP_REST_Response($data, 200);
+        } catch (\Exception $e) {
+            $response = new WP_REST_Response($status = $e->getCode());
+        }
 
         // Set headers.
         $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
@@ -195,8 +200,13 @@ class ContactsAPI
         $contactQuery = new ContactsListingPersistor($sites, $profileURL, $filter, $args);
         $queryHash = $contactQuery->save();
 
-        $contacts = $this->getContactsFromAPI($sites, $filter, $select);
-        // do_action('qm/debug', $contacts);
+        $contacts = array();
+        try {
+            $contacts = $this->getContactsFromAPI($sites, $filter, $select);
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+        }
+
         if (!empty($savedSearch)) {
             $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
         }
