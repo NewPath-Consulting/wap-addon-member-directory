@@ -75,7 +75,7 @@ class WaApiClient
         }
 
         if (!$response || is_wp_error($response)) {
-            throw new \Exception('failed making request', $response->get_error_code());
+            throw new \Exception($response->get_error_message(), 404);
         }
 
         $response_data = $response['body'];
