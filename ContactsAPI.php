@@ -111,7 +111,7 @@ class ContactsAPI
             $data = $waService->getContactFields();
             $response = new WP_REST_Response($data, 200);
         } catch (\Exception $e) {
-            $response = new WP_REST_Response($status = $e->getCode());
+            $response = new WP_REST_Response($e->getMessage(), $e->getCode());
         }
 
         // Set headers.
@@ -123,9 +123,14 @@ class ContactsAPI
     public function savedSearchesRestRoute() {
         $waService = new WAService();
 
-        $data = $waService->getSavedSearches();
+        try {
+            $data = $waService->getSavedSearches();
+            $response = new WP_REST_Response($data, 200);
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+            $response = new WP_REST_Response($e->getMessage(), $e->getCode());
+        }
 
-        $response = new WP_REST_Response($data, 200);
 
         // Set headers.
         $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
@@ -208,7 +213,11 @@ class ContactsAPI
         }
 
         if (!empty($savedSearch)) {
-            $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
+            try {
+                $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
+            } catch (\Exception $e) {
+                Log::wap_log_error($e->getMessage(), true);
+            }
         }
 
         $contacts = $this->filterContacts($contacts, $args);
