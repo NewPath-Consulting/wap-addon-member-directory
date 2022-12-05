@@ -178,6 +178,11 @@ class WAService {
             '/Contacts?' .
             $query;
 
+        if ($block) {
+            $contacts = $this->getContactsBlock($query);
+            return array_values($contacts['Contacts']);
+        }
+
         if (isset($this->useCache)) {
             $apiCache = CacheService::getInstance();
             $contacts = $apiCache->getValue($url);
@@ -198,7 +203,41 @@ class WAService {
         } 
 
         return array_values($contacts['Contacts']);
-    }  
+    }
+
+    public function getContactsBlock($query) {
+        $count = $this->apiClient->getContactsCount();
+
+        $skip = 0;
+        $top = 500;
+
+        $done = false;
+
+        $all_contacts = array(
+            'Contacts' => array()
+        );
+
+        // retrieve in blocks of 500
+		while (!$done) {
+			// if there are more than 500 entires left, include top query
+			if (($count - $skip) <= $top) {
+				$top = 0;
+				$done = true;
+			}
+
+			// make API request and add block to list of all contacts
+			$contacts_block = $this->apiClient->getContactBlock($query, $skip, $top);
+			$all_contacts['Contacts'] = array_merge(
+				$all_contacts['Contacts'],
+				$contacts_block['Contacts']
+			);
+
+			// increment by block size
+			$skip += $top;
+		}
+        
+        return $all_contacts;
+    }
 
     public function getSavedSearches() {
         $url = $this->getEndpointURL() . '/savedsearches';
