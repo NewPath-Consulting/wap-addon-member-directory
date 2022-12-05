@@ -37,8 +37,13 @@ class WaApiClient
         $this->token = $access_data['access_token'];
     }
 
-    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = array())
-    {
+    public function getContactsCount() {
+        return $this->wa_api->get_contacts_count();
+    }
+
+    public function getContactBlock($query, $skip, $top) {
+        return $this->wa_api->retrieve_contacts_list($query, true, $skip, $top);
+    }
         if (!$this->token) {
             throw new \Exception(
                 'Access token is not initialized. Call initTokenByApiKey or initTokenByContactCredentials before performing requests.'
