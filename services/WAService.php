@@ -142,7 +142,7 @@ class WAService {
         return $contacts;
     }
 
-    public function getContactsList($filter = null, $select = null, $private = true) {
+    public function getContactsList($filter = null, $select = null, $block = true, $private = true) {
         $queryParams = array(
             '$async' => 'false'
         );

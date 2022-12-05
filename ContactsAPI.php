@@ -80,7 +80,7 @@ class ContactsAPI
 
         $select = ContactsUtils::generateSelectStatement($args);
 
-        $contacts = $this->getContactsFromAPI($sites, $filter, $select);
+        $contacts = $this->getContactsFromAPI($sites, $filter, $select, false);
         $contacts = $this->filterContacts($contacts, $args);
 
         $contacts = $this->searchContactsByKeywords($contacts, $searchTerm);
@@ -518,9 +518,9 @@ class ContactsAPI
         return true;
     }
 
-    public function getContactsFromAPI($sites, $filter, $select) {
+    public function getContactsFromAPI($sites, $filter, $select, $block = true) {
         $waService = new WAService();
-        $contacts = $waService->getContactsList($filter, $select);
+        $contacts = $waService->getContactsList($filter, $select, $block);
 
         return $contacts;
     }

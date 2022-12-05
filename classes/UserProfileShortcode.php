@@ -54,7 +54,7 @@ class UserProfileShortcode {
             if($userID == $current_user_id) { //If user being displayed is the current user
                 $contacts = $waService->getContactsList($filter, $select, false); //run without restriction
             } else {
-                $contacts = $waService->getContactsList($filter, $select, true);
+                $contacts = $waService->getContactsList($filter, $select, false, true);
             }
         } catch (\Exception $e) {
             Log::wap_log_error($e->getMessage(), true);
