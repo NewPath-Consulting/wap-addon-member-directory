@@ -278,7 +278,7 @@ class WAService {
                 $account_id = $this->apiClient->getAccountID();
 
             } catch (\Exception $e) {
-                Log::wap_log_error($e->getMessage(), tr);
+                Log::wap_log_error($e->getMessage(), true);
             }
 
             $this->accountURL = ACCOUNTS_API_URL . $account_id;

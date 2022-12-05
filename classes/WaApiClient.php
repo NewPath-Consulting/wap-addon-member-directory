@@ -33,7 +33,7 @@ class WaApiClient
 
     public function initToken() {
         $access_data = WA_API::verify_valid_access_token();
-        $this->wa_api = new WA_API($access_data['access_token'], $access_data['account_id']);
+        $this->wa_api = new WA_API($access_data['access_token'], $access_data['wa_account_id']);
         $this->token = $access_data['access_token'];
     }
 
@@ -44,6 +44,8 @@ class WaApiClient
     public function getContactBlock($query, $skip, $top) {
         return $this->wa_api->retrieve_contacts_list($query, true, $skip, $top);
     }
+
+    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = array()) {
         if (!$this->token) {
             throw new \Exception(
                 'Access token is not initialized. Call initTokenByApiKey or initTokenByContactCredentials before performing requests.'
