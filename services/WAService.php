@@ -13,12 +13,10 @@ const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
 class WAService {
     private $apiClient;
-    private $useCache;
     private $accountURL = null;
 
     public function __construct() {
         $this->apiClient = new WaApiClient();
-        $this->useCache = true;
     }
 
     public function getContactFields() {
@@ -174,16 +172,12 @@ class WAService {
             '/Contacts?' .
             $query;
 
-        $contacts = array();
-        $apiCache = null;
 
-        // if cache is enabled, look for contacts
-        if ($this->useCache) {
-            $apiCache = CacheService::getInstance();
-            $contacts = $apiCache->getValue($url);
-        }
+        // look for contacts in cache
+        $apiCache = CacheService::getInstance();
+        $contacts = $apiCache->getValue($url);
 
-        // if cache disabled or contacts not in cache, retrieve from api
+        // if contacts not in cache, retrieve from api
         if (empty($contacts)) {
             if ($block) {
                 $contacts = $this->getContactsBlock($query);
@@ -191,10 +185,8 @@ class WAService {
                 $contacts = $this->apiClient->makeRequest($url);
             }
 
-            // if cache is enabled, save contacts in cache
-            if ($this->useCache) {
-                $apiCache->saveValue($url, $contacts);
-            }
+            // save contacts in cache
+            $apiCache->saveValue($url, $contacts);
         }
 
         // return empty array if contacts array doesn't exist in the response
