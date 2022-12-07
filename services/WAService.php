@@ -14,7 +14,7 @@ const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 class WAService {
     private $apiKey;
     private $apiClient;
-    private $accountURL = false;
+    private $useCache;
 
     public function __construct() {
         $this->apiClient = new WaApiClient();
@@ -178,21 +178,27 @@ class WAService {
             '/Contacts?' .
             $query;
 
-        if ($block) {
-            $contacts = $this->getContactsBlock($query);
-            return array_values($contacts['Contacts']);
-        }
+        $contacts = array();
+        $apiCache = null;
 
-        if (isset($this->useCache)) {
+        // if cache is enabled, look for contacts
+        if ($this->useCache) {
             $apiCache = CacheService::getInstance();
             $contacts = $apiCache->getValue($url);
+        }
 
-            if (empty($contacts)) {
+        // if cache disabled or contacts not in cache, retrieve from api
+        if (empty($contacts)) {
+            if ($block) {
+                $contacts = $this->getContactsBlock($query);
+            } else {
                 $contacts = $this->apiClient->makeRequest($url);
+            }
+
+            // if cache is enabled, save contacts in cache
+            if ($this->useCache) {
                 $apiCache->saveValue($url, $contacts);
             }
-        } else {
-            $contacts = $this->apiClient->makeRequest($url);
         }
 
         if (!isset($contacts['Contacts'])) {
