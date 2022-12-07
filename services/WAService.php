@@ -12,17 +12,13 @@ use WAWP\Memdir_Block\services\CacheService;
 const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
 class WAService {
-    private $apiKey;
     private $apiClient;
     private $useCache;
+    private $accountURL = null;
 
     public function __construct() {
         $this->apiClient = new WaApiClient();
-    }
-
-    public function initWithCache() {
         $this->useCache = true;
-        $this->init();
     }
 
     public function getContactFields() {
@@ -147,7 +143,7 @@ class WAService {
             '$async' => 'false'
         );
 
-        if($private) { //The global restriction of a contact is a FieldValue (terrible design), so need to get 
+        if ($private) { //The global restriction of a contact is a FieldValue (terrible design), so need to get 
             if (!empty($select)) {
                 $queryParams = array_merge($queryParams, array('$select' => ($select . ",'AccessToProfileByOthers'")));
             } else {
@@ -159,7 +155,7 @@ class WAService {
             }
         }
 
-        if($private) { //FUTURE: let shown statuses be customizable
+        if ($private) { //FUTURE: let shown statuses be customizable
             if (!empty($filter)) {
                 $queryParams = array_merge($queryParams, array('$filter' => ($filter . " AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
             } else {
@@ -201,11 +197,18 @@ class WAService {
             }
         }
 
-        if (!isset($contacts['Contacts'])) {
+        // return empty array if contacts array doesn't exist in the response
+        if (!array_key_exists('Contacts', $contacts)) {
             return array();
         }
-        if($private) {
-            return $this->controlAccess(array_values($contacts['Contacts']), $filter, $select); 
+
+        // return control access values if private is true
+        if ($private) {
+            return $this->controlAccess(
+                array_values($contacts['Contacts']), 
+                $filter, 
+                $select
+            ); 
         } 
 
         return array_values($contacts['Contacts']);
@@ -278,7 +281,7 @@ class WAService {
 
     private function getEndpointURL() {
         
-        if (empty($this->accountURL)) {
+        if (is_null($this->accountURL)) {
 
             try {
                 $account_id = $this->apiClient->getAccountID();
