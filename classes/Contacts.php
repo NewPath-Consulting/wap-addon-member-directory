@@ -55,4 +55,3 @@ class Contacts {
       return $foundContacts;
     }
 }
-?>

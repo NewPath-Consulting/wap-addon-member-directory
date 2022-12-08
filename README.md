@@ -4,7 +4,7 @@ Tags: wildapricot, wild apricot, membership, membership directory
 Requires at least: 5.7
 Tested up to: 6.0
 Requires PHP: 7.4
-Stable Tag: 1.0.0
+Stable Tag: 1.0.1
 License: GPL v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -193,6 +193,8 @@ The row contains the ID city and a class field. Each element of the row has the 
 9. Enabling Hiding Restricted Fields
 
 == Changelog ==
+
+= November 29 2022 - 1.0.1 - fixed installation bug found on some sites =
 
 = August 9 2022 - 1.0.0 - first public release =
 

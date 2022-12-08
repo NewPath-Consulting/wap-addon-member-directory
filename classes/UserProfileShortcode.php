@@ -3,8 +3,6 @@
 namespace WAWP\Memdir_Block\classes;
 use WAWP\Memdir_Block\classes\ContactsUtils;
 use WAWP\Memdir_Block\services\WAService;
-use WAWP\Memdir_Block\services\SettingsService;
-use Walker;
 
 class UserProfileShortcode {
     private static $SHORTCODE_NAME = 'wa-profile';
@@ -128,5 +126,3 @@ class UserProfileShortcode {
     }
 
 }
-
-?>

@@ -50,4 +50,3 @@ class ContactsListingPersistor {
         return MD5(implode($this->sites) . $this->filter . $this->select);
     }
 }
-?>
