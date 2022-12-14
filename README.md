@@ -2,7 +2,7 @@
 Contributors: nataliebrotherton, asirota
 Tags: wildapricot, wild apricot, membership, membership directory
 Requires at least: 5.7
-Tested up to: 6.0
+Tested up to: 6.1.1
 Requires PHP: 7.4
 Stable Tag: 1.0.1
 License: GPL v2 or later
