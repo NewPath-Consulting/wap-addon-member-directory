@@ -83,7 +83,49 @@ Route   |   Function  | Used by | Arguments
 `/wawp/v1/savedsearches/` | Retrieves list of saved searches to display as a dropdown in the block editor settings | `blocks/components/SavedSearches.js` | None
 `/wawp/v1/profiles/` | Retrieves profiles shortcode to display as content in the member directory when user clicks on a profile link | `js/wafw.js` | <ul><li>`int` `id` User ID</li><li>`bool` `hideResFields` Hide restricted fields</li><li>`array` `fields` List of contact fields to display</li></ul>
 
+### Shortcodes
+The plugin registers two shortcodes for the member directory and member profile respectively.
 
+#### `wa-contacts`
+The member directory shortcode can be invoked with `[wa-contacts]`. It takes in several **named** arguments along with a **list of fields** (each as a string) to render for each member in the directory.
+
+Argument       | Type  | Description
+---------------|-------|------------
+`page-size`    | `int` | The number of members to display on each page of the directory.
+`search`       | `bool` | Flags whether to enable search on the directory. If enabled, the shortcode will render a search box.
+`saved-search` | `int` | The ID of the WA saved search from which the user wishes to render members.
+`profile`      | `bool` | Flags whether to display a link to each members' profile on their cell in the directory.
+`hide_restricted_fields` | `bool` | Flags whether to display fields which are restricted in Wild Apricot.
+
+**Note:** Not passing in any fields will result in the block rendering an empty shortcode.
+
+**Example:**
+```
+[wa-contacts 'User ID' 'My First name' 'Last name' page-size=10 profile] [/wa-contacts] 
+```
+This shortcode passes in the fields `User ID`, `My First name`, and `Last name`. The shortcode will render all of these fields for every user in the directory. 
+
+The shortcode also indicates the page size is 10 users per page and it **enables** the profile link to link to each member.
+
+Notice the `bool` arguments are toggled simply by **including** or ***not* including** the argument name in the shortcode.
+
+
+
+#### `wa-profile`
+The member profile shortcode can be invoked with `[wa-profile]`. Similar to the member directory shortcode, `[wa-profile]` takes in named arguments as well as a list of fields to render in the profile.
+
+Argument    | Type | Description
+------------|------|------------
+`user-id`   |`int` | **[Required]** The ID of the user for which to display the profile.
+`hide_restricted_fields` | `bool` | Flags whether to display fields which are restricted in Wild Apricot.
+
+**Note:** Not passing in any fields and not passing in a user ID will result in the block rendering an empty shortcode.
+
+**Example:**
+```
+[wa-profile 'User ID' 'My First name' 'Last name' 'Organization' 'Job Title' 'City' user-id=60085794 hide_restricted_fields] 
+```
+This shortcode passes in several fields: `User ID`, `My first name`, `Last name`, `Organization`, `Job Title`, and `City`. It also passes in a user ID and enables hiding restricted fields.
 
 ## Block files and functionality
 
