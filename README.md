@@ -194,7 +194,7 @@ The row contains the ID city and a class field. Each element of the row has the 
 
 == Changelog ==
 
-= November 29 2022 - 1.0.1 - fixed installation bug found on some sites =
+= Decemnber 14 2022 - 1.0.1 - fixed installation bug found on some sites, added support for  large WildApricot contact and member directories =
 
 = August 9 2022 - 1.0.0 - first public release =
 
