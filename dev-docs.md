@@ -67,6 +67,21 @@ Has specific functions implemented to requests specific routes in the API such a
 * `getSavedSearch()` retrieves a saved search corresponding to the ID argument passed in
 * `getPicture()` retrieves the picture using the URL argument passed in
 
+### REST API
+As previously mentioned in `ContactsAPI`, there are several custom REST routes defined. These REST routes serve the WA data to the blocks.
+
+The WordPress REST API can be accessed at `wp-json`. The plugin also has its own namespaces for endpoints which is required for custom REST routes.
+
+For example, the full URL (relative to the WP website URL) for the contact fields endpoint would be `/wp-json/wawp/v1/contacts/fields/`. 
+
+You can read more [here](https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/) about custom REST routes in WordPress.
+
+Route   |   Function  | Used by | Arguments
+--------|-------------|---------|-----------
+`/wafw/v1/contacts/search/` | Used by the member directory search box to search a specific contact | `js/wafw.js` | None
+`/wawp/v1/contacts/fields/` | Retrieve list of contact fields to display as checkboxes in the block editor settings | `blocks/components/ContactFields.js` | None
+`/wawp/v1/savedsearches/` | Retrieves list of saved searches to display as a dropdown in the block editor settings | `blocks/components/SavedSearches.js` | None
+`/wawp/v1/profiles/` | Retrieves profiles shortcode to display as content in the member directory when user clicks on a profile link | `js/wafw.js` | <ul><li>`int` `id` User ID</li><li>`bool` `hideResFields` Hide restricted fields</li><li>`array` `fields` List of contact fields to display</li></ul>
 
 
 
