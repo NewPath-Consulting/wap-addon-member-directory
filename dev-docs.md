@@ -46,8 +46,6 @@ It registers several REST routes used by the Javascript side of the plugin. See 
 
 It also handles rendering the member directory shortcode.
 
-#### `ContactsListingPersistor`
-
 #### `ContactsUtils`
 Contains helper functions for parsing contacts data. This includes using the arguments from the shortcodes to build `filter` and `select` queries to pass in to the Wild Apricot API. 
 
@@ -60,7 +58,7 @@ Interfaces with the WAP API class `WA_API` to obtain the user authentication (ac
 #### `WAService`
 Interfaces with `WaApiClient` to connect to the WA API.
 
-Has specific functions implemented to requests specific routes in the API such as
+Has specific functions implemented to request specific routes in the API such as
 * `getContactFields()` retrieves custom fields for contacts/members
 * `getContactsList()` retrieves list of contacts with a `filter` and/or `select` statement applied
 * `getSavedSearches()` retrieves list of saved search IDs
@@ -128,14 +126,93 @@ Argument    | Type | Description
 This shortcode passes in several fields: `User ID`, `My first name`, `Last name`, `Organization`, `Job Title`, and `City`. It also passes in a user ID and enables hiding restricted fields.
 
 ## Block files and functionality
+There are two separate blocks included in this plugin, for the member directory and member profile respectively. 
+
+The purpose of the blocks is to provide an interface for building the shortcodes described above. 
+
+All block files are located in the `blocks/` folder. The two blocks also share several classes and custom React components located in `blocks/components/`.
+
+### Shared classes and components
+
+The custom components are responsible for rendering settings fields in the block editor. Some of these components, like contact fields for example, use data from Wild Apricot to render the settings fields. 
+
+#### `ContactFields`
+The `ContactFields` class is responsible for retrieving all the contact fields from Wild Apricot via the custom REST endpoint defined on the PHP side. 
+
+The fields are separated into three categories: System, Common, and Member fields. The block editor will also display the fields in these categories. The class maintains separate data structures for the fields.
+
+The file containing the definition of this class exports an instance `contactFields` at the bottom which is used by the member directory and profile blocks to access custom field data.
+
+#### `<Field>`
+The `Field` component is a custom component that renders a single checkbox for a custom field.
+
+Checking a field box will add the field to a list of fields to be applied in the shortcode in the block's attributes. 
 
 ### Member directory
 
+#### Attributes and block settings
+The attributes of this block roughly align with the shortcode parameters. 
+
+The only exception is `profile_fields`. `profile_fields` is a list of fields (similar to `fields_applied`) to include in the user profile that will display if the user enables the profile link option in the shortcode. Read more about the functionality of the profile link in the profile link section.
+
+The chart below describes how the block attributes, settings, and shortcode parameters relate to eachother
+
+Attribute        | Type      | Settings | Shortcode parameter
+-----------------|-----------|----------|---------------------
+`fields_applied` | `array`   | Checkboxes in 3 categories<ul><li>System Fields</li><li>Common Fields</li><li>Member Fields</li></ul> | List of fields
+`enable_search`  | `boolean` | "Enable Search" toggle | `search`
+`page_size`      | `number`  | "Page Size" input box | `page-size`
+`saved_search`   | `number`  | "Filters" dropdown | `saved-search`
+`profile_link`   | `boolean` | "Profile Link" toggle | `profile`
+`profile_fields` | `array`   | "User Profile Fields" checkboxes | N/A
+`hide_restricted_fields` | `boolean` | "Hide Restricted Fields" toggle | `hide_restricted_fields`
+
+All the settings for the member directory are controlled by the `FieldControls` class defined in `FilterControls.js` There is a separate component for each attribute with the exception of the contact fields.
+
+When the user enters the block editor, each attribute is parsed from its HTML source in the block content. This means its value is extracted from the HTML element with the specified selector.
+
+For example,
+```js
+enable_search: {
+    type: 'boolean',
+    default: false,
+    selector: '#enable_search',
+    attribute: 'data-search-enabled'
+},
+```
+For the `enable_search` attribute, its value will be extracted from the element with the `enable_search` ID and the value will come from the `data-search-enabled` attribute in that element. For more information on attribute sources, read [here](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/).
+
+#### Rendering the block
+The block has two distinct parts: hidden fields and the shortcode. 
+
+##### Hidden fields
+Hidden fields are used to keep track of the user profile fields (which aren't rendered in the shortcode) and rendering the fields used for the directory so they can be extracted when the block is parsed.
+
+##### Shortcode
+The shortcode is where the actual directory will be rendered. The shortcode string is simply concatenated with the block attributes for the arguments.
+
+#### Functionality controlled by external JavaScript
+Since there is some functionality of the block that needs to happen on the client side, meaning it is reactive to the user and it needs to happen after the block renders, there are some additional JavaScript files in `js/` serving that functionality.
+
+##### Search
+Users can search through directories when the search setting is enabled. This will cause a search box to be rendered in the shortcode.
+
+The actual functionality for that search is controlled in `js/wafw.js`. This code will wait for the user to submit a search, and this could be any query or keyword, then uses the REST endpoint to search the WA database with the user's query. 
+
+The result of the search will then display in place of the directory content.
+
+##### Pagination
+Since there could potentially be a large list of contacts to display in the directory, it is paginated by a set page size. As mentioned previously, the page size is first determined in the block settings, then it is passed in to the shortcode. The shortcode then enqueues the pagination scripts and sends the page size value to the scripts using `wp_localize_script`. 
+
+The files controlling pagination are `pagination.js` and `pagination.min.js`, which is a minified version of the jQuery plugin [pagination.js](http://pagination.js.org). `pagination.js` simply identifies the objects to be paginated (all the contacts) and passes it in along with the page size value to the pagination library function.
+
+##### Profile link
+The profile link can be enabled through the block settings. Enabling this setting will cause a "link" to an individual member profile to be rendered in each member profile. 
+
+`js/profiles.js` controls the functionality for the profile link.
+
+Clicking this "link" will cause the member directory content to be replaced with the profile shortcode for the profile on which the link was clicked.
+
+In order to obtain the profile shortcode quickly and dynamically, it is served by the REST API. The `profiles.js` code simply passes in the necessary parameters for the profile shortcode (fields, user ID, hide restricted fields toggle) via URL queries in the REST endpoint.
+
 ### Member profile
-
-## REST routes
-
-## Shortcodes
-### `wa-contacts`
-
-### `wa-profile`
