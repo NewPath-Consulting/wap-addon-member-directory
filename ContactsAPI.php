@@ -6,6 +6,8 @@ use WAWP\Memdir_Block\classes\ContactsUtils;
 use WAWP\Memdir_Block\classes\Contacts;
 use WAWP\Memdir_Block\classes\ContactsListingPersistor;
 
+use WAWP\Log as Log;
+
 class ContactsAPI
 {
     const DEFAULT_CSS_CLASS = "wa-contacts";
@@ -78,7 +80,7 @@ class ContactsAPI
 
         $select = ContactsUtils::generateSelectStatement($args);
 
-        $contacts = $this->getContactsFromAPI($sites, $filter, $select);
+        $contacts = $this->getContactsFromAPI($sites, $filter, $select, false);
         $contacts = $this->filterContacts($contacts, $args);
 
         $contacts = $this->searchContactsByKeywords($contacts, $searchTerm);
@@ -105,9 +107,12 @@ class ContactsAPI
     public function contactFieldsRestRoute() {
         $waService = new WAService();
 
-        $data = $waService->getContactFields();
-
-        $response = new WP_REST_Response($data, 200);
+        try {
+            $data = $waService->getContactFields();
+            $response = new WP_REST_Response($data, 200);
+        } catch (\Exception $e) {
+            $response = new WP_REST_Response($e->getMessage(), $e->getCode());
+        }
 
         // Set headers.
         $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
@@ -118,9 +123,14 @@ class ContactsAPI
     public function savedSearchesRestRoute() {
         $waService = new WAService();
 
-        $data = $waService->getSavedSearches();
+        try {
+            $data = $waService->getSavedSearches();
+            $response = new WP_REST_Response($data, 200);
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+            $response = new WP_REST_Response($e->getMessage(), $e->getCode());
+        }
 
-        $response = new WP_REST_Response($data, 200);
 
         // Set headers.
         $response->set_headers([ 'Cache-Control' => 'must-revalidate, no-cache, no-store, private' ]);
@@ -195,10 +205,19 @@ class ContactsAPI
         $contactQuery = new ContactsListingPersistor($sites, $profileURL, $filter, $args);
         $queryHash = $contactQuery->save();
 
-        $contacts = $this->getContactsFromAPI($sites, $filter, $select);
-        // do_action('qm/debug', $contacts);
+        $contacts = array();
+        try {
+            $contacts = $this->getContactsFromAPI($sites, $filter, $select);
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+        }
+
         if (!empty($savedSearch)) {
-            $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
+            try {
+                $contacts = $this->filterContactsWithSavedSearch($contacts, $savedSearch);
+            } catch (\Exception $e) {
+                Log::wap_log_error($e->getMessage(), true);
+            }
         }
 
         $contacts = $this->filterContacts($contacts, $args);
@@ -271,11 +290,15 @@ class ContactsAPI
             }
 
             if (ContactsUtils::isPicture($field['Value'])) {
-                //data:image/gif;base64,
-                $picture = $this->getPictureFromAPI($field['Value']['Url']);
-                $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
-                echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
-                    esc_html($picture) . '"/>';
+                try {
+                    $picture = $this->getPictureFromAPI($field['Value']['Url']);
+                    $imgType = ContactsUtils::getPictureType($field['Value']['Id']);
+                    echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
+                        esc_html($picture) . '"/>';
+                } catch (\Exception $e) {
+                    Log::wap_log_error($e->getMessage(), true);
+                }
+
             } else if ($field['Value'] == "🔒 Restricted" && $hideResField) {
                 continue;
             } else if (is_array($field['Value'])) {
@@ -495,9 +518,9 @@ class ContactsAPI
         return true;
     }
 
-    public function getContactsFromAPI($sites, $filter, $select) {
+    public function getContactsFromAPI($sites, $filter, $select, $block = true) {
         $waService = new WAService();
-        $contacts = $waService->getContactsList($filter, $select);
+        $contacts = $waService->getContactsList($filter, $select, $block);
 
         return $contacts;
     }
