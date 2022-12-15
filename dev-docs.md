@@ -257,3 +257,24 @@ The block content includes hidden fields from which the attributes data is extra
 ### Styles
 Custom styling for each block is located in the `scss` files in the block directories. `style.scss` styles the rendered block and `editor.scss` styles the block in the editor.
 
+## How to use (from a developer's POV)
+
+Also refer to `README.md` for a basic walkthrough and screenshots of how to use the plugin.
+
+1. Install and activate
+    * If the WA API credentials and/or license are missing/invalid, the plugin will not activate and display an admin notice prompting the user to add their missing credentials.
+    * If WAP is not installed and active, the plugin will not activate and display an admin notice prompting the user to install and activate WAP.
+2. Find the blocks
+    * To use the blocks, open the post/page editor in **block mode**. The blocks do not work in classic mode.
+    * Both blocks can be found in the widgets category, or by searching "WAP", or by typing `/wap` in the post content area and choosing one of the suggested options.
+3. Configure block settings
+    * As described in previous sections, all the options for the blocks are in the block settings.
+    * Expand the fields dropdowns to select which fields to include in the directory/profile, toggle search, page size, etc.
+    * Enter User ID for the profile block.
+4. View the blocks
+    * Save and view the post/page to view the rendered blocks.
+    * The directory will simply display as a grid, with each member in their own cell. Each cell contains the field information checked off in the settings
+    * The profile will display the field title and values separated by tabs. 
+5. Member directory functionality
+    * On the directory, you can scroll through the pages and search for contacts (if search is enabled)
+    * If the profile link is enabled, there will be a link to each member's profile on their cell. Clicking on the link will replace the directory content with the respective profile content, exactly how it looks in the profile block with the addition of a "back" arrow, which will display the directory again when clicked.
