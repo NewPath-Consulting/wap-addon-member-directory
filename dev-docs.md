@@ -216,3 +216,30 @@ Clicking this "link" will cause the member directory content to be replaced with
 In order to obtain the profile shortcode quickly and dynamically, it is served by the REST API. The `profiles.js` code simply passes in the necessary parameters for the profile shortcode (fields, user ID, hide restricted fields toggle) via URL queries in the REST endpoint.
 
 ### Member profile
+
+All files for the member profile block are located under 
+
+#### Attributes and block settings
+
+The setup of the member profile attributes is similar to the member directory in that they mirror the shortcode arguments. 
+
+The chart below describes how the attributes, block settings, and shortcode arguments relate to eachother.
+
+Attribute        | Type      | Settings | Shortcode parameter
+-----------------|-----------|----------|---------------------
+`fields_applied` | `array`   | Checkboxes in 3 categories<ul><li>System Fields</li><li>Common Fields</li><li>Member Fields</li></ul> | List of fields
+`user_id`        | `string`  | Input box | `user-id`
+`hide_restricted_fields` | `boolean` | "Hide Restricted Fields" toggle | `hide_restricted_fields`
+
+Like the member directory, the field settings display in three separate categories: System Fields, Common Fields, and Member Fields.
+
+The member profile attributes also use the block HTML as a data source.
+
+#### Rendering the block
+Like the attributes, rendering the profile block works extrememly similar to the member directory. 
+
+The block content includes hidden fields from which the attributes data is extracted. It also includes the profile shortcode with the attributes data plugged in. The profile shortcode will render the profile itself.
+
+### Styles
+Custom styling for each block is located in the `scss` files in the block directories. `style.scss` styles the rendered block and `editor.scss` styles the block in the editor.
+
