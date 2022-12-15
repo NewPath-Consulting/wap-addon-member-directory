@@ -10,6 +10,18 @@ The plugin contains two separate blocks: the WAP Member Directory and the WAP Me
 
 The functionality for the plugin is separated into two separate parts: Javascript and PHP. The Javascript part is responsible for the Gutenberg blocks and some other client-side block functionality. The PHP side is responsible for handling the WildApricot member data. The two sides communicate via REST routes defined in PHP.
 
+Before reading this documentation and contributing to this project, it is highly recommended to have a basic understanding of PHP, React & JSX syntax, and Gutenberg blocks. 
+
+## Setup
+To build the block files in this project, you must have `npm` installed on your machine. 
+
+The below chart describes commands for building each block.
+
+Block | Watch (dev) | Build (prod)
+------|-------------|--------------
+Member directory | `npm run start:member-directory` | `npm run build:member-directory`
+Member profile | `npm run start:member-profile` | `npm run build:member-profile`
+
 ## PHP files and functionality
 The PHP side of the plugin handles grabbing data from the Wild Apricot API and rendering the data in a shortcode to display either the directory or a profile.
 
@@ -150,12 +162,14 @@ Checking a field box will add the field to a list of fields to be applied in the
 
 ### Member directory
 
+All the member directory files are located under `blocks/member-directory`.
+
 #### Attributes and block settings
 The attributes of this block roughly align with the shortcode parameters. 
 
 The only exception is `profile_fields`. `profile_fields` is a list of fields (similar to `fields_applied`) to include in the user profile that will display if the user enables the profile link option in the shortcode. Read more about the functionality of the profile link in the profile link section.
 
-The chart below describes how the block attributes, settings, and shortcode parameters relate to eachother
+The chart below describes how the block attributes, settings, and shortcode parameters relate to eachother.
 
 Attribute        | Type      | Settings | Shortcode parameter
 -----------------|-----------|----------|---------------------
