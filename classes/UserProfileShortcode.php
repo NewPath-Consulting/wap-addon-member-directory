@@ -3,6 +3,9 @@
 namespace WAWP\Memdir_Block\classes;
 use WAWP\Memdir_Block\classes\ContactsUtils;
 use WAWP\Memdir_Block\services\WAService;
+use WAWP\Memdir_Block\services\SettingsService;
+use \WAWP\Log as Log;
+use Walker;
 
 class UserProfileShortcode {
     private static $SHORTCODE_NAME = 'wa-profile';
@@ -44,12 +47,18 @@ class UserProfileShortcode {
         $sites = empty($sites) ? reset($waAPIKeys) : $sites;
 
         $waService = new WAService();
+        
         $current_user_id = get_user_meta(get_current_user_id(), "wawp_wa_user_id");
-        // $contacts;
-        if($userID == $current_user_id) { //If user being displayed is the current user
-            $contacts = $waService->getContactsList($filter, $select, false); //run without restriction
-        } else {
-            $contacts = $waService->getContactsList($filter, $select, true);
+
+        try {
+            if($userID == $current_user_id) { //If user being displayed is the current user
+                $contacts = $waService->getContactsList($filter, $select, false); //run without restriction
+            } else {
+                $contacts = $waService->getContactsList($filter, $select, false, true);
+            }
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+            return $this->render(array(), $hideResField);
         }
 
         $contacts = new Contacts($contacts);
@@ -90,12 +99,17 @@ class UserProfileShortcode {
             echo '</span>';
 
             if (ContactsUtils::isPicture($userFieldValue)) {
-                // need to get picture from API
-                $waService = new WAService();
-                $picture = $waService->getPicture($userFieldValue['Url']);
-                $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
-                echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
-                esc_html($picture) . '"/>';
+                try {
+                    // need to get picture from API
+                    $waService = new WAService();
+                    $picture = $waService->getPicture($userFieldValue['Url']);
+                    $imgType = ContactsUtils::getPictureType($userFieldValue['Id']);
+                    echo '<img src="data:image/' . esc_attr($imgType) . ';base64,' . 
+                    esc_html($picture) . '"/>';
+                } catch (\Exception $e) {
+                    Log::wap_log_error($e->getMessage(), true);
+                }
+
             }else {
                 if (is_array($userFieldValue)) {
                     $userFieldValue = $userFieldValue['Label'];

@@ -18,7 +18,7 @@ class WaApiClient
         try {
             $this->initToken();
         } catch (\Exception $e) {
-            Log::wap_log_error($e->getMessage(), 1);
+            Log::wap_log_error($e->getMessage(), true);
         }
     }
 
@@ -33,12 +33,19 @@ class WaApiClient
 
     public function initToken() {
         $access_data = WA_API::verify_valid_access_token();
-        $this->wa_api = new WA_API($access_data['access_token'], $access_data['account_id']);
+        $this->wa_api = new WA_API($access_data['access_token'], $access_data['wa_account_id']);
         $this->token = $access_data['access_token'];
     }
 
-    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = array())
-    {
+    public function getContactsCount() {
+        return $this->wa_api->get_contacts_count();
+    }
+
+    public function getContactBlock($query, $skip, $top) {
+        return $this->wa_api->retrieve_contacts_list($query, true, $skip, $top);
+    }
+
+    public function makeRequest($url, $isPicture = false, $verb = 'GET', $data = array()) {
         if (!$this->token) {
             throw new \Exception(
                 'Access token is not initialized. Call initTokenByApiKey or initTokenByContactCredentials before performing requests.'
@@ -74,8 +81,8 @@ class WaApiClient
             $response = wp_remote_post($url, $args);
         }
 
-        if (!$response) {
-            throw new \Exception('failed making request');
+        if (!$response || is_wp_error($response)) {
+            throw new \Exception($response->get_error_message(), 404);
         }
 
         $response_data = $response['body'];

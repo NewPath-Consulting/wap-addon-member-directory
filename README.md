@@ -2,7 +2,7 @@
 Contributors: nataliebrotherton, asirota
 Tags: wildapricot, wild apricot, membership, membership directory
 Requires at least: 5.7
-Tested up to: 6.0
+Tested up to: 6.1.1
 Requires PHP: 7.4
 Stable Tag: 1.0.1
 License: GPL v2 or later
@@ -194,7 +194,7 @@ The row contains the ID city and a class field. Each element of the row has the 
 
 == Changelog ==
 
-= November 29 2022 - 1.0.1 - fixed installation bug found on some sites =
+= Decemnber 14 2022 - 1.0.1 - fixed installation bug found on some sites, added support for  large WildApricot contact and member directories =
 
 = August 9 2022 - 1.0.0 - first public release =
 

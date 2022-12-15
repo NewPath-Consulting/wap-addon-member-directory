@@ -12,17 +12,11 @@ use WAWP\Memdir_Block\services\CacheService;
 const ACCOUNTS_API_URL = 'https://api.wildapricot.org/v2.2/accounts/';
 
 class WAService {
-    private $apiKey;
     private $apiClient;
-    private $accountURL = false;
+    private $accountURL = null;
 
     public function __construct() {
         $this->apiClient = new WaApiClient();
-    }
-
-    public function initWithCache() {
-        $this->useCache = true;
-        $this->init();
     }
 
     public function getContactFields() {
@@ -60,7 +54,12 @@ class WAService {
 
 
         $contactFields = array(); 
-        $contactFields = array_values($this->getContactFields()); //get /contactfields to see/store what things are allowed for what levels
+        try {
+            $contactFields = array_values($this->getContactFields()); //get /contactfields to see/store what things are allowed for what levels
+        } catch (\Exception $e) {
+            Log::wap_log_error($e->getMessage(), true);
+        }
+        
         //How to check for error? This will cause an error if empty
         /*if($contactFields['statusCode'] != 200) { 
             return $contactFields; //Error: if the restriction of everything can't be determined, can't give information, return the error 
@@ -137,12 +136,12 @@ class WAService {
         return $contacts;
     }
 
-    public function getContactsList($filter = null, $select = null, $private = true) {
+    public function getContactsList($filter = null, $select = null, $block = true, $private = true) {
         $queryParams = array(
             '$async' => 'false'
         );
 
-        if($private) { //The global restriction of a contact is a FieldValue (terrible design), so need to get 
+        if ($private) { //The global restriction of a contact is a FieldValue (terrible design), so need to get 
             if (!empty($select)) {
                 $queryParams = array_merge($queryParams, array('$select' => ($select . ",'AccessToProfileByOthers'")));
             } else {
@@ -154,7 +153,7 @@ class WAService {
             }
         }
 
-        if($private) { //FUTURE: let shown statuses be customizable
+        if ($private) { //FUTURE: let shown statuses be customizable
             if (!empty($filter)) {
                 $queryParams = array_merge($queryParams, array('$filter' => ($filter . " AND (Status eq 'Active' OR Status eq 'PendingRenewal')" )));
             } else {
@@ -173,27 +172,73 @@ class WAService {
             '/Contacts?' .
             $query;
 
-        if (isset($this->useCache)) {
-            $apiCache = CacheService::getInstance();
-            $contacts = $apiCache->getValue($url);
 
-            if (empty($contacts)) {
+        // look for contacts in cache
+        $apiCache = CacheService::getInstance();
+        $contacts = $apiCache->getValue($url);
+
+        // if contacts not in cache, retrieve from api
+        if (empty($contacts)) {
+            if ($block) {
+                $contacts = $this->getContactsBlock($query);
+            } else {
                 $contacts = $this->apiClient->makeRequest($url);
-                $apiCache->saveValue($url, $contacts);
             }
-        } else {
-            $contacts = $this->apiClient->makeRequest($url);
+
+            // save contacts in cache
+            $apiCache->saveValue($url, $contacts);
         }
 
-        if (!isset($contacts['Contacts'])) {
+        // return empty array if contacts array doesn't exist in the response
+        if (!array_key_exists('Contacts', $contacts)) {
             return array();
         }
-        if($private) {
-            return $this->controlAccess(array_values($contacts['Contacts']), $filter, $select); 
+
+        // return control access values if private is true
+        if ($private) {
+            return $this->controlAccess(
+                array_values($contacts['Contacts']), 
+                $filter, 
+                $select
+            ); 
         } 
 
         return array_values($contacts['Contacts']);
-    }  
+    }
+
+    public function getContactsBlock($query) {
+        $count = $this->apiClient->getContactsCount();
+
+        $skip = 0;
+        $top = 500;
+
+        $done = false;
+
+        $all_contacts = array(
+            'Contacts' => array()
+        );
+
+        // retrieve in blocks of 500
+		while (!$done) {
+			// if there are more than 500 entires left, include top query
+			if (($count - $skip) <= $top) {
+				$top = 0;
+				$done = true;
+			}
+
+			// make API request and add block to list of all contacts
+			$contacts_block = $this->apiClient->getContactBlock($query, $skip, $top);
+			$all_contacts['Contacts'] = array_merge(
+				$all_contacts['Contacts'],
+				$contacts_block['Contacts']
+			);
+
+			// increment by block size
+			$skip += $top;
+		}
+        
+        return $all_contacts;
+    }
 
     public function getSavedSearches() {
         $url = $this->getEndpointURL() . '/savedsearches';
@@ -228,13 +273,13 @@ class WAService {
 
     private function getEndpointURL() {
         
-        if (empty($this->accountURL)) {
+        if (is_null($this->accountURL)) {
 
             try {
                 $account_id = $this->apiClient->getAccountID();
 
             } catch (\Exception $e) {
-                Log::wap_log_error($e->getMessage(), 1);
+                Log::wap_log_error($e->getMessage(), true);
             }
 
             $this->accountURL = ACCOUNTS_API_URL . $account_id;
